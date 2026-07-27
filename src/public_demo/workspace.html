@@ -1,0 +1,2252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Production</title>
+  <style>
+    :root {
+      --bg: #071018;
+      --bg-2: #0c1722;
+      --panel: rgba(10, 19, 31, 0.86);
+      --panel-strong: rgba(11, 23, 37, 0.96);
+      --border: rgba(165, 197, 255, 0.16);
+      --text: #f4f7fb;
+      --muted: #9aabc4;
+      --accent: #89dcc8;
+      --accent-2: #f1b85d;
+      --accent-3: #8bb0ff;
+      --warning: #f5a66d;
+      --danger: #ff8087;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(137, 220, 200, 0.14), transparent 30%),
+        radial-gradient(circle at 88% 0%, rgba(241, 184, 93, 0.14), transparent 26%),
+        radial-gradient(circle at 70% 90%, rgba(139, 176, 255, 0.12), transparent 28%),
+        linear-gradient(160deg, #06101a 0%, #0c1521 42%, #05090f 100%);
+      font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .shell {
+      width: min(1600px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 26px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+
+    .hero-copy,
+    .hero-meta,
+    .panel,
+    .tabs,
+    .chrome,
+    .toast {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-copy {
+      border-radius: var(--radius-xl);
+      padding: 22px 24px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-copy::after {
+      content: "";
+      position: absolute;
+      inset: -1px -1px auto auto;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(137, 220, 200, 0.14), transparent 64%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #dce9ff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      margin-bottom: 14px;
+    }
+
+    h1, h2, h3, .display {
+      font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.3rem, 5vw, 4.8rem);
+      line-height: 0.92;
+      max-width: 14ch;
+    }
+
+    .lede {
+      margin: 12px 0 0;
+      max-width: 72ch;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1.02rem;
+    }
+
+    .hero-meta {
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 14px 12px;
+      min-height: 86px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 5px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+      color: #ebf2ff;
+      font-size: 0.84rem;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .chip.accent { background: rgba(137, 220, 200, 0.11); color: #c9f4e8; }
+    .chip.accent-2 { background: rgba(241, 184, 93, 0.12); color: #ffe5ba; }
+    .chip.accent-3 { background: rgba(139, 176, 255, 0.12); color: #d7e5ff; }
+    .chip.muted { background: rgba(255, 255, 255, 0.06); color: #c2cede; }
+    .chip.danger { background: rgba(255, 128, 135, 0.12); color: #ffd1d5; }
+
+    .chrome {
+      border-radius: 22px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .chrome-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chrome-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .chrome-title .name {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .chrome-title .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .chrome-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .button {
+      border-radius: 999px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: #f6f8ff;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, #8bdcc8, #a5c6ff);
+      color: #051018;
+      border: 0;
+      font-weight: 700;
+    }
+
+    .button.warn {
+      background: rgba(241, 184, 93, 0.14);
+      border-color: rgba(241, 184, 93, 0.2);
+      color: #ffe3b3;
+    }
+
+    .button.ghost {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .button.small {
+      padding: 7px 10px;
+      font-size: 0.84rem;
+    }
+
+    .tabs {
+      border-radius: 22px;
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .tab {
+      flex: 1 1 180px;
+      min-width: 160px;
+      text-align: left;
+      border-radius: 18px;
+      padding: 13px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: #f4f7fb;
+    }
+
+    .tab strong {
+      display: block;
+      font-size: 1.02rem;
+      margin-bottom: 4px;
+    }
+
+    .tab span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .tab.active {
+      border-color: rgba(137, 220, 200, 0.34);
+      background: linear-gradient(180deg, rgba(137, 220, 200, 0.16), rgba(255, 255, 255, 0.05));
+      box-shadow: inset 0 0 0 1px rgba(137, 220, 200, 0.12);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(284px, 330px) minmax(0, 1fr) minmax(320px, 372px);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .panel {
+      border-radius: 24px;
+      padding: 16px;
+    }
+
+    .panel + .panel { margin-top: 12px; }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      line-height: 1.1;
+    }
+
+    .panel .subcopy {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
+    }
+
+    .rail {
+      position: sticky;
+      top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .rail-list {
+      display: grid;
+      gap: 8px;
+      max-height: calc(100vh - 190px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .phase-label {
+      display: inline-flex;
+      margin: 8px 0 2px;
+      color: #bfd0e8;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.72rem;
+    }
+
+    .stage-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: start;
+      width: 100%;
+      text-align: left;
+      padding: 12px 12px 11px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stage-row.active {
+      border-color: rgba(137, 220, 200, 0.28);
+      background: rgba(137, 220, 200, 0.08);
+    }
+
+    .stage-row.locked { opacity: 0.92; }
+    .stage-row.pending { opacity: 0.74; }
+
+    .stage-index {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .stage-body strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.96rem;
+    }
+
+    .stage-body span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+
+    .stage-status {
+      color: #dfeaff;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-top: 2px;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .view-shell {
+      min-height: 760px;
+    }
+
+    .view-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .view-head h2 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .view-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 72ch;
+      line-height: 1.55;
+    }
+
+    .view-frame {
+      border-radius: 28px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px;
+      min-height: 720px;
+      overflow: hidden;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      color: #d9e6fa;
+      font-size: 0.86rem;
+      letter-spacing: 0.02em;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border-radius: 16px;
+      padding: 12px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(137, 220, 200, 0.42);
+      box-shadow: 0 0 0 3px rgba(137, 220, 200, 0.12);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .subpanel {
+      border-radius: 22px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .subpanel h3 {
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+    }
+
+    .canvas-surface {
+      position: relative;
+      min-height: 520px;
+      border-radius: 24px;
+      background:
+        linear-gradient(transparent 0 0),
+        radial-gradient(circle at 15% 20%, rgba(137, 220, 200, 0.06), transparent 24%),
+        radial-gradient(circle at 80% 18%, rgba(241, 184, 93, 0.08), transparent 22%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .canvas-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .canvas-card {
+      position: absolute;
+      border-radius: 20px;
+      padding: 14px;
+      background: rgba(9, 17, 28, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.24);
+      cursor: pointer;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+      overflow: hidden;
+    }
+
+    .canvas-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(137, 220, 200, 0.24);
+    }
+
+    .canvas-card.selected,
+    .graph-node.selected,
+    .asset-card.selected,
+    .agent-card.selected {
+      border-color: rgba(137, 220, 200, 0.42);
+      box-shadow: 0 0 0 1px rgba(137, 220, 200, 0.18), 0 14px 36px rgba(0, 0, 0, 0.3);
+    }
+
+    .canvas-card h4,
+    .graph-node h4,
+    .agent-card h4,
+    .asset-card h4 {
+      margin: 10px 0 8px;
+      font-size: 1.06rem;
+    }
+
+    .canvas-card p,
+    .graph-node p,
+    .asset-card p,
+    .agent-card p {
+      margin: 0;
+      color: #dbe6f7;
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .canvas-card .card-footer,
+    .asset-card .card-footer,
+    .agent-card .card-footer,
+    .graph-node .card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .canvas-titlebar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .version-tree {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .note-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: #dce8f8;
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .agent-card,
+    .asset-card,
+    .graph-node {
+      border-radius: 20px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .agent-card .proposal-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .proposal {
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .proposal.selected {
+      border-color: rgba(137, 220, 200, 0.3);
+      background: rgba(137, 220, 200, 0.08);
+    }
+
+    .proposal h5 {
+      margin: 0 0 6px;
+      font-size: 0.98rem;
+    }
+
+    .proposal .meta-row,
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .proposal p.small,
+    .small {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.45;
+    }
+
+    .proposal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .override-note {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .override-note textarea {
+      min-height: 72px;
+      resize: vertical;
+      width: 100%;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .guided-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.92fr) minmax(0, 1.08fr);
+      gap: 12px;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-item {
+      border-radius: 18px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: grid;
+      gap: 6px;
+    }
+
+    .step-item.active {
+      border-color: rgba(137, 220, 200, 0.3);
+      background: rgba(137, 220, 200, 0.08);
+    }
+
+    .step-item.done {
+      opacity: 0.9;
+    }
+
+    .step-item strong {
+      font-size: 0.98rem;
+    }
+
+    .step-item span {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .decision-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .decision-card {
+      border-radius: 22px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .decision-card h3 {
+      font-size: 1.18rem;
+      margin-bottom: 8px;
+    }
+
+    .timeline-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .track {
+      border-radius: 20px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .track-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .track-lane {
+      display: grid;
+      grid-template-columns: repeat(24, minmax(0, 1fr));
+      gap: 6px;
+      min-height: 88px;
+      align-items: stretch;
+      position: relative;
+    }
+
+    .clip {
+      border-radius: 16px;
+      padding: 10px 10px 9px;
+      background: rgba(137, 220, 200, 0.14);
+      border: 1px solid rgba(137, 220, 200, 0.22);
+      display: grid;
+      gap: 6px;
+      min-height: 74px;
+      overflow: hidden;
+    }
+
+    .clip.voice { background: rgba(139, 176, 255, 0.14); border-color: rgba(139, 176, 255, 0.22); }
+    .clip.music { background: rgba(241, 184, 93, 0.16); border-color: rgba(241, 184, 93, 0.22); }
+    .clip.effects { background: rgba(255, 128, 135, 0.14); border-color: rgba(255, 128, 135, 0.22); }
+
+    .clip h4 {
+      margin: 0;
+      font-size: 0.94rem;
+    }
+
+    .clip .clip-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .clip-controls {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .clip-controls input {
+      width: 72px;
+      padding: 8px 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+    }
+
+    .graph-shell {
+      position: relative;
+      min-height: 620px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 20% 25%, rgba(137, 220, 200, 0.06), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(241, 184, 93, 0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .graph-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .graph-nodes {
+      position: relative;
+      min-height: 620px;
+    }
+
+    .graph-node {
+      position: absolute;
+      width: 216px;
+      min-height: 98px;
+      cursor: pointer;
+    }
+
+    .graph-node .tag,
+    .asset-card .tag {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 6px 8px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #dfeaff;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .asset-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .asset-card {
+      cursor: pointer;
+    }
+
+    .asset-card p {
+      color: var(--muted);
+    }
+
+    .asset-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .inspector {
+      display: grid;
+      gap: 10px;
+    }
+
+    .inspector-box {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .provenance-feed {
+      display: grid;
+      gap: 8px;
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .event {
+      border-radius: 14px;
+      padding: 10px 11px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .event strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.92rem;
+    }
+
+    .event span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .final-report {
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(137, 220, 200, 0.09);
+      border: 1px solid rgba(137, 220, 200, 0.18);
+      display: grid;
+      gap: 10px;
+    }
+
+    .final-report pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dbe8f7;
+      font-size: 0.88rem;
+      line-height: 1.48;
+    }
+
+    .footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: grid;
+      gap: 8px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      max-width: min(520px, calc(100vw - 36px));
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: grid;
+      gap: 4px;
+      z-index: 20;
+    }
+
+    .toast strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .toast span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 1280px) {
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar, .rail { position: static; top: auto; }
+      .hero { grid-template-columns: 1fr; }
+      .agent-grid, .guided-grid, .two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 18px, 100%); padding-top: 12px; }
+      .chrome-top { align-items: flex-start; }
+      .stat-grid, .field-grid { grid-template-columns: 1fr; }
+      .tabs { padding: 8px; }
+      .tab { min-width: 100%; }
+      .view-frame { padding: 12px; min-height: 620px; }
+      .canvas-card, .graph-node { position: static !important; width: auto !important; min-height: auto !important; margin-bottom: 10px; }
+      .canvas-surface, .graph-shell { min-height: auto; }
+      .track-lane { grid-template-columns: 1fr; }
+      .clip { grid-column: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Open Production browser workspace</div>
+        <h1>One production model. Five views. Every decision stays visible.</h1>
+        <p class="lede">
+          The workspace is wired around a single shared production state. Move between
+          Director's Canvas, Guided Production Flow, Timeline Editor, Agent Console, and
+          Node Graph without losing edits, approvals, or provenance.
+        </p>
+      </div>
+      <div class="hero-meta">
+        <div class="status-row" id="status-row"></div>
+        <div class="stat-grid" id="metrics-grid"></div>
+      </div>
+    </section>
+
+    <section class="chrome">
+      <div class="chrome-top">
+        <div class="chrome-title">
+          <div class="name" id="production-name"></div>
+          <div class="meta" id="production-meta"></div>
+        </div>
+        <div class="chrome-actions">
+          <button class="button ghost" type="button" data-action="export-state">Export state</button>
+          <button class="button ghost" type="button" data-action="reset-workspace">Reset workspace</button>
+          <button class="button primary" type="button" data-action="generate-audit">Generate</button>
+        </div>
+      </div>
+      <div class="status-row" id="model-chips"></div>
+    </section>
+
+    <nav class="tabs" id="view-tabs" aria-label="Primary views"></nav>
+
+    <section class="workspace">
+      <aside class="rail">
+        <section class="panel">
+          <h2>Production pipeline</h2>
+          <p class="subcopy">A visible stage rail keeps the pipeline honest. The active stage is the one the crew is working against right now.</p>
+          <div class="rail-list" id="pipeline-rail"></div>
+        </section>
+        <section class="panel">
+          <h2>Guided cue</h2>
+          <p class="subcopy" id="guided-helper"></p>
+          <div id="guided-cue"></div>
+        </section>
+      </aside>
+
+      <section class="main">
+        <div class="view-shell">
+          <div class="view-head">
+            <div>
+              <h2 id="active-view-title"></h2>
+              <p id="active-view-description"></p>
+            </div>
+            <div class="status-row" id="active-view-chips"></div>
+          </div>
+          <div class="view-frame" id="view-host"></div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Asset library</h2>
+          <p class="subcopy">Assets carry provenance. Clicking an asset updates the inspector, the graph, and the visible model.</p>
+          <div class="field" style="margin-bottom:10px;">
+            <label for="asset-query">Search</label>
+            <input id="asset-query" data-bind="filters.asset_query" type="text" placeholder="Filter by name, type, or provenance" />
+          </div>
+          <div class="asset-list" id="asset-list"></div>
+        </section>
+        <section class="panel inspector">
+          <h2>Inspector & provenance</h2>
+          <div class="inspector-box" id="inspector-box"></div>
+          <div class="inspector-box" id="final-report-box"></div>
+          <div>
+            <h3>Recent provenance</h3>
+            <div class="provenance-feed" id="provenance-feed"></div>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <div class="footer">
+      <div id="save-status"></div>
+      <div id="notification-line"></div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const BOOTSTRAP_STATE = __BOOTSTRAP_STATE__;
+  </script>
+  <script>
+    const STORAGE_KEY = "open-production.workspace.v1";
+    const VIEW_LABELS = {
+      director_canvas: "Director's Canvas",
+      guided_flow: "Guided Production Flow",
+      timeline_editor: "Timeline Editor",
+      agent_console: "Agent Console",
+      node_graph: "Node Graph",
+    };
+    const VIEW_COPY = {
+      director_canvas: "A spatial production board where scenes, notes, and references stay pinned to the same underlying model.",
+      guided_flow: "A beginner-friendly path that shows the next decision and the next approval without hiding the system beneath it.",
+      timeline_editor: "A sequence editor with editable tracks for video, voice, music, and effects.",
+      agent_console: "A visible crew conversation where every AI move is a proposal until a human approves it.",
+      node_graph: "A DAG view of the shared production model for expert users who want to see the wiring.",
+    };
+
+    const dom = {
+      statusRow: document.getElementById("status-row"),
+      metricsGrid: document.getElementById("metrics-grid"),
+      productionName: document.getElementById("production-name"),
+      productionMeta: document.getElementById("production-meta"),
+      modelChips: document.getElementById("model-chips"),
+      viewTabs: document.getElementById("view-tabs"),
+      activeViewTitle: document.getElementById("active-view-title"),
+      activeViewDescription: document.getElementById("active-view-description"),
+      activeViewChips: document.getElementById("active-view-chips"),
+      viewHost: document.getElementById("view-host"),
+      pipelineRail: document.getElementById("pipeline-rail"),
+      guidedHelper: document.getElementById("guided-helper"),
+      guidedCue: document.getElementById("guided-cue"),
+      assetList: document.getElementById("asset-list"),
+      inspectorBox: document.getElementById("inspector-box"),
+      finalReportBox: document.getElementById("final-report-box"),
+      provenanceFeed: document.getElementById("provenance-feed"),
+      saveStatus: document.getElementById("save-status"),
+      notificationLine: document.getElementById("notification-line"),
+      toast: document.getElementById("toast"),
+    };
+
+    function structuredCloneFallback(value) {
+      if (typeof structuredClone === "function") {
+        return structuredClone(value);
+      }
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function nowLabel() {
+      const now = new Date();
+      return now.toLocaleString([], {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function isIndex(part) {
+      return /^\d+$/.test(part);
+    }
+
+    function setPath(root, path, value) {
+      const parts = String(path).split(".");
+      let cursor = root;
+      for (let i = 0; i < parts.length - 1; i += 1) {
+        const key = isIndex(parts[i]) ? Number(parts[i]) : parts[i];
+        cursor = cursor[key];
+      }
+      const last = parts[parts.length - 1];
+      const lastKey = isIndex(last) ? Number(last) : last;
+      cursor[lastKey] = value;
+    }
+
+    function getPath(root, path) {
+      return String(path).split(".").reduce((cursor, part) => {
+        if (cursor == null) {
+          return undefined;
+        }
+        const key = isIndex(part) ? Number(part) : part;
+        return cursor[key];
+      }, root);
+    }
+
+    function clone(value) {
+      return structuredCloneFallback(value);
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return clone(BOOTSTRAP_STATE);
+        }
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") {
+          return clone(BOOTSTRAP_STATE);
+        }
+        return parsed;
+      } catch (error) {
+        return clone(BOOTSTRAP_STATE);
+      }
+    }
+
+    let state = loadState();
+    let renderChromeQueued = false;
+    let toastTimer = null;
+
+    function saveState(message) {
+      state.saved_at = nowLabel();
+      state.production.saved_label = "Saved locally";
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      dom.saveStatus.textContent = `Saved locally at ${state.saved_at}.`;
+      if (message) {
+        showToast("State updated", message);
+      }
+    }
+
+    function trimList(list, limit = 24) {
+      if (Array.isArray(list) && list.length > limit) {
+        list.splice(limit);
+      }
+    }
+
+    function recordEvent(kind, message, extra = {}) {
+      const entry = {
+        ts: nowLabel(),
+        kind,
+        message,
+        ...extra,
+      };
+      state.audit_log.unshift(entry);
+      trimList(state.audit_log, 36);
+      state.notifications.unshift(entry);
+      trimList(state.notifications, 10);
+      saveState(message);
+    }
+
+    function showToast(title, message) {
+      dom.toast.innerHTML = `
+        <strong>${escapeHtml(title)}</strong>
+        <span>${escapeHtml(message)}</span>
+      `;
+      dom.toast.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        dom.toast.classList.add("hidden");
+      }, 2800);
+    }
+
+    function selectEntity(kind, id) {
+      state.selection_kind = kind;
+      state.selection_id = id;
+      switch (kind) {
+        case "asset":
+          state.selected_asset_id = id;
+          break;
+        case "agent":
+          state.selected_agent_id = id;
+          break;
+        case "node":
+          state.selected_node_id = id;
+          break;
+        case "stage":
+          state.selected_stage_id = id;
+          break;
+        case "scene":
+          state.selected_scene_id = id;
+          break;
+        case "clip":
+          state.selected_clip_id = id;
+          break;
+        case "provenance":
+          state.selected_provenance_id = id;
+          break;
+        default:
+          break;
+      }
+      saveState(`Selected ${kind}: ${id}`);
+      renderChrome();
+    }
+
+    function setView(viewId) {
+      state.current_view = viewId;
+      saveState(`Switched to ${VIEW_LABELS[viewId] || viewId}`);
+      renderAll();
+    }
+
+    function getCurrentStage() {
+      return state.pipeline.find((stage) => stage.id === state.production.current_stage_id) || state.pipeline[0];
+    }
+
+    function getSelectedAsset() {
+      return state.assets.find((asset) => asset.id === state.selected_asset_id) || state.assets[0];
+    }
+
+    function getSelectedAgent() {
+      return state.agents.find((agent) => agent.id === state.selected_agent_id) || state.agents[0];
+    }
+
+    function getSelectedNode() {
+      return state.graph.nodes.find((node) => node.id === state.selected_node_id) || state.graph.nodes[0];
+    }
+
+    function getSelectedStage() {
+      return state.pipeline.find((stage) => stage.id === state.selected_stage_id) || getCurrentStage();
+    }
+
+    function getSelectedScene() {
+      return state.canvas.cards.find((card) => card.id === state.selected_scene_id) || state.canvas.cards[0];
+    }
+
+    function getSelectedClip() {
+      for (const track of state.timeline.tracks) {
+        const clip = track.clips.find((item) => item.id === state.selected_clip_id);
+        if (clip) {
+          return { track, clip };
+        }
+      }
+      return { track: state.timeline.tracks[0], clip: state.timeline.tracks[0].clips[0] };
+    }
+
+    function currentAgentProposal(agent) {
+      return agent.proposals.find((proposal) => proposal.id === agent.selected_proposal_id) || agent.proposals[0];
+    }
+
+    function renderChips(items) {
+      return items
+        .map((item) => `<span class="chip ${item.tone || "muted"}">${escapeHtml(item.label)}</span>`)
+        .join("");
+    }
+
+    function renderMetrics() {
+      const lockedStages = state.pipeline.filter((stage) => stage.status === "locked").length;
+      const activeStages = state.pipeline.filter((stage) => stage.status === "active").length;
+      const approvedAgents = state.agents.filter((agent) => agent.status === "approved").length;
+      const assets = state.assets.length;
+      dom.metricsGrid.innerHTML = `
+        <div class="stat"><strong>${lockedStages} locked stages</strong><span>The pipeline exposes the current gate state instead of hiding it.</span></div>
+        <div class="stat"><strong>${activeStages} active stage</strong><span>The same model drives the canvas, flow, timeline, console, and graph.</span></div>
+        <div class="stat"><strong>${approvedAgents} approved proposals</strong><span>Approvals are visible and reversible.</span></div>
+        <div class="stat"><strong>${assets} tracked assets</strong><span>Every asset carries provenance and usage history.</span></div>
+      `;
+    }
+
+    function renderStatusRow() {
+      const currentStage = getCurrentStage();
+      dom.statusRow.innerHTML = renderChips([
+        { label: state.production.status, tone: "accent" },
+        { label: `Current stage: ${currentStage.name}`, tone: "accent-2" },
+        { label: `Branch: ${state.production.branch}`, tone: "accent-3" },
+        { label: state.production.saved_label, tone: "muted" },
+      ]);
+      dom.modelChips.innerHTML = renderChips([
+        { label: `Current view: ${VIEW_LABELS[state.current_view] || state.current_view}`, tone: "accent" },
+        { label: `Selected stage: ${getSelectedStage().name}`, tone: "accent-2" },
+        { label: `Selection: ${state.selection_kind || "asset"}`, tone: "accent-3" },
+      ]);
+      dom.productionName.textContent = state.production.title;
+      dom.productionMeta.textContent = `${state.production.subtitle} • ${state.production.version_note}`;
+      dom.activeViewTitle.textContent = VIEW_LABELS[state.current_view];
+      dom.activeViewDescription.textContent = VIEW_COPY[state.current_view];
+      dom.guidedHelper.textContent = state.guided_flow.helper;
+      dom.saveStatus.textContent = `Saved locally at ${state.saved_at || state.production.saved_label}.`;
+      dom.notificationLine.textContent = state.notifications[0]
+        ? `${state.notifications[0].kind.toUpperCase()}: ${state.notifications[0].message}`
+        : "";
+    }
+
+    function renderTabs() {
+      dom.viewTabs.innerHTML = state.views.map((view) => `
+        <button class="tab ${state.current_view === view.id ? "active" : ""}" type="button" data-action="view|${view.id}">
+          <strong>${escapeHtml(view.label)}</strong>
+          <span>${escapeHtml(view.description)}</span>
+        </button>
+      `).join("");
+      dom.activeViewChips.innerHTML = renderChips([
+        { label: state.views.find((view) => view.id === state.current_view)?.tag || "View", tone: "accent" },
+        { label: `View ${state.views.findIndex((view) => view.id === state.current_view) + 1}/5`, tone: "muted" },
+      ]);
+    }
+
+    function renderPipeline() {
+      let currentPhase = "";
+      dom.pipelineRail.innerHTML = state.pipeline.map((stage, index) => {
+        const phase = stage.phase || "Pipeline";
+        const phaseHtml = phase !== currentPhase ? `<div class="phase-label">${escapeHtml(phase)}</div>` : "";
+        currentPhase = phase;
+        return `
+          ${phaseHtml}
+          <button class="stage-row ${stage.status} ${stage.id === state.selected_stage_id ? "active" : ""}" type="button" data-action="stage|${stage.id}">
+            <span class="stage-index">${index + 1}</span>
+            <span class="stage-body">
+              <strong>${escapeHtml(stage.name)}</strong>
+              <span>${escapeHtml(stage.summary)}</span>
+            </span>
+            <span class="stage-status">${escapeHtml(stage.status)}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderGuidedCue() {
+      const step = state.guided_flow.steps.find((item) => item.id === state.guided_flow.active_step_id) || state.guided_flow.steps[0];
+      dom.guidedCue.innerHTML = `
+        <div class="decision-card">
+          <div class="meta-row">
+            <span class="chip accent">${escapeHtml(step.label)}</span>
+            <span class="chip muted">${escapeHtml(step.gate)}</span>
+          </div>
+          <h3>${escapeHtml(step.agent)}</h3>
+          <p class="subcopy">${escapeHtml(step.hint)}</p>
+          <div class="proposal-actions">
+            <button class="button small ghost" type="button" data-action="guided-back">Back</button>
+            <button class="button small primary" type="button" data-action="guided-next">Approve and advance</button>
+            <button class="button small warn" type="button" data-action="guided-generate">Generate</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderInspector() {
+      const kind = state.selection_kind || "asset";
+      let title = "Asset";
+      let body = "";
+      let meta = [];
+      let provenance = [];
+      if (kind === "asset") {
+        const asset = getSelectedAsset();
+        title = asset.name;
+        body = asset.provenance;
+        meta = [
+          { label: asset.type, tone: "accent" },
+          { label: asset.status, tone: asset.status === "approved" ? "accent-2" : "muted" },
+          { label: asset.created, tone: "accent-3" },
+        ];
+        provenance = asset.used_in.map((item) => ({ title: "Used in", detail: item, actor: asset.approved_by }));
+      } else if (kind === "agent") {
+        const agent = getSelectedAgent();
+        const proposal = currentAgentProposal(agent);
+        title = agent.name;
+        body = `${agent.role}. ${proposal.summary}`;
+        meta = [
+          { label: agent.linked_stage, tone: "accent" },
+          { label: agent.status, tone: "accent-2" },
+          { label: `${Math.round(proposal.confidence * 100)}% confidence`, tone: "accent-3" },
+        ];
+        provenance = agent.messages.map((message) => ({ title: message.who, detail: message.text, actor: "Conversation" }));
+      } else if (kind === "node") {
+        const node = getSelectedNode();
+        title = node.label;
+        body = node.detail;
+        meta = [
+          { label: node.kind, tone: "accent" },
+          { label: node.status, tone: "accent-2" },
+        ];
+        provenance = [{ title: "Graph node", detail: node.detail, actor: "Node Graph" }];
+      } else if (kind === "stage") {
+        const stage = getSelectedStage();
+        title = stage.name;
+        body = stage.summary;
+        meta = [
+          { label: stage.phase, tone: "accent" },
+          { label: stage.status, tone: "accent-2" },
+          { label: stage.gate, tone: "accent-3" },
+        ];
+        provenance = [{ title: stage.owner, detail: stage.gate, actor: "Pipeline" }];
+      } else if (kind === "scene") {
+        const scene = getSelectedScene();
+        title = scene.title;
+        body = scene.summary;
+        meta = [
+          { label: scene.kind, tone: "accent" },
+          { label: scene.accent, tone: "accent-2" },
+        ];
+        provenance = [{ title: "Canvas card", detail: scene.summary, actor: "Director's Canvas" }];
+      } else if (kind === "clip") {
+        const clipState = getSelectedClip();
+        title = clipState.clip.label;
+        body = clipState.clip.note;
+        meta = [
+          { label: clipState.track.label, tone: "accent" },
+          { label: clipState.clip.status, tone: "accent-2" },
+        ];
+        provenance = [{ title: "Timeline clip", detail: clipState.clip.note, actor: clipState.track.label }];
+      }
+
+      dom.inspectorBox.innerHTML = `
+        <div class="meta-row">${renderChips(meta)}</div>
+        <h3>${escapeHtml(title)}</h3>
+        <p class="subcopy">${escapeHtml(body)}</p>
+        <div class="inspector-box" style="padding:12px;">
+          <div class="meta-row">
+            <span class="chip muted">Human override is always available</span>
+            <span class="chip muted">Same model across every view</span>
+          </div>
+        </div>
+      `;
+
+      const report = state.final_report;
+      if (report) {
+        dom.finalReportBox.innerHTML = `
+          <div class="final-report">
+            <div class="meta-row">
+              <span class="chip accent">Kernel audit snapshot</span>
+              <span class="chip muted">${escapeHtml(report.audit_path)}</span>
+            </div>
+            <strong>Accepted ${report.accepted_claims} • Rejected ${report.rejected_claims} • Contradictions ${report.contradictions.length}</strong>
+            <pre>${escapeHtml(report.summary)}</pre>
+            <div class="proposal-actions">
+              <button class="button small ghost" type="button" data-action="download-audit-report">Download audit JSON</button>
+            </div>
+          </div>
+        `;
+      } else {
+        dom.finalReportBox.innerHTML = `
+          <div class="inspector-box">
+            <strong>Kernel audit snapshot</strong>
+            <p class="subcopy" style="margin-bottom:0;">Press Generate to run the existing backend audit pipeline and capture the report here.</p>
+          </div>
+        `;
+      }
+
+      dom.provenanceFeed.innerHTML = [
+        ...state.provenance.slice(0, 4).map((item) => ({
+          ts: item.id,
+          html: `
+            <div class="event" data-action="provenance|${item.id}">
+              <strong>${escapeHtml(item.title)}</strong>
+              <span>${escapeHtml(item.actor)} • ${escapeHtml(item.detail)}</span>
+            </div>
+          `,
+        })),
+        ...state.audit_log.slice(0, 3).map((item, index) => ({
+          ts: `${item.ts}-${index}`,
+          html: `
+            <div class="event">
+              <strong>${escapeHtml(item.kind)}</strong>
+              <span>${escapeHtml(item.message)} • ${escapeHtml(item.ts)}</span>
+            </div>
+          `,
+        })),
+      ]
+        .sort((a, b) => a.ts.localeCompare(b.ts))
+        .map((item) => item.html)
+        .join("");
+    }
+
+    function renderAssets() {
+      const query = (state.filters.asset_query || "").trim().toLowerCase();
+      const filtered = state.assets.filter((asset) => {
+        const haystack = `${asset.name} ${asset.type} ${asset.provenance} ${asset.used_in.join(" ")}`.toLowerCase();
+        return haystack.includes(query);
+      });
+      dom.assetList.innerHTML = filtered.map((asset) => `
+        <button class="asset-card ${asset.id === state.selected_asset_id ? "selected" : ""}" type="button" data-action="asset|${asset.id}">
+          <div class="meta-row">
+            <span class="tag">${escapeHtml(asset.type)}</span>
+            <span class="chip ${asset.status === "approved" ? "accent" : "accent-2"}">${escapeHtml(asset.status)}</span>
+          </div>
+          <h4>${escapeHtml(asset.name)}</h4>
+          <p>${escapeHtml(asset.provenance)}</p>
+          <div class="asset-meta">
+            ${asset.used_in.map((item) => `<span class="chip muted">${escapeHtml(item)}</span>`).join("")}
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function renderDirectorCanvas() {
+      const sceneCards = state.canvas.cards.map((card) => `
+        <article
+          class="canvas-card ${card.id === state.selected_scene_id ? "selected" : ""}"
+          style="left:${card.x}px; top:${card.y}px; width:${card.w}px; min-height:${card.h}px;"
+          data-action="scene|${card.id}"
+        >
+          <div class="meta-row">
+            <span class="tag">${escapeHtml(card.kind)}</span>
+            <span class="chip ${card.accent === "accent" ? "accent" : card.accent === "accent2" ? "accent-2" : card.accent === "accent3" ? "accent-3" : "muted"}">${escapeHtml(card.linked)}</span>
+          </div>
+          <h4>${escapeHtml(card.title)}</h4>
+          <p>${escapeHtml(card.summary)}</p>
+          <div class="card-footer">
+            <button class="button small ghost" type="button" data-action="asset|${card.linked}">Open linked item</button>
+            <button class="button small ghost" type="button" data-action="canvas-pin|${card.id}">Pin note</button>
+          </div>
+        </article>
+      `).join("");
+
+      const versionTree = state.canvas.version_tree.map((branch) => `
+        <span class="chip ${branch.status === "current" ? "accent" : "accent-3"}">${escapeHtml(branch.label)}</span>
+      `).join("");
+
+      const notes = state.canvas.story_points.map((item) => `<span class="note">${escapeHtml(item)}</span>`).join("");
+
+      return `
+        <div class="two-col">
+          <section class="subpanel">
+            <div class="canvas-titlebar">
+              <div>
+                <h3>${escapeHtml(state.canvas.title)}</h3>
+                <p class="subcopy" style="margin-bottom:0;">${escapeHtml(state.canvas.note)}</p>
+              </div>
+              <div class="version-tree">${versionTree}</div>
+            </div>
+            <div class="canvas-surface">
+              ${sceneCards}
+            </div>
+            <div class="note-strip">${notes}</div>
+            <div class="proposal-actions" style="margin-top:12px;">
+              <button class="button small primary" type="button" data-action="canvas-add-note">Add note</button>
+              <button class="button small ghost" type="button" data-action="select-stage|creative_direction">Focus current gate</button>
+            </div>
+          </section>
+          <section class="subpanel">
+            <h3>Brief controls</h3>
+            <div class="field-grid">
+              <div class="field full">
+                <label for="brief-topic">Topic</label>
+                <input id="brief-topic" data-bind="brief.topic" type="text" value="${escapeHtml(state.brief.topic)}" />
+              </div>
+              <div class="field">
+                <label for="brief-audience">Audience</label>
+                <input id="brief-audience" data-bind="brief.audience" type="text" value="${escapeHtml(state.brief.audience)}" />
+              </div>
+              <div class="field">
+                <label for="brief-tone">Tone</label>
+                <input id="brief-tone" data-bind="brief.tone" type="text" value="${escapeHtml(state.brief.tone)}" />
+              </div>
+              <div class="field">
+                <label for="brief-length">Length</label>
+                <input id="brief-length" data-bind="brief.length" type="text" value="${escapeHtml(state.brief.length)}" />
+              </div>
+              <div class="field">
+                <label for="brief-format">Format</label>
+                <input id="brief-format" data-bind="brief.format" type="text" value="${escapeHtml(state.brief.format)}" />
+              </div>
+              <div class="field full">
+                <label for="brief-objective">Objective</label>
+                <textarea id="brief-objective" data-bind="brief.objective">${escapeHtml(state.brief.objective)}</textarea>
+              </div>
+              <div class="field full">
+                <label for="brief-constraints">Constraints</label>
+                <textarea id="brief-constraints" data-bind="brief.constraints_text">${escapeHtml(state.brief.constraints_text)}</textarea>
+              </div>
+              <div class="field full">
+                <label for="brief-references">Reference cues</label>
+                <textarea id="brief-references" data-bind="brief.references_text">${escapeHtml(state.brief.references_text)}</textarea>
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderGuidedFlow() {
+      const steps = state.guided_flow.steps.map((step, index) => `
+        <button class="step-item ${step.id === state.guided_flow.active_step_id ? "active" : ""} ${step.status}" type="button" data-action="guided-step|${step.id}">
+          <span class="chip ${step.status === "done" ? "accent" : step.status === "active" ? "accent-2" : "muted"}">Step ${index + 1}</span>
+          <strong>${escapeHtml(step.label)}</strong>
+          <span>${escapeHtml(step.hint)}</span>
+        </button>
+      `).join("");
+
+      const activeStep = state.guided_flow.steps.find((step) => step.id === state.guided_flow.active_step_id) || state.guided_flow.steps[0];
+      const agent = state.agents.find((item) => item.name === activeStep.agent) || getSelectedAgent();
+      const currentProposal = currentAgentProposal(agent);
+      const proposals = agent.proposals.map((proposal) => `
+        <article class="proposal ${proposal.id === agent.selected_proposal_id ? "selected" : ""}">
+          <div class="meta-row">
+            <span class="chip accent">${escapeHtml(proposal.id)}</span>
+            <span class="chip muted">${Math.round(proposal.confidence * 100)}%</span>
+          </div>
+          <h5>${escapeHtml(proposal.title)}</h5>
+          <p class="small">${escapeHtml(proposal.summary)}</p>
+          <p class="small" style="margin-top:8px;">${escapeHtml(proposal.rationale)}</p>
+          <div class="proposal-actions">
+            <button class="button small primary" type="button" data-action="approve-proposal|${agent.id}|${proposal.id}">Approve</button>
+            <button class="button small ghost" type="button" data-action="override-proposal|${agent.id}|${proposal.id}">Override</button>
+          </div>
+        </article>
+      `).join("");
+
+      const finalPanel = state.final_report
+        ? `
+          <div class="decision-card">
+            <div class="meta-row">
+              <span class="chip accent">Audit snapshot ready</span>
+              <span class="chip muted">${escapeHtml(state.final_report.audit_path)}</span>
+            </div>
+            <p class="subcopy">The backend audit run has been captured. The workspace state and the audit snapshot now point at the same decision history.</p>
+            <div class="proposal-actions">
+              <button class="button small ghost" type="button" data-action="download-audit-report">Download audit JSON</button>
+            </div>
+          </div>
+        `
+        : `
+          <div class="decision-card">
+            <div class="meta-row">
+              <span class="chip accent-2">Ready to generate</span>
+              <span class="chip muted">${escapeHtml(activeStep.gate)}</span>
+            </div>
+            <p class="subcopy">When the direction is approved, the existing backend flow can produce a kernel audit snapshot without breaking the browser workspace.</p>
+            <div class="proposal-actions">
+              <button class="button small warn" type="button" data-action="guided-generate">Generate</button>
+            </div>
+          </div>
+        `;
+
+      return `
+        <div class="guided-grid">
+          <div class="step-list">${steps}</div>
+          <div class="decision-stack">
+            <section class="decision-card">
+              <div class="meta-row">
+                <span class="chip accent">${escapeHtml(activeStep.label)}</span>
+                <span class="chip muted">${escapeHtml(activeStep.agent)}</span>
+              </div>
+              <h3>${escapeHtml(currentProposal.title)}</h3>
+              <p class="subcopy">${escapeHtml(activeStep.hint)}</p>
+              <div class="proposal-actions">
+                <button class="button small ghost" type="button" data-action="guided-back">Back</button>
+                <button class="button small primary" type="button" data-action="guided-next">Approve and advance</button>
+                <button class="button small warn" type="button" data-action="guided-generate">Generate</button>
+              </div>
+            </section>
+            <section class="decision-card">
+              <h3>Creative Director proposal</h3>
+              <div class="proposal-list">
+                ${state.agents.find((item) => item.id === "creative_director").proposals.map((proposal) => `
+                  <article class="proposal ${proposal.id === state.agents.find((item) => item.id === "creative_director").selected_proposal_id ? "selected" : ""}">
+                    <div class="meta-row">
+                      <span class="chip accent">${escapeHtml(proposal.id)}</span>
+                      <span class="chip muted">${Math.round(proposal.confidence * 100)}%</span>
+                    </div>
+                    <h5>${escapeHtml(proposal.title)}</h5>
+                    <p class="small">${escapeHtml(proposal.summary)}</p>
+                    <p class="small" style="margin-top:8px;">${escapeHtml(proposal.impact)}</p>
+                    <div class="proposal-actions">
+                      <button class="button small primary" type="button" data-action="approve-proposal|creative_director|${proposal.id}">Approve</button>
+                      <button class="button small ghost" type="button" data-action="override-proposal|creative_director|${proposal.id}">Override</button>
+                    </div>
+                  </article>
+                `).join("")}
+              </div>
+            </section>
+            ${finalPanel}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTimelineEditor() {
+      const tracks = state.timeline.tracks.map((track, trackIndex) => {
+        const clips = track.clips.map((clip) => {
+          const style = `grid-column: ${clip.start + 1} / span ${clip.duration};`;
+          return `
+            <article class="clip ${track.id}" style="${style}" data-action="clip|${clip.id}">
+              <h4>${escapeHtml(clip.label)}</h4>
+              <p class="small">${escapeHtml(clip.note)}</p>
+              <div class="meta-row">
+                <span class="chip muted">${escapeHtml(clip.status)}</span>
+                <span class="chip muted">Start ${clip.start}</span>
+                <span class="chip muted">Span ${clip.duration}</span>
+              </div>
+              <div class="clip-controls">
+                <button class="button small ghost" type="button" data-action="timeline-shift|${track.id}|${clip.id}|-1|0">◀</button>
+                <button class="button small ghost" type="button" data-action="timeline-shift|${track.id}|${clip.id}|1|0">▶</button>
+                <button class="button small ghost" type="button" data-action="timeline-shift|${track.id}|${clip.id}|0|1">+ length</button>
+                <button class="button small ghost" type="button" data-action="timeline-shift|${track.id}|${clip.id}|0|-1">- length</button>
+              </div>
+            </article>
+          `;
+        }).join("");
+
+        return `
+          <section class="track">
+            <div class="track-head">
+              <div>
+                <strong>${escapeHtml(track.label)}</strong>
+                <p class="small">${escapeHtml(state.timeline.note)}</p>
+              </div>
+              <div class="proposal-actions">
+                <button class="button small primary" type="button" data-action="timeline-add-clip|${track.id}">Add clip</button>
+              </div>
+            </div>
+            <div class="track-lane">
+              ${clips}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      const scriptLines = state.script.lines.map((line, index) => `
+        <div class="inspector-box" style="margin-top:10px;">
+          <div class="meta-row">
+            <span class="chip accent">${escapeHtml(line.scene)}</span>
+            <span class="chip muted">${escapeHtml(line.speaker)}</span>
+            <span class="chip ${line.locked ? "accent-2" : "muted"}">${line.locked ? "Locked" : "Editable"}</span>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="script-line-${index}">Line ${index + 1}</label>
+            <textarea id="script-line-${index}" data-bind="script.lines.${index}.text">${escapeHtml(line.text)}</textarea>
+          </div>
+        </div>
+      `).join("");
+
+      return `
+        <div class="timeline-grid">
+          ${tracks}
+          <section class="panel" style="margin:0;">
+            <h3>${escapeHtml(state.script.title)}</h3>
+            <p class="subcopy">The script stays editable in the same production model. Changing a line updates the browser state and the audit trail.</p>
+            ${scriptLines}
+          </section>
+        </div>
+      `;
+    }
+
+    function renderAgentConsole() {
+      const cards = state.agents.map((agent) => {
+        const proposal = currentAgentProposal(agent);
+        return `
+          <article class="agent-card ${agent.id === state.selected_agent_id ? "selected" : ""}" data-action="agent|${agent.id}">
+            <div class="meta-row">
+              <span class="chip accent">${escapeHtml(agent.name)}</span>
+              <span class="chip muted">${escapeHtml(agent.linked_stage)}</span>
+            </div>
+            <h4>${escapeHtml(agent.role)}</h4>
+            <p>${escapeHtml(proposal.summary)}</p>
+            <div class="proposal-list">
+              ${agent.proposals.map((item) => `
+                <article class="proposal ${item.id === agent.selected_proposal_id ? "selected" : ""}">
+                  <h5>${escapeHtml(item.title)}</h5>
+                  <p class="small">${escapeHtml(item.rationale)}</p>
+                  <p class="small" style="margin-top:8px;">${escapeHtml(item.impact)}</p>
+                  <div class="proposal-actions">
+                    <button class="button small primary" type="button" data-action="approve-proposal|${agent.id}|${item.id}">Approve</button>
+                    <button class="button small ghost" type="button" data-action="override-proposal|${agent.id}|${item.id}">Override</button>
+                    ${agent.id === "creative_director" ? `<button class="button small ghost" type="button" data-action="refresh-agent|${agent.id}">Refresh</button>` : ""}
+                  </div>
+                </article>
+              `).join("")}
+            </div>
+            <div class="override-note">
+              <label for="override-${agent.id}">Override note</label>
+              <textarea id="override-${agent.id}" placeholder="Write the override here if the crew should follow your direction instead.">${escapeHtml(agent.override_note || "")}</textarea>
+            </div>
+            <div class="proposal-actions">
+              <button class="button small primary" type="button" data-action="approve-proposal|${agent.id}|${proposal.id}">Approve selected</button>
+              <button class="button small warn" type="button" data-action="override-agent|${agent.id}">Store override</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      const conversation = state.agents.map((agent) => `
+        <div class="event">
+          <strong>${escapeHtml(agent.name)}</strong>
+          <span>${escapeHtml(agent.messages[agent.messages.length - 1]?.text || "No message yet.")}</span>
+        </div>
+      `).join("");
+
+      return `
+        <div class="agent-grid">
+          ${cards}
+        </div>
+        <section class="panel" style="margin-top:12px;">
+          <h3>Conversation thread</h3>
+          <p class="subcopy">The crew conversation is visible, but the user still decides what becomes part of the production state.</p>
+          <div class="provenance-feed">${conversation}</div>
+        </section>
+      `;
+    }
+
+    function renderNodeGraph() {
+      const width = 1020;
+      const height = 620;
+      const nodeWidth = 216;
+      const nodeHeight = 96;
+      const edges = state.graph.edges.map((edge) => {
+        const from = state.graph.nodes.find((node) => node.id === edge.from);
+        const to = state.graph.nodes.find((node) => node.id === edge.to);
+        if (!from || !to) return "";
+        const x1 = from.x + nodeWidth / 2;
+        const y1 = from.y + nodeHeight / 2;
+        const x2 = to.x + nodeWidth / 2;
+        const y2 = to.y + nodeHeight / 2;
+        return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(137, 220, 200, 0.26)" stroke-width="2" />`;
+      }).join("");
+
+      const nodes = state.graph.nodes.map((node) => `
+        <article class="graph-node ${node.id === state.selected_node_id ? "selected" : ""}" style="left:${node.x}px; top:${node.y}px;" data-action="node|${node.id}">
+          <div class="meta-row">
+            <span class="tag">${escapeHtml(node.kind)}</span>
+            <span class="chip ${node.status === "active" ? "accent-2" : node.status === "locked" ? "accent" : "accent-3"}">${escapeHtml(node.status)}</span>
+          </div>
+          <h4>${escapeHtml(node.label)}</h4>
+          <p>${escapeHtml(node.detail)}</p>
+        </article>
+      `).join("");
+
+      return `
+        <section class="graph-shell">
+          <svg class="graph-lines" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+            ${edges}
+          </svg>
+          <div class="graph-nodes">
+            ${nodes}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderView() {
+      if (state.current_view === "director_canvas") {
+        dom.viewHost.innerHTML = renderDirectorCanvas();
+      } else if (state.current_view === "guided_flow") {
+        dom.viewHost.innerHTML = renderGuidedFlow();
+      } else if (state.current_view === "timeline_editor") {
+        dom.viewHost.innerHTML = renderTimelineEditor();
+      } else if (state.current_view === "agent_console") {
+        dom.viewHost.innerHTML = renderAgentConsole();
+      } else if (state.current_view === "node_graph") {
+        dom.viewHost.innerHTML = renderNodeGraph();
+      }
+    }
+
+    function renderChrome() {
+      renderStatusRow();
+      renderMetrics();
+      renderTabs();
+      renderPipeline();
+      renderGuidedCue();
+      renderAssets();
+      renderInspector();
+      const activeStep = state.guided_flow.steps.find((item) => item.id === state.guided_flow.active_step_id) || state.guided_flow.steps[0];
+      dom.activeViewDescription.textContent = VIEW_COPY[state.current_view];
+      dom.guidedHelper.textContent = `${activeStep.label} • ${activeStep.gate}`;
+      dom.toast.classList.toggle("hidden", !state.notifications.length);
+      if (state.notifications.length) {
+        const latest = state.notifications[0];
+        dom.toast.innerHTML = `<strong>${escapeHtml(latest.kind.toUpperCase())}</strong><span>${escapeHtml(latest.message)}</span>`;
+      }
+    }
+
+    function renderAll() {
+      renderChrome();
+      renderView();
+    }
+
+    function queueChromeRender() {
+      if (renderChromeQueued) {
+        return;
+      }
+      renderChromeQueued = true;
+      window.requestAnimationFrame(() => {
+        renderChromeQueued = false;
+        renderChrome();
+      });
+    }
+
+    function updateBriefFromInput(target) {
+      const bind = target.dataset.bind;
+      let value;
+      if (target.type === "checkbox") {
+        value = target.checked;
+      } else if (target.type === "number") {
+        value = Number(target.value);
+      } else {
+        value = target.value;
+      }
+      setPath(state, bind, value);
+      saveState(`Updated ${bind}`);
+      queueChromeRender();
+    }
+
+    function updateClip(trackId, clipId, deltaStart, deltaDuration) {
+      const track = state.timeline.tracks.find((item) => item.id === trackId);
+      if (!track) return;
+      const clip = track.clips.find((item) => item.id === clipId);
+      if (!clip) return;
+      clip.start = Math.max(0, clip.start + deltaStart);
+      clip.duration = Math.max(1, clip.duration + deltaDuration);
+      saveState(`Updated timeline clip ${clip.label}`);
+      renderAll();
+    }
+
+    function addTimelineClip(trackId) {
+      const track = state.timeline.tracks.find((item) => item.id === trackId);
+      if (!track) return;
+      const last = track.clips[track.clips.length - 1];
+      const start = last ? Math.min(20, last.start + last.duration + 1) : 0;
+      track.clips.push({
+        id: `${trackId}_${Date.now()}`,
+        label: "New clip",
+        start,
+        duration: 3,
+        status: "draft",
+        note: "A new clip inherits the same production state.",
+      });
+      state.selected_clip_id = track.clips[track.clips.length - 1].id;
+      state.selection_kind = "clip";
+      state.selection_id = state.selected_clip_id;
+      saveState(`Added a new ${track.label} clip`);
+      renderAll();
+    }
+
+    function addCanvasNote() {
+      const count = state.canvas.cards.filter((card) => card.kind === "note").length + 1;
+      state.canvas.cards.push({
+        id: `note_${Date.now()}`,
+        kind: "note",
+        title: `Note ${count}`,
+        summary: "A pinned note stays attached to the same workspace state.",
+        x: 64 + (count * 24) % 380,
+        y: 404 + (count * 18) % 64,
+        w: 210,
+        h: 132,
+        accent: "muted",
+        linked: state.selected_asset_id,
+      });
+      state.selected_scene_id = state.canvas.cards[state.canvas.cards.length - 1].id;
+      state.selection_kind = "scene";
+      state.selection_id = state.selected_scene_id;
+      saveState("Added a canvas note");
+      renderAll();
+    }
+
+    function advanceGuidedStep(direction) {
+      const steps = state.guided_flow.steps;
+      const index = steps.findIndex((step) => step.id === state.guided_flow.active_step_id);
+      const nextIndex = Math.max(0, Math.min(steps.length - 1, index + direction));
+      state.guided_flow.active_step_id = steps[nextIndex].id;
+      saveState(`Guided flow moved to ${steps[nextIndex].label}`);
+      renderAll();
+    }
+
+    async function refreshCreativeDirector() {
+      const agent = state.agents.find((item) => item.id === "creative_director");
+      if (!agent) return;
+      try {
+        const response = await fetch("/api/reframe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topic: state.brief.topic,
+            audience: state.brief.audience,
+            tone: state.brief.tone,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("reframe endpoint failed");
+        }
+        const data = await response.json();
+        agent.proposals = data.angles.map((angle) => ({
+          id: angle.id,
+          title: angle.name,
+          summary: angle.summary,
+          rationale: angle.risk_focus,
+          impact: angle.questions_to_address.join(" "),
+          confidence: angle.id === "contrarian" ? 0.93 : angle.id === "advocate" ? 0.95 : 0.96,
+        }));
+        agent.selected_proposal_id = agent.selected_proposal_id || agent.proposals[0]?.id || "skeptic";
+        recordEvent("ai", "Creative Director refreshed the proposal set.");
+        renderAll();
+      } catch (error) {
+        recordEvent("error", "Creative Director refresh failed; the bootstrap proposals remain in place.");
+      }
+    }
+
+    function applyProposal(agentId, proposalId, overridden = false) {
+      const agent = state.agents.find((item) => item.id === agentId);
+      if (!agent) return;
+      const proposal = agent.proposals.find((item) => item.id === proposalId) || agent.proposals[0];
+      if (!proposal) return;
+      agent.selected_proposal_id = proposal.id;
+      agent.status = overridden ? "overridden" : "approved";
+      if (overridden) {
+        const note = document.getElementById(`override-${agentId}`);
+        agent.override_note = note ? note.value.trim() : "";
+      }
+
+      if (agent.id === "creative_director") {
+        state.brief.creative_angle = proposal.id;
+        state.production.current_stage_id = "creative_direction";
+        state.guided_flow.active_step_id = "plan_shots";
+        const stage = state.pipeline.find((item) => item.id === "creative_direction");
+        if (stage) stage.status = "locked";
+        const next = state.pipeline.find((item) => item.id === "story");
+        if (next) next.status = "active";
+      } else if (agent.id === "storyboard_artist") {
+        const stage = state.pipeline.find((item) => item.id === "storyboard");
+        if (stage) stage.status = "locked";
+        const next = state.pipeline.find((item) => item.id === "timeline");
+        if (next) next.status = "active";
+      } else if (agent.id === "reviewer") {
+        const stage = state.pipeline.find((item) => item.id === "review");
+        if (stage) stage.status = "locked";
+        const next = state.pipeline.find((item) => item.id === "publishing");
+        if (next) next.status = "active";
+      }
+
+      recordEvent("decision", `${agent.name} ${overridden ? "overridden" : "approved"}: ${proposal.title}`);
+      renderAll();
+    }
+
+    function storeOverride(agentId) {
+      const agent = state.agents.find((item) => item.id === agentId);
+      if (!agent) return;
+      const note = document.getElementById(`override-${agentId}`);
+      agent.override_note = note ? note.value.trim() : "";
+      agent.status = "overridden";
+      recordEvent("override", `${agent.name} override stored.`);
+      renderAll();
+    }
+
+    async function generateAuditSnapshot() {
+      const agent = state.agents.find((item) => item.id === "creative_director");
+      const chosen = currentAgentProposal(agent);
+      try {
+        const response = await fetch("/api/finalize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topic: state.brief.topic,
+            audience: state.brief.audience,
+            tone: state.brief.tone,
+            chosen_angle_id: chosen.id,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("finalize endpoint failed");
+        }
+        const report = await response.json();
+        state.final_report = report;
+        state.guided_flow.active_step_id = "generate";
+        recordEvent("publish", `Audit snapshot generated with ${report.accepted_claims} accepted claims.`);
+        renderAll();
+      } catch (error) {
+        recordEvent("error", "Audit snapshot generation failed.");
+      }
+    }
+
+    function exportState() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "open-production-workspace-state.json";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 500);
+      recordEvent("export", "Workspace state exported as JSON.");
+    }
+
+    function resetWorkspace() {
+      localStorage.removeItem(STORAGE_KEY);
+      window.location.reload();
+    }
+
+    document.addEventListener("input", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (!target.matches("[data-bind]")) return;
+      updateBriefFromInput(target);
+    });
+
+    document.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (!target.matches("[data-bind]")) return;
+      updateBriefFromInput(target);
+    });
+
+    document.addEventListener("click", async (event) => {
+      const trigger = event.target.closest("[data-action]");
+      if (!trigger) return;
+      const parts = trigger.dataset.action.split("|");
+      const action = parts[0];
+      if (action === "view") {
+        setView(parts[1]);
+      } else if (action === "asset") {
+        selectEntity("asset", parts[1]);
+      } else if (action === "stage") {
+        selectEntity("stage", parts[1]);
+      } else if (action === "scene") {
+        selectEntity("scene", parts[1]);
+      } else if (action === "node") {
+        selectEntity("node", parts[1]);
+      } else if (action === "clip") {
+        selectEntity("clip", parts[1]);
+      } else if (action === "provenance") {
+        selectEntity("provenance", parts[1]);
+      } else if (action === "guided-next") {
+        advanceGuidedStep(1);
+      } else if (action === "guided-back") {
+        advanceGuidedStep(-1);
+      } else if (action === "guided-generate") {
+        await generateAuditSnapshot();
+      } else if (action === "guided-step") {
+        const stepId = parts[1];
+        state.guided_flow.active_step_id = stepId;
+        saveState(`Focused guided step ${stepId}`);
+        renderAll();
+      } else if (action === "approve-proposal") {
+        applyProposal(parts[1], parts[2], false);
+      } else if (action === "override-proposal") {
+        applyProposal(parts[1], parts[2], true);
+      } else if (action === "override-agent") {
+        storeOverride(parts[1]);
+      } else if (action === "refresh-agent") {
+        await refreshCreativeDirector();
+      } else if (action === "timeline-shift") {
+        updateClip(parts[1], parts[2], Number(parts[3] || 0), Number(parts[4] || 0));
+      } else if (action === "timeline-add-clip") {
+        addTimelineClip(parts[1]);
+      } else if (action === "canvas-add-note") {
+        addCanvasNote();
+      } else if (action === "canvas-pin") {
+        selectEntity("asset", parts[1] || state.selected_asset_id);
+        recordEvent("canvas", "Pinned a note to the Director's Canvas.");
+      } else if (action === "generate-audit") {
+        await generateAuditSnapshot();
+      } else if (action === "download-audit-report") {
+        exportState();
+      } else if (action === "export-state") {
+        exportState();
+      } else if (action === "reset-workspace") {
+        resetWorkspace();
+      }
+    });
+
+    window.addEventListener("storage", (event) => {
+      if (event.key !== STORAGE_KEY) return;
+      state = loadState();
+      renderAll();
+    });
+
+    renderAll();
+    refreshCreativeDirector();
+    dom.toast.classList.toggle("hidden", false);
+  </script>
+</body>
+</html>

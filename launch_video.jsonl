@@ -1,0 +1,5 @@
+{"ts": "2026-07-26T17:21:49.380691+00:00", "gate_name": "composition_plan", "claim_id": "intent-Launch demo", "decision_status": "accepted", "reason": "planned 3 shots", "evidence": {"title": "Launch demo", "duration_seconds": 6.0, "shot_count": 3, "style": "cinematic"}}
+{"ts": "2026-07-26T17:21:49.381842+00:00", "gate_name": "frame_render", "claim_id": "shot-01", "decision_status": "accepted", "reason": "rendered 60 frames", "evidence": {"shot_id": "shot-01", "frame_count": 60}}
+{"ts": "2026-07-26T17:21:49.382839+00:00", "gate_name": "frame_render", "claim_id": "shot-02", "decision_status": "accepted", "reason": "rendered 60 frames", "evidence": {"shot_id": "shot-02", "frame_count": 60}}
+{"ts": "2026-07-26T17:21:49.384011+00:00", "gate_name": "frame_render", "claim_id": "shot-03", "decision_status": "accepted", "reason": "rendered 60 frames", "evidence": {"shot_id": "shot-03", "frame_count": 60}}
+{"ts": "2026-07-26T17:21:49.384766+00:00", "gate_name": "video_quality_gate", "claim_id": "video-render", "decision_status": "publish_ok", "reason": "180/180 frames passed", "evidence": {"frame_count": 180, "rejected_count": 0}}

@@ -1,0 +1,387 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://open-production.org/schema/production-document.schema.json",
+  "title": "Production Document",
+  "description": "Canonical schema for an Open Production. Hierarchical: Studio > Production > Scene > Shot > Frame. Plus cross-cutting Asset, Reference, Character, Environment, StyleToken, ConsistencyContract, AuditEntry, VersionEvent, VersionSnapshot, Branch. Compatible with the existing AuditRecorder.record_gate_decision field shape.",
+  "type": "object",
+  "required": ["schema_version", "id", "state", "intent", "scenes", "audit_trail"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Schema version. Bump on breaking changes."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^prod_[A-Za-z0-9_-]{8,}$",
+      "description": "Globally unique production id. Format: prod_<base64-like>."
+    },
+    "studio_id": {
+      "type": "string",
+      "pattern": "^studio_[A-Za-z0-9_-]{4,}$",
+      "description": "Owning Studio. Optional — single-user productions may have no Studio."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "state": {
+      "type": "string",
+      "enum": ["DRAFT", "BRIEFED", "IN_PRODUCTION", "IN_REVIEW", "APPROVED", "PUBLISHED"],
+      "description": "Production state machine. Transitions forward only, except IN_REVIEW -> IN_PRODUCTION (revision loop). State changes require human confirmation (AuditEntry of action_type=state_transition)."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "intent": {
+      "$ref": "#/$defs/IntentDocument"
+    },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Reference" },
+      "description": "All references used anywhere in this production. May include mood-board images, voice samples, prior cuts."
+    },
+    "characters": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Character" },
+      "description": "Named characters with consistency contracts."
+    },
+    "environments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Environment" },
+      "description": "Named environments with consistency contracts."
+    },
+    "style_tokens": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/StyleToken" },
+      "description": "Reusable named visual parameters."
+    },
+    "brand_kit": {
+      "$ref": "#/$defs/BrandKit",
+      "description": "Optional. Productions bound to a brand carry this."
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/Scene" }
+    },
+    "timeline": {
+      "$ref": "#/$defs/Timeline",
+      "description": "Sequence of scenes + global cut, transitions, music cues."
+    },
+    "branches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Branch" },
+      "description": "Named branches. Always includes 'main'."
+    },
+    "snapshots": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/VersionSnapshot" },
+      "description": "Named, content-addressed snapshots. Diffable."
+    },
+    "audit_trail": {
+      "type": "array",
+      "description": "Append-only log. Every state change, decision, override, and gate verdict lives here. The current Production is always (initial state) + (every entry applied in order).",
+      "items": { "$ref": "#/$defs/AuditEntry" }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Free-form key-value bag. Reserved for forward compatibility.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+
+    "IntentDocument": {
+      "type": "object",
+      "required": ["topic"],
+      "additionalProperties": false,
+      "properties": {
+        "topic":        { "type": "string", "minLength": 1, "description": "The user-supplied topic or one-line brief." },
+        "audience":     { "type": "string", "description": "Target audience descriptor." },
+        "tone":         { "type": "string", "description": "Desired tone descriptor." },
+        "platform":     { "type": "string", "description": "Intended publication platform (tiktok, instagram, youtube, broadcast, etc)." },
+        "duration_sec": { "type": "number", "minimum": 0, "description": "Target duration in seconds, if applicable." },
+        "style_seed":   { "type": "string", "description": "Hash of style references used to seed generation." },
+        "extra":        { "type": "object", "additionalProperties": true }
+      }
+    },
+
+    "Reference": {
+      "type": "object",
+      "required": ["id", "kind", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id":      { "type": "string", "pattern": "^ref_[A-Za-z0-9_-]{4,}$" },
+        "kind":    { "type": "string", "enum": ["image", "video", "audio", "text", "url"] },
+        "label":   { "type": "string", "minLength": 1, "maxLength": 200 },
+        "uri":     { "type": "string", "description": "Where the asset lives." },
+        "sha256":  { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$", "description": "Content hash. Optional but recommended." },
+        "pinned_by": { "type": "string", "description": "Who/what pinned it. Free-form for now." },
+        "pinned_at": { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "Character": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id":        { "type": "string", "pattern": "^char_[A-Za-z0-9_-]{4,}$" },
+        "name":      { "type": "string", "minLength": 1 },
+        "role":      { "type": "string", "description": "protagonist / antagonist / supporting / extra / etc." },
+        "voice_id":  { "type": "string", "description": "Pointer to Voice Library entry (post-MVP)." },
+        "visual_anchors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Reference" },
+          "description": "Reference images used as identity anchors for generation."
+        },
+        "consistency_contract": { "$ref": "#/$defs/ConsistencyContract" }
+      }
+    },
+
+    "Environment": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "id":   { "type": "string", "pattern": "^env_[A-Za-z0-9_-]{4,}$" },
+        "name": { "type": "string", "minLength": 1 },
+        "time_of_day_variants": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Free-form list, e.g. ['dawn', 'midday', 'dusk', 'night']."
+        },
+        "visual_anchors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Reference" }
+        },
+        "lighting_presets": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Named lighting presets referenced by shots in this environment."
+        },
+        "consistency_contract": { "$ref": "#/$defs/ConsistencyContract" }
+      }
+    },
+
+    "ConsistencyContract": {
+      "type": "object",
+      "description": "Formal spec the Reviewer agent evaluates against before exposing any generation to the user. Failed generations are silently regenerated or escalated.",
+      "required": ["subject_id"],
+      "additionalProperties": false,
+      "properties": {
+        "subject_id":         { "type": "string", "description": "ID of the subject this contract applies to." },
+        "visual_anchors":     { "type": "array", "items": { "$ref": "#/$defs/Reference" } },
+        "required_attributes":{ "type": "array", "items": { "type": "string" }, "description": "Must appear in every generation. e.g. ['short_hair', 'scar_left', 'age_30s']." },
+        "prohibited_attributes":{ "type": "array", "items": { "type": "string" }, "description": "Must not appear. e.g. ['long_hair', 'glasses', 'helmet']." },
+        "variance_tolerance": { "type": "number", "minimum": 0.0, "maximum": 1.0, "description": "0.0 = identical, 1.0 = loose. Default 0.15." },
+        "reviewer_checklist": { "type": "array", "items": { "type": "string" }, "description": "Free-form checklist items the Reviewer must verify." }
+      }
+    },
+
+    "StyleToken": {
+      "type": "object",
+      "required": ["id", "name", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "id":      { "type": "string", "pattern": "^tok_[A-Za-z0-9_-]{4,}$" },
+        "name":    { "type": "string", "minLength": 1 },
+        "kind":    { "type": "string", "enum": ["color", "texture", "lighting", "motion", "framing", "voice", "music", "composite"] },
+        "value":   { "description": "Token value. Free-form: hex code, descriptive text, nested object." },
+        "tokens":  { "type": "object", "additionalProperties": true, "description": "Subtokens if value is composite." }
+      }
+    },
+
+    "BrandKit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name":      { "type": "string" },
+        "palette":   { "type": "array", "items": { "$ref": "#/$defs/StyleToken" } },
+        "typography":{ "type": "array", "items": { "$ref": "#/$defs/StyleToken" } },
+        "logos":     { "type": "array", "items": { "$ref": "#/$defs/Reference" } },
+        "approved_language": { "type": "array", "items": { "type": "string" } },
+        "prohibited_language":{ "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "Scene": {
+      "type": "object",
+      "required": ["id", "name", "shots"],
+      "additionalProperties": false,
+      "properties": {
+        "id":        { "type": "string", "pattern": "^scene_[A-Za-z0-9_-]{4,}$" },
+        "name":      { "type": "string", "minLength": 1 },
+        "mood":      { "$ref": "#/$defs/MoodSpec" },
+        "location":  { "type": "string", "description": "Pointer to Environment.id, or free-form for ad-hoc." },
+        "shots":     { "type": "array", "minItems": 0, "items": { "$ref": "#/$defs/Shot" } },
+        "notes":     { "type": "string" },
+        "stage":     { "type": "string", "description": "Which of the 26 stages this scene is currently at." }
+      }
+    },
+
+    "MoodSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "emotional_promise": { "type": "string" },
+        "tonal_palette":     { "type": "array", "items": { "type": "string" } },
+        "references":        { "type": "array", "items": { "type": "string" }, "description": "Reference ids." },
+        "locked":            { "type": "boolean", "default": false, "description": "Locked moods cannot be changed without an override event." }
+      }
+    },
+
+    "Shot": {
+      "type": "object",
+      "required": ["id", "scene_id", "intent", "duration_sec", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id":          { "type": "string", "pattern": "^shot_[A-Za-z0-9_-]{4,}$" },
+        "scene_id":    { "type": "string" },
+        "intent":      { "type": "string", "minLength": 1, "description": "What this shot is supposed to do, in plain English." },
+        "camera":      { "$ref": "#/$defs/CameraSpec" },
+        "lighting":    { "$ref": "#/$defs/LightingSpec" },
+        "characters":  { "type": "array", "items": { "$ref": "#/$defs/CharacterReference" } },
+        "duration_sec":{ "type": "number", "minimum": 0 },
+        "audio":       { "$ref": "#/$defs/AudioSpec" },
+        "generation":  { "$ref": "#/$defs/GenerationResult" },
+        "status":      { "type": "string", "enum": ["draft", "in_production", "generated", "in_review", "approved", "rejected"] },
+        "locked":      { "type": "boolean", "default": false },
+        "version_history": { "type": "array", "items": { "$ref": "#/$defs/GenerationResult" }, "description": "All previous generations for this shot. Newest is also in 'generation'." }
+      }
+    },
+
+    "CameraSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "focal_length_mm": { "type": "number" },
+        "frame_rate":      { "type": "number" },
+        "aperture":        { "type": "string" },
+        "movement":        { "type": "string", "enum": ["static", "pan", "tilt", "dolly", "push_in", "pull_out", "handheld", "custom"] },
+        "framing":         { "type": "string", "enum": ["extreme_close", "close", "medium", "wide", "extreme_wide", "over_the_shoulder", "custom"] },
+        "preset_id":       { "type": "string", "description": "Pointer to CameraPreset in Studio Library." }
+      }
+    },
+
+    "LightingSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key_intensity_pct":   { "type": "number", "minimum": 0, "maximum": 100 },
+        "fill_intensity_pct":  { "type": "number", "minimum": 0, "maximum": 100 },
+        "color_temp_k":        { "type": "number" },
+        "preset_id":           { "type": "string" }
+      }
+    },
+
+    "AudioSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "voice_direction": { "type": "string" },
+        "sfx":             { "type": "array", "items": { "type": "string" } },
+        "music_cue":       { "type": "string" }
+      }
+    },
+
+    "CharacterReference": {
+      "type": "object",
+      "required": ["character_id"],
+      "additionalProperties": false,
+      "properties": {
+        "character_id":  { "type": "string" },
+        "expression":    { "type": "string" },
+        "blocking_note": { "type": "string" }
+      }
+    },
+
+    "GenerationResult": {
+      "type": "object",
+      "required": ["id", "produced_at"],
+      "additionalProperties": false,
+      "properties": {
+        "id":              { "type": "string", "pattern": "^gen_[A-Za-z0-9_-]{4,}$" },
+        "produced_at":     { "type": "string", "format": "date-time" },
+        "produced_by":     { "type": "string", "description": "Agent or human identifier." },
+        "backend":         { "type": "string", "description": "e.g. 'runway-gen3', 'veo', 'local:svd', 'mock'." },
+        "backend_version": { "type": "string" },
+        "prompt_hash":     { "type": "string", "description": "Hash of the resolved generation prompt (for reproducibility)." },
+        "output_uri":      { "type": "string" },
+        "output_sha256":   { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" },
+        "reviewer_verdict":{ "type": "object", "additionalProperties": true, "description": "Reviewer agent's verdict against the consistency contract." },
+        "cost_estimate_usd":{ "type": "number" },
+        "latency_ms":       { "type": "number" }
+      }
+    },
+
+    "Timeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scene_order": { "type": "array", "items": { "type": "string" }, "description": "Ordered list of Scene ids." },
+        "transitions": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+        "music_cues":  { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+      }
+    },
+
+    "Branch": {
+      "type": "object",
+      "required": ["id", "name", "created_at"],
+      "additionalProperties": false,
+      "properties": {
+        "id":         { "type": "string", "pattern": "^branch_[A-Za-z0-9_-]{4,}$" },
+        "name":       { "type": "string", "minLength": 1 },
+        "parent_snapshot_id": { "type": "string", "description": "Snapshot this branch was forked from." },
+        "created_at": { "type": "string", "format": "date-time" },
+        "created_by": { "type": "string" },
+        "locked":     { "type": "boolean", "default": false }
+      }
+    },
+
+    "VersionSnapshot": {
+      "type": "object",
+      "required": ["id", "taken_at", "content_hash"],
+      "additionalProperties": false,
+      "properties": {
+        "id":            { "type": "string", "pattern": "^snap_[A-Za-z0-9_-]{4,}$" },
+        "taken_at":      { "type": "string", "format": "date-time" },
+        "taken_by":      { "type": "string" },
+        "content_hash":  { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$", "description": "Content-addressed hash of the production state at this snapshot." },
+        "label":         { "type": "string" },
+        "branch_id":     { "type": "string" }
+      }
+    },
+
+    "AuditEntry": {
+      "type": "object",
+      "description": "Append-only event log entry. Compatible with src/audit/recorder.py:record_gate_decision fields. Extended with actor + action_type for non-gate events.",
+      "required": ["id", "ts", "actor", "action_type"],
+      "additionalProperties": false,
+      "properties": {
+        "id":              { "type": "string", "pattern": "^evt_[A-Za-z0-9_-]{8,}$" },
+        "ts":              { "type": "string", "format": "date-time" },
+        "actor":           { "type": "string", "description": "human | agent_id | system" },
+        "action_type":     { "type": "string", "enum": ["gate_decision", "decision", "lock", "unlock", "snapshot", "branch", "merge", "state_transition", "override", "comment", "system"] },
+        "gate_name":       { "type": "string", "description": "For action_type=gate_decision." },
+        "claim_id":        { "type": "string", "description": "For action_type=gate_decision." },
+        "decision_status": { "type": "string", "description": "For action_type=gate_decision. accepted | rejected | publish_ok | publish_rejected | contradiction_detected | review_flagged" },
+        "reason":          { "type": "string" },
+        "evidence":        { "type": "object", "additionalProperties": true },
+        "payload":         { "type": "object", "additionalProperties": true, "description": "For non-gate events. Structure depends on action_type." },
+        "state_before":    { "type": "string", "description": "Content hash of production state before this entry." },
+        "state_after":     { "type": "string", "description": "Content hash of production state after this entry." }
+      }
+    }
+
+  }
+}

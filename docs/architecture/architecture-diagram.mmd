@@ -1,0 +1,64 @@
+flowchart TD
+  %% Section 1 - User / Intent
+  subgraph section1["Section 1 - User / Intent"]
+    intent["User declares Intent<br/>(topic, audience, tone, length)"]
+  end
+
+  %% Section 2 - Creative Reframing (Stage 2)
+  subgraph creative_reframing["Creative Reframing - Stage 2<br/>Bob Session 2: built"]
+    direction LR
+    skeptic["skeptic"]
+    advocate["advocate"]
+    contrarian["contrarian"]
+    chosen_angle["chosen_angle"]
+    skeptic -->|user picks one| chosen_angle
+    advocate -->|user picks one| chosen_angle
+    contrarian -->|user picks one| chosen_angle
+  end
+
+  %% Section 3 - Multi-Agent Research (Stage 3)
+  subgraph research_agents["Multi-Agent Research - Stage 3"]
+    direction LR
+    pubmed_agent["pubmed_agent"]
+    openalex_agent["openalex_agent"]
+    crossref_agent["crossref_agent"]
+    semantic_scholar_agent["semantic_scholar_agent"]
+    source_set["source_set"]
+    pubmed_agent --> source_set
+    openalex_agent --> source_set
+    crossref_agent --> source_set
+    semantic_scholar_agent --> source_set
+  end
+
+  %% Section 4 - Claim Extraction + Gates (Stages 4-5)
+  subgraph section4["Claim Extraction + Gates - Stages 4-5"]
+    claim_extractor["claim_extractor"]
+    evidence_gate["evidence_gate<br/>(fail-closed)"]
+    consistency_gate["consistency_gate<br/>(fail-closed)"]
+    publication_gate["publication_gate<br/>(fail-closed)"]
+    claim_extractor --> evidence_gate --> consistency_gate --> publication_gate
+  end
+
+  %% Section 5 - Output
+  subgraph section5["Section 5 - Output"]
+    finalized_document["finalized_document"]
+    audit_trail["audit_trail.json"]
+    finalized_document -. audit trail .-> audit_trail
+  end
+
+  intent -->|intent feeds creative reframing| creative_reframing
+  chosen_angle -->|chosen_angle guides research| research_agents
+  source_set --> claim_extractor
+  publication_gate --> finalized_document
+
+  loop_checkpoints["loop_checkpoints"]
+  loop_checkpoints -. checkpoint .-> evidence_gate
+  loop_checkpoints -. checkpoint .-> consistency_gate
+  loop_checkpoints -. checkpoint .-> publication_gate
+
+  classDef bobStyle fill:#7AC9F2,stroke:#0A0E1A,color:#0A0E1A,stroke-width:2px
+  classDef gateStyle fill:#86E09C,stroke:#0A0E1A,color:#0A0E1A
+  classDef failClosedStyle fill:#FF8A8A,stroke:#0A0E1A,color:#0A0E1A
+  class creative_reframing bobStyle
+  class evidence_gate,publication_gate gateStyle
+  class consistency_gate failClosedStyle

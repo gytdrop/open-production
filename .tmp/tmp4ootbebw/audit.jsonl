@@ -1,0 +1,6 @@
+{"ts": "2026-07-27T18:16:54.376403+00:00", "gate_name": "confirm_gate", "claim_id": "angle-selection", "decision_status": "accepted", "reason": "user picked advocate", "evidence": {"options": ["skeptic", "advocate", "contrarian"], "chosen": "advocate"}}
+{"ts": "2026-07-27T18:16:54.377008+00:00", "gate_name": "evidence_gate", "claim_id": "c1", "decision_status": "accepted", "reason": "has sources", "evidence": {"source_ids": ["pubmed:38001234"]}}
+{"ts": "2026-07-27T18:16:54.377824+00:00", "gate_name": "evidence_gate", "claim_id": "c2", "decision_status": "rejected", "reason": "no source_ids", "evidence": {"source_ids": []}}
+{"ts": "2026-07-27T18:16:54.378654+00:00", "gate_name": "evidence_gate", "claim_id": "c3", "decision_status": "accepted", "reason": "has sources", "evidence": {"source_ids": ["pubmed:38005678"]}}
+{"ts": "2026-07-27T18:16:54.379239+00:00", "gate_name": "consistency_gate", "claim_id": "c1_c3", "decision_status": "contradiction_detected", "reason": "fact_id=efficacy-rate", "evidence": {"fact_id": "efficacy-rate"}}
+{"ts": "2026-07-27T18:16:54.379747+00:00", "gate_name": "publication_gate", "claim_id": "doc-metadata", "decision_status": "publish_ok", "reason": "ok", "evidence": {"doi": "10.1000/demo-2026", "authors": ["Alice Smith", "Bob Jones"], "date": "2026-07-27", "title": "Demo document"}}

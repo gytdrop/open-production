@@ -1,0 +1,158 @@
+{
+  "audit_trail": [
+    {
+      "action_type": "system",
+      "actor": "system",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_bc6023221f45",
+      "payload": {
+        "operation": "init",
+        "title": "CRISPR for sickle cell disease"
+      },
+      "reason": null,
+      "state_after": "6b0f2a9aa82118e1",
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.333383+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "angle-selection",
+      "decision_status": "accepted",
+      "evidence": {
+        "chosen": "advocate",
+        "options": [
+          "skeptic",
+          "advocate",
+          "contrarian"
+        ]
+      },
+      "gate_name": "confirm_gate",
+      "id": "evt_3e48c0b7dcac",
+      "payload": {},
+      "reason": "user picked advocate",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.376887+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c1",
+      "decision_status": "accepted",
+      "evidence": {
+        "source_ids": [
+          "pubmed:38001234"
+        ]
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_5311348c1117",
+      "payload": {},
+      "reason": "has sources",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.377737+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c2",
+      "decision_status": "rejected",
+      "evidence": {
+        "source_ids": []
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_9c10e1531f1b",
+      "payload": {},
+      "reason": "no source_ids",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.378577+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c3",
+      "decision_status": "accepted",
+      "evidence": {
+        "source_ids": [
+          "pubmed:38005678"
+        ]
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_d88b9d446a2d",
+      "payload": {},
+      "reason": "has sources",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.379157+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c1_c3",
+      "decision_status": "contradiction_detected",
+      "evidence": {
+        "fact_id": "efficacy-rate"
+      },
+      "gate_name": "consistency_gate",
+      "id": "evt_1314dad6af7f",
+      "payload": {},
+      "reason": "fact_id=efficacy-rate",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.379674+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "doc-metadata",
+      "decision_status": "publish_ok",
+      "evidence": {
+        "authors": [
+          "Alice Smith",
+          "Bob Jones"
+        ],
+        "date": "2026-07-27",
+        "doi": "10.1000/demo-2026",
+        "title": "Demo document"
+      },
+      "gate_name": "publication_gate",
+      "id": "evt_4622c878d315",
+      "payload": {},
+      "reason": "ok",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:16:54.380221+00:00"
+    }
+  ],
+  "branches": [],
+  "brand_kit": null,
+  "characters": [],
+  "created_at": "2026-07-27T18:16:54.332531+00:00",
+  "environments": [],
+  "id": "prod_9e3e7d11055a",
+  "intent": {
+    "audience": "educated_lay",
+    "duration_sec": null,
+    "extra": {},
+    "platform": null,
+    "style_seed": null,
+    "tone": "neutral",
+    "topic": "CRISPR for sickle cell disease"
+  },
+  "metadata": {},
+  "references": [],
+  "scenes": [],
+  "schema_version": "1.0.0",
+  "snapshots": [],
+  "state": "DRAFT",
+  "studio_id": null,
+  "style_tokens": [],
+  "timeline": null,
+  "title": "CRISPR for sickle cell disease",
+  "updated_at": "2026-07-27T18:16:54.380221+00:00"
+}

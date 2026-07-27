@@ -1,0 +1,1 @@
+from . import sequence  # noqa: F401  (auto-register)

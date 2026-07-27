@@ -1,0 +1,3 @@
+{"ts": "2026-07-27T19:00:15.613106+00:00", "gate_name": "confirm_gate", "claim_id": "angle-selection", "decision_status": "accepted", "reason": "user picked contrarian", "evidence": {"options": ["skeptic", "advocate", "contrarian"], "chosen": "contrarian"}}
+{"ts": "2026-07-27T19:00:15.613882+00:00", "gate_name": "evidence_gate", "claim_id": "x1", "decision_status": "accepted", "reason": "has sources", "evidence": {"source_ids": ["src:001"]}}
+{"ts": "2026-07-27T19:00:15.615873+00:00", "gate_name": "publication_gate", "claim_id": "doc-metadata", "decision_status": "publish_ok", "reason": "ok", "evidence": {"doi": "10.1000/demo-2026", "authors": ["Alice Smith", "Bob Jones"], "date": "2026-07-27", "title": "Demo document"}}

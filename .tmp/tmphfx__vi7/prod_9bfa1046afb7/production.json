@@ -1,0 +1,108 @@
+{
+  "audit_trail": [
+    {
+      "action_type": "system",
+      "actor": "system",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_eebae6d253fa",
+      "payload": {
+        "operation": "init",
+        "title": "Test topic"
+      },
+      "reason": null,
+      "state_after": "f17c82b86e1384ec",
+      "state_before": null,
+      "ts": "2026-07-27T18:19:54.359382+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "angle-selection",
+      "decision_status": "accepted",
+      "evidence": {
+        "chosen": "contrarian",
+        "options": [
+          "skeptic",
+          "advocate",
+          "contrarian"
+        ]
+      },
+      "gate_name": "confirm_gate",
+      "id": "evt_1a92b1cca2b9",
+      "payload": {},
+      "reason": "user picked contrarian",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:19:54.364301+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "x1",
+      "decision_status": "accepted",
+      "evidence": {
+        "source_ids": [
+          "src:001"
+        ]
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_924351b474dd",
+      "payload": {},
+      "reason": "has sources",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:19:54.365158+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "doc-metadata",
+      "decision_status": "publish_ok",
+      "evidence": {
+        "authors": [
+          "Alice Smith",
+          "Bob Jones"
+        ],
+        "date": "2026-07-27",
+        "doi": "10.1000/demo-2026",
+        "title": "Demo document"
+      },
+      "gate_name": "publication_gate",
+      "id": "evt_41f39ef1c4ca",
+      "payload": {},
+      "reason": "ok",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-27T18:19:54.366105+00:00"
+    }
+  ],
+  "branches": [],
+  "brand_kit": null,
+  "characters": [],
+  "created_at": "2026-07-27T18:19:54.358844+00:00",
+  "environments": [],
+  "id": "prod_9bfa1046afb7",
+  "intent": {
+    "audience": "educated_lay",
+    "duration_sec": null,
+    "extra": {},
+    "platform": null,
+    "style_seed": null,
+    "tone": "neutral",
+    "topic": "Test topic"
+  },
+  "metadata": {},
+  "references": [],
+  "scenes": [],
+  "schema_version": "1.0.0",
+  "snapshots": [],
+  "state": "DRAFT",
+  "studio_id": null,
+  "style_tokens": [],
+  "timeline": null,
+  "title": "Test topic",
+  "updated_at": "2026-07-27T18:19:54.366105+00:00"
+}

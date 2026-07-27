@@ -1,0 +1,443 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="-apple-system, 'Segoe UI', Inter, Helvetica, Arial, sans-serif">
+  <!-- ============ DEFINITIONS ============ -->
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+      <stop offset="0%" stop-color="#1f242c"/>
+      <stop offset="100%" stop-color="#0a0c10"/>
+    </radialGradient>
+
+    <!-- Kernel glow -->
+    <radialGradient id="kernelGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f62fe" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#0f62fe" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#0f62fe" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Cyan accent gradient -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#82cfff"/>
+      <stop offset="100%" stop-color="#4589ff"/>
+    </linearGradient>
+
+    <!-- Amber gate gradient -->
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f1c21b"/>
+      <stop offset="100%" stop-color="#e8a200"/>
+    </linearGradient>
+
+    <!-- Vertical panel gradient -->
+    <linearGradient id="panelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161b22" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#0d1117" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Soft drop shadow -->
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feOffset dx="0" dy="4" result="offset"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Subtle grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1c2330" stroke-width="0.5"/>
+    </pattern>
+
+    <!-- Lock icon -->
+    <symbol id="lock" viewBox="0 0 24 24">
+      <rect x="5" y="11" width="14" height="10" rx="1.5" fill="#f1c21b"/>
+      <path d="M8 11 V8 a4 4 0 0 1 8 0 V11" fill="none" stroke="#f1c21b" stroke-width="2"/>
+      <circle cx="12" cy="16" r="1.5" fill="#1a1d23"/>
+    </symbol>
+
+    <!-- Camera icon -->
+    <symbol id="camera" viewBox="0 0 24 24">
+      <path d="M4 7 H8 L10 5 H14 L16 7 H20 V19 H4 Z" fill="none" stroke="#82cfff" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="12" cy="13" r="3.5" fill="none" stroke="#82cfff" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- Doc icon -->
+    <symbol id="doc" viewBox="0 0 24 24">
+      <path d="M6 3 H14 L18 7 V21 H6 Z" fill="none" stroke="#82cfff" stroke-width="1.5" stroke-linejoin="round"/>
+      <line x1="9" y1="11" x2="15" y2="11" stroke="#82cfff" stroke-width="1.5"/>
+      <line x1="9" y1="14" x2="15" y2="14" stroke="#82cfff" stroke-width="1.5"/>
+      <line x1="9" y1="17" x2="13" y2="17" stroke="#82cfff" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- Check icon -->
+    <symbol id="check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="#24a148" stroke-width="1.5"/>
+      <path d="M7 12 L11 16 L17 9" fill="none" stroke="#24a148" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- Sparkle -->
+    <symbol id="spark" viewBox="0 0 16 16">
+      <path d="M8 1 L9 7 L15 8 L9 9 L8 15 L7 9 L1 8 L7 7 Z" fill="#82cfff"/>
+    </symbol>
+  </defs>
+
+  <!-- ============ BACKGROUND ============ -->
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#grid)" opacity="0.35"/>
+
+  <!-- ============ HEADER ============ -->
+  <g transform="translate(96, 72)">
+    <!-- IBM-style eyebrow tag -->
+    <rect x="0" y="0" width="180" height="28" rx="2" fill="#0f62fe"/>
+    <text x="90" y="19" fill="#ffffff" font-size="13" font-weight="600" letter-spacing="2" text-anchor="middle">OPEN PRODUCTION</text>
+    <text x="200" y="19" fill="#82cfff" font-size="13" font-weight="400" letter-spacing="1">·  ARCHITECTURE OVERVIEW</text>
+  </g>
+
+  <text x="96" y="170" fill="#ffffff" font-size="58" font-weight="700" letter-spacing="-1.5">The production process is the product.</text>
+  <text x="96" y="215" fill="#a8b3c5" font-size="22" font-weight="400">AI-native creative studio · production-document-first · medium-blind kernel</text>
+
+  <!-- Header divider -->
+  <line x1="96" y1="252" x2="1824" y2="252" stroke="#2a3548" stroke-width="1"/>
+
+  <!-- ============ LEFT VERTICAL: VIDEO PRODUCTION ============ -->
+  <g transform="translate(96, 290)">
+    <rect x="0" y="0" width="500" height="610" rx="6" fill="url(#panelGrad)" stroke="#2a3548" stroke-width="1"/>
+
+    <!-- Panel header -->
+    <rect x="0" y="0" width="500" height="60" rx="6" fill="#0f62fe"/>
+    <rect x="0" y="40" width="500" height="20" fill="#0f62fe"/>
+    <use href="#camera" x="22" y="20" width="22" height="22"/>
+    <text x="58" y="38" fill="#ffffff" font-size="20" font-weight="600">VIDEO PRODUCTION</text>
+    <text x="478" y="38" fill="#82cfff" font-size="13" font-weight="500" text-anchor="end">26 stages · 5 agents</text>
+
+    <!-- Mini pipeline (8 representative stages + gates) -->
+    <g transform="translate(28, 90)">
+      <!-- Stage chips -->
+      <g font-size="11" font-weight="500" fill="#ffffff" text-anchor="middle">
+        <rect x="0" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="50" y="21">Idea</text>
+
+        <rect x="125" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="175" y="21">Script</text>
+
+        <rect x="250" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="300" y="21">Shot plan</text>
+
+        <rect x="375" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="425" y="21">Generate</text>
+      </g>
+
+      <!-- Arrows between stages -->
+      <g fill="none" stroke="#82cfff" stroke-width="1.5">
+        <line x1="100" y1="17" x2="125" y2="17"/>
+        <line x1="225" y1="17" x2="250" y2="17"/>
+        <line x1="350" y1="17" x2="375" y2="17"/>
+      </g>
+
+      <!-- Gates (locks) between stages -->
+      <use href="#lock" x="107" y="9" width="14" height="14"/>
+      <use href="#lock" x="232" y="9" width="14" height="14"/>
+      <use href="#lock" x="357" y="9" width="14" height="14"/>
+
+      <!-- Continue pipeline row -->
+      <g font-size="11" font-weight="500" fill="#ffffff" text-anchor="middle">
+        <rect x="0" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="50" y="81">Edit</text>
+
+        <rect x="125" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="175" y="81">Color</text>
+
+        <rect x="250" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="300" y="81">Music</text>
+
+        <rect x="375" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="425" y="81">Publish</text>
+      </g>
+      <g fill="none" stroke="#82cfff" stroke-width="1.5">
+        <line x1="100" y1="77" x2="125" y2="77"/>
+        <line x1="225" y1="77" x2="250" y2="77"/>
+        <line x1="350" y1="77" x2="375" y2="77"/>
+      </g>
+      <use href="#lock" x="107" y="69" width="14" height="14"/>
+      <use href="#lock" x="232" y="69" width="14" height="14"/>
+      <use href="#lock" x="357" y="69" width="14" height="14"/>
+
+      <!-- "..." continuation indicator -->
+      <text x="240" y="125" fill="#6b7787" font-size="11" font-style="italic" text-anchor="middle">+ 18 more stages, all gated</text>
+    </g>
+
+    <!-- Agents row -->
+    <g transform="translate(28, 250)">
+      <text x="0" y="0" fill="#82cfff" font-size="11" font-weight="600" letter-spacing="1.5">AGENTS</text>
+      <g transform="translate(0, 14)">
+        <g font-size="11" fill="#ffffff" text-anchor="middle">
+          <rect x="0" y="0" width="86" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="43" y="19">Creative Dir.</text>
+          <rect x="96" y="0" width="76" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="134" y="19">Shot Designer</text>
+          <rect x="182" y="0" width="58" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="211" y="19">Editor</text>
+          <rect x="250" y="0" width="70" height="30" rx="14" fill="#0d1117" stroke="#ee5396" stroke-width="1"/>
+          <text x="285" y="19">Reviewer</text>
+          <rect x="330" y="0" width="74" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="367" y="19">Publisher</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Feature highlight -->
+    <g transform="translate(28, 330)">
+      <rect x="0" y="0" width="444" height="250" rx="4" fill="#0d1117" stroke="#2a3548"/>
+      <text x="14" y="24" fill="#f1c21b" font-size="11" font-weight="600" letter-spacing="1.5">DIFFERENTIATOR</text>
+      <text x="14" y="52" fill="#ffffff" font-size="18" font-weight="600">Consistency Contract</text>
+      <text x="14" y="78" fill="#c9d1d9" font-size="13">Every character and environment has a formal</text>
+      <text x="14" y="96" fill="#c9d1d9" font-size="13">spec — visual anchors, required/prohibited</text>
+      <text x="14" y="114" fill="#c9d1d9" font-size="13">attributes, variance tolerance. The Reviewer</text>
+      <text x="14" y="132" fill="#c9d1d9" font-size="13">agent gates every generation against it.</text>
+
+      <!-- mini contract spec -->
+      <g transform="translate(14, 152)" font-size="10" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace">
+        <rect x="0" y="0" width="416" height="82" rx="3" fill="#161b22" stroke="#2a3548"/>
+        <text x="10" y="16" fill="#82cfff">contract:</text>
+        <text x="80" y="16" fill="#ffffff">protagonist.v1</text>
+        <text x="10" y="32" fill="#82cfff">anchors:</text>
+        <text x="80" y="32" fill="#a8b3c5">[ref_001, ref_002, ref_003]</text>
+        <text x="10" y="48" fill="#82cfff">required:</text>
+        <text x="80" y="48" fill="#a8b3c5">[short_hair, scar_left, age_30s]</text>
+        <text x="10" y="64" fill="#82cfff">prohibited:</text>
+        <text x="80" y="64" fill="#a8b3c5">[long_hair, glasses, helmet]</text>
+        <text x="10" y="76" fill="#82cfff" opacity="0.6">tolerance: 0.15</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ============ CENTER: KERNEL + DATA RING ============ -->
+  <g transform="translate(710, 290)">
+    <!-- Data ring / middle layer -->
+    <circle cx="250" cy="300" r="220" fill="none" stroke="#2a3548" stroke-width="1" stroke-dasharray="2 6"/>
+    <circle cx="250" cy="300" r="200" fill="none" stroke="#1f2937" stroke-width="1"/>
+
+    <!-- Ring labels -->
+    <text x="250" y="98" fill="#82cfff" font-size="11" font-weight="600" letter-spacing="2" text-anchor="middle">— AUDIT TRAIL · EVENT LOG · STATE MACHINE —</text>
+
+    <!-- Tick marks around the ring -->
+    <g stroke="#3a4759" stroke-width="1">
+      <line x1="250" y1="105" x2="250" y2="115"/>
+      <line x1="250" y1="485" x2="250" y2="495"/>
+      <line x1="55" y1="300" x2="65" y2="300"/>
+      <line x1="435" y1="300" x2="445" y2="300"/>
+    </g>
+
+    <!-- Kernel glow -->
+    <circle cx="250" cy="300" r="160" fill="url(#kernelGlow)"/>
+
+    <!-- Kernel core -->
+    <circle cx="250" cy="300" r="80" fill="#0a0c10" stroke="#0f62fe" stroke-width="2"/>
+    <text x="250" y="285" fill="#ffffff" font-size="13" font-weight="700" letter-spacing="2" text-anchor="middle">KERNEL</text>
+    <text x="250" y="305" fill="#82cfff" font-size="11" text-anchor="middle">five primitives</text>
+    <text x="250" y="322" fill="#6b7787" font-size="10" text-anchor="middle">medium-blind</text>
+
+    <!-- Five primitives as pentagon nodes -->
+    <g font-size="12" font-weight="600" fill="#ffffff" text-anchor="middle">
+      <!-- top -->
+      <g transform="translate(250, 140)">
+        <circle r="22" fill="#0f62fe" stroke="#82cfff" stroke-width="1.5"/>
+        <text y="4">Source</text>
+      </g>
+      <!-- top-right -->
+      <g transform="translate(348, 220)">
+        <circle r="22" fill="#0f62fe" stroke="#82cfff" stroke-width="1.5"/>
+        <text y="4">Transform</text>
+      </g>
+      <!-- bottom-right -->
+      <g transform="translate(348, 380)">
+        <circle r="22" fill="#0f62fe" stroke="#82cfff" stroke-width="1.5"/>
+        <text y="4">Composition</text>
+      </g>
+      <!-- bottom-left -->
+      <g transform="translate(152, 380)">
+        <circle r="22" fill="#0f62fe" stroke="#82cfff" stroke-width="1.5"/>
+        <text y="4">Evaluation</text>
+      </g>
+      <!-- top-left -->
+      <g transform="translate(152, 220)">
+        <circle r="22" fill="#0f62fe" stroke="#82cfff" stroke-width="1.5"/>
+        <text y="4">Intent</text>
+      </g>
+    </g>
+
+    <!-- Pentagon connection lines -->
+    <g stroke="#82cfff" stroke-width="0.8" opacity="0.5" fill="none">
+      <line x1="250" y1="140" x2="348" y2="220"/>
+      <line x1="348" y1="220" x2="348" y2="380"/>
+      <line x1="348" y1="380" x2="152" y2="380"/>
+      <line x1="152" y1="380" x2="152" y2="220"/>
+      <line x1="152" y1="220" x2="250" y2="140"/>
+    </g>
+
+    <!-- Arrows from kernel to verticals (plug-in surface) -->
+    <g>
+      <!-- Left arrow -->
+      <path d="M 64 300 L 26 300" fill="none" stroke="#82cfff" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <polygon points="26,300 36,295 36,305" fill="#82cfff"/>
+      <text x="45" y="290" fill="#82cfff" font-size="10" font-weight="600" letter-spacing="1.5" text-anchor="middle">PLUG-IN</text>
+      <text x="45" y="318" fill="#82cfff" font-size="10" font-weight="600" letter-spacing="1.5" text-anchor="middle">SURFACE</text>
+
+      <!-- Right arrow -->
+      <path d="M 436 300 L 474 300" fill="none" stroke="#82cfff" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <polygon points="474,300 464,295 464,305" fill="#82cfff"/>
+      <text x="455" y="290" fill="#82cfff" font-size="10" font-weight="600" letter-spacing="1.5" text-anchor="middle">PLUG-IN</text>
+      <text x="455" y="318" fill="#82cfff" font-size="10" font-weight="600" letter-spacing="1.5" text-anchor="middle">SURFACE</text>
+    </g>
+  </g>
+
+  <!-- ============ RIGHT VERTICAL: RESEARCH WRITING ============ -->
+  <g transform="translate(1244, 290)">
+    <rect x="0" y="0" width="500" height="610" rx="6" fill="url(#panelGrad)" stroke="#2a3548" stroke-width="1"/>
+
+    <rect x="0" y="0" width="500" height="60" rx="6" fill="#0f62fe"/>
+    <rect x="0" y="40" width="500" height="20" fill="#0f62fe"/>
+    <use href="#doc" x="22" y="20" width="22" height="22"/>
+    <text x="58" y="38" fill="#ffffff" font-size="20" font-weight="600">RESEARCH WRITING</text>
+    <text x="478" y="38" fill="#82cfff" font-size="13" font-weight="500" text-anchor="end">7 stages · 5 agents</text>
+
+    <!-- Pipeline -->
+    <g transform="translate(28, 90)">
+      <g font-size="11" font-weight="500" fill="#ffffff" text-anchor="middle">
+        <rect x="0" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="50" y="21">Frame</text>
+
+        <rect x="125" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="175" y="21">Outline</text>
+
+        <rect x="250" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="300" y="21">Draft</text>
+
+        <rect x="375" y="0" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="425" y="21">Critique</text>
+      </g>
+      <g fill="none" stroke="#82cfff" stroke-width="1.5">
+        <line x1="100" y1="17" x2="125" y2="17"/>
+        <line x1="225" y1="17" x2="250" y2="17"/>
+        <line x1="350" y1="17" x2="375" y2="17"/>
+      </g>
+      <use href="#lock" x="107" y="9" width="14" height="14"/>
+      <use href="#lock" x="232" y="9" width="14" height="14"/>
+      <use href="#lock" x="357" y="9" width="14" height="14"/>
+
+      <g font-size="11" font-weight="500" fill="#ffffff" text-anchor="middle">
+        <rect x="0" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="50" y="81">Revise</text>
+
+        <rect x="125" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="175" y="81">Verify</text>
+
+        <rect x="250" y="60" width="100" height="34" rx="3" fill="#1f2937" stroke="#3a4759"/>
+        <text x="300" y="81">Publish</text>
+      </g>
+      <g fill="none" stroke="#82cfff" stroke-width="1.5">
+        <line x1="100" y1="77" x2="125" y2="77"/>
+        <line x1="225" y1="77" x2="250" y2="77"/>
+      </g>
+      <use href="#lock" x="107" y="69" width="14" height="14"/>
+      <use href="#lock" x="232" y="69" width="14" height="14"/>
+    </g>
+
+    <!-- Agents row -->
+    <g transform="translate(28, 250)">
+      <text x="0" y="0" fill="#82cfff" font-size="11" font-weight="600" letter-spacing="1.5">AGENTS</text>
+      <g transform="translate(0, 14)">
+        <g font-size="11" fill="#ffffff" text-anchor="middle">
+          <rect x="0" y="0" width="76" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="38" y="19">Reframer</text>
+          <rect x="86" y="0" width="74" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="123" y="19">Outliner</text>
+          <rect x="170" y="0" width="68" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="204" y="19">Drafter</text>
+          <rect x="248" y="0" width="64" height="30" rx="14" fill="#0d1117" stroke="#ee5396" stroke-width="1"/>
+          <text x="280" y="19">Critic</text>
+          <rect x="322" y="0" width="74" height="30" rx="14" fill="#0d1117" stroke="#0f62fe" stroke-width="1"/>
+          <text x="359" y="19">Publisher</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Highlight: Production Document -->
+    <g transform="translate(28, 330)">
+      <rect x="0" y="0" width="444" height="250" rx="4" fill="#0d1117" stroke="#2a3548"/>
+      <text x="14" y="24" fill="#f1c21b" font-size="11" font-weight="600" letter-spacing="1.5">DIFFERENTIATOR</text>
+      <text x="14" y="52" fill="#ffffff" font-size="18" font-weight="600">Production Document</text>
+      <text x="14" y="78" fill="#c9d1d9" font-size="13">Every decision, asset, and reference is</text>
+      <text x="14" y="96" fill="#c9d1d9" font-size="13">an event in an immutable log. The current</text>
+      <text x="14" y="114" fill="#c9d1d9" font-size="13">state is a function of the log. Diffable,</text>
+      <text x="14" y="132" fill="#c9d1d9" font-size="13">shareable, replayable.</text>
+
+      <!-- Event log preview -->
+      <g transform="translate(14, 152)" font-size="10" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace">
+        <rect x="0" y="0" width="416" height="82" rx="3" fill="#161b22" stroke="#2a3548"/>
+        <text x="10" y="16" fill="#6b7787">2026-07-26T14:22:01Z</text>
+        <text x="160" y="16" fill="#82cfff">agent.reframer</text>
+        <text x="280" y="16" fill="#a8b3c5">→ propose(3 angles)</text>
+        <text x="10" y="32" fill="#6b7787">2026-07-26T14:23:18Z</text>
+        <text x="160" y="32" fill="#24a148">human.kartikey</text>
+        <text x="280" y="32" fill="#a8b3c5">→ approve(angle_2)</text>
+        <text x="10" y="48" fill="#6b7787">2026-07-26T14:31:05Z</text>
+        <text x="160" y="48" fill="#82cfff">agent.outliner</text>
+        <text x="280" y="48" fill="#a8b3c5">→ propose(5 sections)</text>
+        <text x="10" y="64" fill="#6b7787">2026-07-26T14:34:42Z</text>
+        <text x="160" y="64" fill="#f1c21b">gate.outline</text>
+        <text x="280" y="64" fill="#a8b3c5">→ PASS (3/3 checklist)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ============ BOTTOM STRIP: 5 DIFFERENTIATORS ============ -->
+  <g transform="translate(96, 942)">
+    <text x="0" y="0" fill="#82cfff" font-size="11" font-weight="600" letter-spacing="2">FIVE PRODUCTION-DOCUMENT-FIRST DIFFERENTIATORS</text>
+
+    <g transform="translate(0, 18)">
+      <g font-size="13" font-weight="600" fill="#ffffff">
+        <!-- 01 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="48" height="48" rx="4" fill="#0f62fe"/>
+          <text x="24" y="30" text-anchor="middle">01</text>
+          <text x="60" y="20">Production Document</text>
+          <text x="60" y="38" fill="#a8b3c5" font-size="11" font-weight="400">serializable, diffable, versionable</text>
+        </g>
+
+        <!-- 02 -->
+        <g transform="translate(346, 0)">
+          <rect x="0" y="0" width="48" height="48" rx="4" fill="#0f62fe"/>
+          <text x="24" y="30" text-anchor="middle">02</text>
+          <text x="60" y="20">Consistency Contract</text>
+          <text x="60" y="38" fill="#a8b3c5" font-size="11" font-weight="400">formal spec, gated by Reviewer</text>
+        </g>
+
+        <!-- 03 -->
+        <g transform="translate(692, 0)">
+          <rect x="0" y="0" width="48" height="48" rx="4" fill="#0f62fe"/>
+          <text x="24" y="30" text-anchor="middle">03</text>
+          <text x="60" y="20">Crew Model</text>
+          <text x="60" y="38" fill="#a8b3c5" font-size="11" font-weight="400">bounded-scope specialist agents</text>
+        </g>
+
+        <!-- 04 -->
+        <g transform="translate(1038, 0)">
+          <rect x="0" y="0" width="48" height="48" rx="4" fill="#0f62fe"/>
+          <text x="24" y="30" text-anchor="middle">04</text>
+          <text x="60" y="20">Stage Gates</text>
+          <text x="60" y="38" fill="#a8b3c5" font-size="11" font-weight="400">human-approved, fail-closed</text>
+        </g>
+
+        <!-- 05 -->
+        <g transform="translate(1384, 0)">
+          <rect x="0" y="0" width="48" height="48" rx="4" fill="#ee5396"/>
+          <text x="24" y="30" text-anchor="middle">05</text>
+          <text x="60" y="20">Reviewer Agent</text>
+          <text x="60" y="38" fill="#a8b3c5" font-size="11" font-weight="400">QA before human sees output</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <text x="1824" y="1052" fill="#6b7787" font-size="12" font-weight="500" text-anchor="end">Open Production · Production-Document-First Creative Studio · 2026</text>
+  <text x="96" y="1052" fill="#6b7787" font-size="12" font-weight="500">demo: open-production plan → architecture.md → principles.md → this</text>
+</svg>

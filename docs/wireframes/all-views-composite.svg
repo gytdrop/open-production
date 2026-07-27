@@ -1,0 +1,336 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="-apple-system,Inter,Segoe UI,Helvetica,Arial,sans-serif">
+  <rect width="1920" height="1080" fill="#0f1117"/>
+
+  <!-- header -->
+  <rect x="0" y="0" width="1920" height="80" fill="rgba(0,0,0,0.5)"/>
+  <rect x="0" y="0" width="5" height="80" fill="#6b8eff"/>
+  <text x="28" y="32" font-size="11" fill="#6b8eff" font-weight="700">OPEN PRODUCTION · WIREFRAMES</text>
+  <text x="28" y="62" font-size="22" fill="#e4e7eb" font-weight="600">Five Views of the Same Production Engine</text>
+  <text x="1892" y="32" font-size="10" fill="#a78bfa" font-weight="700" text-anchor="end">ACT-3 · DESIGN SPRINT</text>
+  <text x="1892" y="62" font-size="11" fill="#8a93a6" text-anchor="end">same engine · different views · per-persona (Law 4)</text>
+
+  <!-- 5 thumbnails in a row -->
+  <!-- each thumbnail: 360 x 480 starting at x = 60 + i*360 -->
+  <g font-size="11">
+    <!-- V1: Director's Canvas -->
+    <g transform="translate(40,120)">
+      <rect x="0" y="0" width="356" height="500" rx="8" fill="rgba(255,255,255,0.04)" stroke="#2d3340" stroke-width="1.5"/>
+      <rect x="0" y="0" width="356" height="40" rx="8" fill="rgba(107,142,255,0.18)"/>
+      <text x="16" y="26" fill="#e4e7eb" font-weight="700">01 · DIRECTOR'S CANVAS</text>
+      <text x="340" y="26" fill="#6b8eff" text-anchor="end" font-size="10" font-weight="700">PRO</text>
+      <!-- mini preview: scene container -->
+      <rect x="20" y="60" width="316" height="180" rx="6" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <rect x="20" y="60" width="316" height="20" fill="rgba(107,142,255,0.18)"/>
+      <text x="28" y="74" fill="#e4e7eb" font-size="9" font-weight="600">Scene 3</text>
+      <!-- shot cards 3x2 -->
+      <g>
+        <rect x="32" y="92" width="90" height="60" rx="3" fill="rgba(34,197,94,0.18)"/>
+        <rect x="130" y="92" width="90" height="60" rx="3" fill="rgba(34,197,94,0.18)"/>
+        <rect x="228" y="92" width="90" height="60" rx="3" fill="rgba(34,197,94,0.18)"/>
+        <rect x="32" y="160" width="90" height="60" rx="3" fill="rgba(34,197,94,0.18)"/>
+        <rect x="130" y="160" width="90" height="60" rx="3" fill="rgba(107,142,255,0.30)" stroke="#6b8eff"/>
+        <rect x="228" y="160" width="90" height="60" rx="3" fill="rgba(251,191,36,0.18)"/>
+      </g>
+      <!-- AI proposal mini -->
+      <rect x="20" y="252" width="316" height="60" rx="6" fill="rgba(15,17,23,0.94)" stroke="#6b8eff"/>
+      <text x="28" y="270" fill="#6b8eff" font-size="9" font-weight="700">✦ AI PROPOSAL · 3 options</text>
+      <rect x="28" y="278" width="80" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
+      <text x="68" y="293" fill="#e4e7eb" font-size="8" text-anchor="middle">A · tighter</text>
+      <rect x="116" y="278" width="80" height="22" rx="3" fill="rgba(167,139,250,0.30)"/>
+      <text x="156" y="293" fill="#e4e7eb" font-size="8" text-anchor="middle">B · lower</text>
+      <rect x="204" y="278" width="80" height="22" rx="3" fill="rgba(255,255,255,0.04)"/>
+      <text x="244" y="293" fill="#e4e7eb" font-size="8" text-anchor="middle">C · split</text>
+      <!-- properties rail mini -->
+      <rect x="20" y="324" width="316" height="120" rx="6" fill="rgba(255,255,255,0.025)" stroke="#3a4256"/>
+      <text x="32" y="344" fill="#a78bfa" font-size="9" font-weight="700">CAMERA · LIGHTING · AUDIO</text>
+      <text x="32" y="362" fill="#8a93a6" font-size="9">85mm · f/2.8 · 24fps</text>
+      <text x="32" y="378" fill="#8a93a6" font-size="9">key 60% · fill 30% · 3200K</text>
+      <text x="32" y="394" fill="#8a93a6" font-size="9">voice · calm · low string</text>
+      <text x="32" y="420" fill="#22c55e" font-size="9" font-weight="600">✓ APPROVED · 4 / 12 shots</text>
+      <!-- timeline strip -->
+      <rect x="20" y="454" width="316" height="32" rx="4" fill="rgba(0,0,0,0.5)"/>
+      <rect x="22" y="466" width="50" height="10" fill="#6b8eff" opacity="0.6"/>
+      <rect x="74" y="466" width="50" height="10" fill="#6b8eff" opacity="0.7"/>
+      <rect x="126" y="466" width="50" height="10" fill="#6b8eff" opacity="0.5"/>
+      <rect x="178" y="466" width="50" height="10" fill="#6b8eff" opacity="0.8"/>
+      <rect x="230" y="466" width="50" height="10" fill="#6b8eff" opacity="0.6"/>
+      <rect x="282" y="466" width="50" height="10" fill="#6b8eff" opacity="0.7"/>
+    </g>
+
+    <!-- V2: Guided Flow -->
+    <g transform="translate(412,120)">
+      <rect x="0" y="0" width="356" height="500" rx="8" fill="rgba(255,255,255,0.04)" stroke="#2d3340" stroke-width="1.5"/>
+      <rect x="0" y="0" width="356" height="40" rx="8" fill="rgba(167,139,250,0.18)"/>
+      <text x="16" y="26" fill="#e4e7eb" font-weight="700">02 · GUIDED FLOW</text>
+      <text x="340" y="26" fill="#a78bfa" text-anchor="end" font-size="10" font-weight="700">BEGINNER</text>
+      <!-- progress dots -->
+      <text x="178" y="68" fill="#5d6678" font-size="9" text-anchor="middle">STEP 1 OF 7</text>
+      <circle cx="148" cy="84" r="6" fill="#6b8eff"/>
+      <circle cx="148" cy="84" r="11" fill="none" stroke="#6b8eff" opacity="0.5"/>
+      <circle cx="178" cy="84" r="4" fill="#3a4256"/>
+      <circle cx="200" cy="84" r="4" fill="#3a4256"/>
+      <circle cx="220" cy="84" r="4" fill="#3a4256"/>
+      <circle cx="180" y="84" r="4" fill="#3a4256"/>
+      <!-- heading -->
+      <text x="178" y="124" fill="#e4e7eb" font-weight="700" font-size="16" text-anchor="middle">What story do you want</text>
+      <text x="178" y="144" fill="#e4e7eb" font-weight="700" font-size="16" text-anchor="middle">to tell?</text>
+      <text x="178" y="166" fill="#8a93a6" font-size="10" text-anchor="middle">A few sentences is fine.</text>
+      <!-- textarea -->
+      <rect x="40" y="184" width="276" height="84" rx="6" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <text x="52" y="206" fill="#5d6678" font-style="italic" font-size="9">e.g. A short film about a barista…</text>
+      <text x="52" y="222" fill="#5d6678" font-style="italic" font-size="9">their regular customer is an AI…</text>
+      <text x="52" y="248" fill="#e4e7eb" font-size="10">A young filmmaker wonders if AI</text>
+      <!-- platform pills -->
+      <rect x="40" y="288" width="56" height="22" rx="11" fill="rgba(107,142,255,0.18)" stroke="#6b8eff"/>
+      <text x="68" y="303" fill="#e4e7eb" font-size="9" font-weight="500" text-anchor="middle">TikTok</text>
+      <rect x="100" y="288" width="56" height="22" rx="11" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <text x="128" y="303" fill="#8a93a6" font-size="9" text-anchor="middle">IG</text>
+      <rect x="160" y="288" width="56" height="22" rx="11" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <text x="188" y="303" fill="#8a93a6" font-size="9" text-anchor="middle">YT</text>
+      <!-- tone selector -->
+      <rect x="40" y="328" width="48" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <text x="64" y="343" fill="#8a93a6" font-size="9" text-anchor="middle">Warm</text>
+      <rect x="92" y="328" width="56" height="22" rx="4" fill="rgba(107,142,255,0.18)" stroke="#6b8eff"/>
+      <text x="120" y="343" fill="#e4e7eb" font-size="9" font-weight="500" text-anchor="middle">Neutral</text>
+      <rect x="152" y="328" width="48" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <text x="176" y="343" fill="#8a93a6" font-size="9" text-anchor="middle">Tense</text>
+      <rect x="204" y="328" width="58" height="22" rx="4" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+      <text x="233" y="343" fill="#8a93a6" font-size="9" text-anchor="middle">Hopeful</text>
+      <!-- continue -->
+      <rect x="216" y="412" width="100" height="36" rx="6" fill="#6b8eff"/>
+      <text x="266" y="436" fill="#0f1117" font-weight="700" font-size="12" text-anchor="middle">Continue →</text>
+      <text x="40" y="434" fill="#6b8eff" font-size="10">I have a script</text>
+      <!-- helper card -->
+      <rect x="220" y="184" width="96" height="80" rx="6" fill="rgba(167,139,250,0.08)" stroke="#a78bfa"/>
+      <text x="232" y="202" fill="#a78bfa" font-size="9" font-weight="700">💡 Tip</text>
+      <text x="232" y="218" fill="#8a93a6" font-size="8">You can change</text>
+      <text x="232" y="232" fill="#8a93a6" font-size="8">anything later.</text>
+    </g>
+
+    <!-- V3: Timeline Editor -->
+    <g transform="translate(784,120)">
+      <rect x="0" y="0" width="356" height="500" rx="8" fill="rgba(255,255,255,0.04)" stroke="#2d3340" stroke-width="1.5"/>
+      <rect x="0" y="0" width="356" height="40" rx="8" fill="rgba(107,142,255,0.18)"/>
+      <text x="16" y="26" fill="#e4e7eb" font-weight="700">03 · TIMELINE EDITOR</text>
+      <text x="340" y="26" fill="#6b8eff" text-anchor="end" font-size="10" font-weight="700">EDITOR</text>
+      <!-- scene tabs -->
+      <rect x="20" y="60" width="60" height="20" rx="3" fill="rgba(255,255,255,0.025)" stroke="#3a4256"/>
+      <text x="50" y="74" fill="#8a93a6" font-size="8" text-anchor="middle">Scene 1</text>
+      <rect x="84" y="60" width="60" height="20" rx="3" fill="rgba(255,255,255,0.025)" stroke="#3a4256"/>
+      <text x="114" y="74" fill="#8a93a6" font-size="8" text-anchor="middle">Scene 2</text>
+      <rect x="148" y="58" width="60" height="22" rx="3" fill="rgba(107,142,255,0.16)" stroke="#6b8eff"/>
+      <text x="178" y="73" fill="#e4e7eb" font-size="8" font-weight="600" text-anchor="middle">Scene 3</text>
+      <!-- asset bin mini -->
+      <rect x="20" y="90" width="60" height="240" rx="3" fill="rgba(0,0,0,0.4)" stroke="#2d3340"/>
+      <text x="28" y="108" fill="#a78bfa" font-size="8" font-weight="700">BIN</text>
+      <rect x="26" y="116" width="48" height="20" fill="rgba(255,255,255,0.04)"/>
+      <rect x="26" y="140" width="48" height="20" fill="rgba(255,255,255,0.04)"/>
+      <rect x="26" y="164" width="48" height="20" fill="rgba(255,255,255,0.04)"/>
+      <!-- tracks -->
+      <text x="86" y="106" fill="#8a93a6" font-size="8" font-weight="700">V1</text>
+      <rect x="100" y="98" width="240" height="22" rx="2" fill="rgba(107,142,255,0.6)"/>
+      <text x="110" y="112" fill="#0f1117" font-size="8" font-weight="700">S01 S02 S05 S07 S06</text>
+      <text x="86" y="134" fill="#8a93a6" font-size="8" font-weight="700">V2</text>
+      <rect x="180" y="126" width="60" height="22" rx="2" fill="rgba(167,139,250,0.4)"/>
+      <text x="210" y="140" fill="#0f1117" font-size="8" font-weight="700">B-roll</text>
+      <text x="86" y="162" fill="#8a93a6" font-size="8" font-weight="700">A1</text>
+      <rect x="100" y="154" width="240" height="18" rx="2" fill="rgba(34,197,94,0.45)"/>
+      <text x="110" y="166" fill="#0f1117" font-size="8" font-weight="700">voice · sfx · music</text>
+      <text x="86" y="190" fill="#8a93a6" font-size="8" font-weight="700">A2</text>
+      <rect x="100" y="182" width="180" height="14" rx="2" fill="rgba(251,191,36,0.45)"/>
+      <text x="110" y="193" fill="#0f1117" font-size="8" font-weight="700">sfx</text>
+      <text x="86" y="216" fill="#8a93a6" font-size="8" font-weight="700">A3</text>
+      <rect x="100" y="208" width="240" height="14" rx="2" fill="rgba(167,139,250,0.4)"/>
+      <text x="110" y="219" fill="#0f1117" font-size="8" font-weight="700">low_string.mp3</text>
+      <!-- playhead -->
+      <line x1="220" y1="92" x2="220" y2="240" stroke="#fff" stroke-width="1.2"/>
+      <polygon points="216,86 224,86 220,94" fill="#fff"/>
+      <!-- inspector mini -->
+      <rect x="20" y="340" width="316" height="120" rx="6" fill="rgba(0,0,0,0.4)" stroke="#2d3340"/>
+      <text x="32" y="358" fill="#6b8eff" font-size="9" font-weight="700">CLIP INSPECTOR</text>
+      <text x="32" y="376" fill="#e4e7eb" font-size="9" font-weight="600">S05 · 1.94s</text>
+      <text x="32" y="394" fill="#8a93a6" font-size="9">In 0:12:14 · Out 0:14:08</text>
+      <text x="32" y="412" fill="#8a93a6" font-size="9">cross-dissolve · 0.4s</text>
+      <rect x="32" y="424" width="80" height="16" rx="3" fill="rgba(34,197,94,0.16)" stroke="#22c55e"/>
+      <text x="72" y="436" fill="#22c55e" font-size="8" font-weight="700" text-anchor="middle">✓ cut clean</text>
+      <!-- transport -->
+      <rect x="20" y="466" width="316" height="22" rx="3" fill="rgba(0,0,0,0.5)"/>
+      <circle cx="40" cy="477" r="6" fill="rgba(255,255,255,0.06)" stroke="#3a4256"/>
+      <circle cx="60" cy="477" r="8" fill="rgba(255,255,255,0.06)" stroke="#3a4256"/>
+      <circle cx="80" cy="477" r="6" fill="rgba(255,255,255,0.06)" stroke="#3a4256"/>
+      <text x="290" y="481" fill="#a78bfa" font-size="9" font-weight="700" text-anchor="end">⌘ J K L</text>
+    </g>
+
+    <!-- V4: Agent Console -->
+    <g transform="translate(1156,120)">
+      <rect x="0" y="0" width="356" height="500" rx="8" fill="rgba(255,255,255,0.04)" stroke="#2d3340" stroke-width="1.5"/>
+      <rect x="0" y="0" width="356" height="40" rx="8" fill="rgba(167,139,250,0.18)"/>
+      <text x="16" y="26" fill="#e4e7eb" font-weight="700">04 · AGENT CONSOLE</text>
+      <text x="340" y="26" fill="#a78bfa" text-anchor="end" font-size="10" font-weight="700">AI NATIVE</text>
+      <!-- crew rail mini -->
+      <rect x="20" y="60" width="100" height="380" rx="3" fill="rgba(0,0,0,0.4)" stroke="#2d3340"/>
+      <text x="28" y="76" fill="#a78bfa" font-size="8" font-weight="700">CREW · 8/12</text>
+      <g>
+        <rect x="26" y="84" width="88" height="28" rx="3" fill="rgba(107,142,255,0.16)" stroke="#6b8eff"/>
+        <circle cx="36" cy="98" r="4" fill="#22c55e"/>
+        <text x="48" y="102" fill="#e4e7eb" font-size="8" font-weight="600">Creative Dir.</text>
+        <rect x="26" y="118" width="88" height="28" rx="3" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+        <circle cx="36" cy="132" r="4" fill="#22c55e"/>
+        <text x="48" y="136" fill="#8a93a6" font-size="8">Producer</text>
+        <rect x="26" y="152" width="88" height="28" rx="3" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+        <circle cx="36" cy="166" r="4" fill="#22c55e"/>
+        <text x="48" y="170" fill="#8a93a6" font-size="8">Storyboard</text>
+        <rect x="26" y="186" width="88" height="28" rx="3" fill="rgba(251,191,36,0.16)" stroke="#fbbf24"/>
+        <circle cx="36" cy="200" r="4" fill="#fbbf24"/>
+        <text x="48" y="204" fill="#fbbf24" font-size="8" font-weight="600">Shot Designer</text>
+        <rect x="26" y="220" width="88" height="28" rx="3" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+        <circle cx="36" cy="234" r="4" fill="#22c55e"/>
+        <text x="48" y="238" fill="#8a93a6" font-size="8">Character Dir.</text>
+        <rect x="26" y="254" width="88" height="28" rx="3" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+        <circle cx="36" cy="268" r="4" fill="#22c55e"/>
+        <text x="48" y="272" fill="#8a93a6" font-size="8">Environment</text>
+        <rect x="26" y="288" width="88" height="28" rx="3" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+        <circle cx="36" cy="302" r="4" fill="#22c55e"/>
+        <text x="48" y="306" fill="#8a93a6" font-size="8">Editor</text>
+        <rect x="26" y="322" width="88" height="28" rx="3" fill="rgba(244,114,182,0.16)" stroke="#f472b6"/>
+        <circle cx="36" cy="336" r="4" fill="#f472b6"/>
+        <text x="48" y="340" fill="#f472b6" font-size="8" font-weight="600">Reviewer · flag</text>
+      </g>
+      <!-- thread -->
+      <rect x="130" y="60" width="206" height="320" rx="3" fill="rgba(255,255,255,0.025)"/>
+      <text x="138" y="76" fill="#a78bfa" font-size="8" font-weight="700">CONVERSATION</text>
+      <!-- system event -->
+      <text x="138" y="98" fill="#22c55e" font-size="8" font-weight="700">SYSTEM</text>
+      <text x="138" y="112" fill="#e4e7eb" font-size="8">✓ Shot 7 generation</text>
+      <text x="138" y="124" fill="#e4e7eb" font-size="8">  complete · 12.4s</text>
+      <!-- creative director -->
+      <circle cx="142" cy="146" r="8" fill="#6b8eff" opacity="0.3"/>
+      <text x="142" y="150" fill="#e4e7eb" font-size="8" font-weight="700" text-anchor="middle">CD</text>
+      <text x="156" y="150" fill="#6b8eff" font-size="8" font-weight="700">Creative Director</text>
+      <rect x="138" y="158" width="194" height="80" rx="4" fill="rgba(107,142,255,0.06)" stroke="#6b8eff"/>
+      <text x="146" y="174" fill="#e4e7eb" font-size="8">"The current shot reads</text>
+      <text x="146" y="186" fill="#e4e7eb" font-size="8">as suspenseful but flat.</text>
+      <text x="146" y="198" fill="#e4e7eb" font-size="8">Here are 3 framings…"</text>
+      <rect x="146" y="206" width="50" height="22" rx="2" fill="rgba(255,255,255,0.04)"/>
+      <text x="171" y="220" fill="#e4e7eb" font-size="8" text-anchor="middle">A · tight</text>
+      <rect x="200" y="206" width="50" height="22" rx="2" fill="rgba(167,139,250,0.30)"/>
+      <text x="225" y="220" fill="#e4e7eb" font-size="8" text-anchor="middle">B · low</text>
+      <rect x="254" y="206" width="50" height="22" rx="2" fill="rgba(255,255,255,0.04)"/>
+      <text x="279" y="220" fill="#e4e7eb" font-size="8" text-anchor="middle">C · split</text>
+      <!-- user reply -->
+      <rect x="138" y="252" width="194" height="22" rx="3" fill="rgba(34,197,94,0.06)" stroke="#22c55e"/>
+      <text x="146" y="266" fill="#22c55e" font-size="8" font-weight="700">YOU</text>
+      <text x="170" y="266" fill="#e4e7eb" font-size="8">"Approve B · 1.0m high"</text>
+      <!-- reviewer flag -->
+      <rect x="138" y="288" width="194" height="60" rx="3" fill="rgba(244,114,182,0.06)" stroke="#f472b6"/>
+      <text x="146" y="304" fill="#f472b6" font-size="8" font-weight="700">⚠ REVIEWER · expression drift</text>
+      <text x="146" y="320" fill="#e4e7eb" font-size="8">S07 cosine-similarity -0.34</text>
+      <text x="146" y="332" fill="#e4e7eb" font-size="8">vs protagonist.v1 anchor</text>
+      <!-- input -->
+      <rect x="130" y="392" width="206" height="40" rx="4" fill="rgba(255,255,255,0.04)" stroke="#6b8eff"/>
+      <text x="138" y="416" fill="#5d6678" font-size="8">⎈ Ask the crew anything…</text>
+    </g>
+
+    <!-- V5: Node Graph -->
+    <g transform="translate(1528,120)">
+      <rect x="0" y="0" width="356" height="500" rx="8" fill="rgba(255,255,255,0.04)" stroke="#2d3340" stroke-width="1.5"/>
+      <rect x="0" y="0" width="356" height="40" rx="8" fill="rgba(107,142,255,0.18)"/>
+      <text x="16" y="26" fill="#e4e7eb" font-weight="700">05 · NODE GRAPH</text>
+      <text x="340" y="26" fill="#6b8eff" text-anchor="end" font-size="10" font-weight="700">EXPERT</text>
+      <!-- canvas grid -->
+      <rect x="20" y="60" width="316" height="380" fill="rgba(255,255,255,0.025)" stroke="#3a4256"/>
+      <g stroke="rgba(255,255,255,0.04)" stroke-width="1">
+        <line x1="100" y1="60" x2="100" y2="440"/>
+        <line x1="180" y1="60" x2="180" y2="440"/>
+        <line x1="260" y1="60" x2="260" y2="440"/>
+        <line x1="20" y1="150" x2="336" y2="150"/>
+        <line x1="20" y1="240" x2="336" y2="240"/>
+        <line x1="20" y1="330" x2="336" y2="330"/>
+      </g>
+      <!-- edges -->
+      <g stroke="#3a4256" stroke-width="1.4" fill="none">
+        <path d="M 178,110 L 178,150"/>
+        <path d="M 178,200 L 178,240"/>
+        <path d="M 138,270 L 80,310"/>
+        <path d="M 168,272 L 138,310"/>
+        <path d="M 188,272 L 220,310"/>
+        <path d="M 218,270 L 280,310"/>
+        <path d="M 178,360 L 178,400"/>
+      </g>
+      <!-- nodes -->
+      <g>
+        <rect x="138" y="80" width="80" height="30" rx="4" fill="rgba(167,139,250,0.18)" stroke="#a78bfa"/>
+        <text x="178" y="98" fill="#a78bfa" font-size="8" font-weight="700" text-anchor="middle">VideoIntent</text>
+
+        <rect x="138" y="150" width="80" height="50" rx="4" fill="rgba(167,139,250,0.18)" stroke="#a78bfa"/>
+        <text x="178" y="168" fill="#a78bfa" font-size="7" font-weight="700" text-anchor="middle">COMPOSITION</text>
+        <text x="178" y="184" fill="#e4e7eb" font-size="9" font-weight="600" text-anchor="middle">ShotList</text>
+
+        <rect x="40" y="240" width="80" height="30" rx="4" fill="rgba(107,142,255,0.18)" stroke="#6b8eff"/>
+        <text x="80" y="258" fill="#e4e7eb" font-size="8" font-weight="600" text-anchor="middle">ShotSpec S01</text>
+
+        <rect x="138" y="240" width="80" height="30" rx="4" fill="rgba(107,142,255,0.30)" stroke="#6b8eff" stroke-width="1.5"/>
+        <text x="178" y="258" fill="#e4e7eb" font-size="8" font-weight="600" text-anchor="middle">ShotSpec S07</text>
+
+        <rect x="238" y="240" width="80" height="30" rx="4" fill="rgba(107,142,255,0.18)" stroke="#6b8eff"/>
+        <text x="278" y="258" fill="#e4e7eb" font-size="8" font-weight="600" text-anchor="middle">ShotSpec S12</text>
+
+        <rect x="138" y="310" width="80" height="50" rx="4" fill="rgba(244,114,182,0.18)" stroke="#f472b6"/>
+        <text x="178" y="328" fill="#f472b6" font-size="7" font-weight="700" text-anchor="middle">EVAL · GATE</text>
+        <text x="178" y="344" fill="#e4e7eb" font-size="9" font-weight="600" text-anchor="middle">VisualQuality</text>
+
+        <rect x="138" y="400" width="80" height="20" rx="3" fill="rgba(34,197,94,0.18)" stroke="#22c55e"/>
+        <text x="178" y="414" fill="#22c55e" font-size="7" font-weight="700" text-anchor="middle">PUBLISH GATE</text>
+      </g>
+      <!-- inspector mini -->
+      <rect x="20" y="446" width="316" height="40" rx="4" fill="rgba(0,0,0,0.4)" stroke="#2d3340"/>
+      <text x="32" y="462" fill="#6b8eff" font-size="9" font-weight="700">SELECTED · ShotSpec S07</text>
+      <text x="32" y="478" fill="#8a93a6" font-size="9">12 nodes · 18 edges · 0 errors · 1 reviewer flag</text>
+    </g>
+  </g>
+
+  <!-- mapping band -->
+  <rect x="40" y="640" width="1844" height="180" rx="8" fill="rgba(255,255,255,0.025)" stroke="#2d3340"/>
+  <text x="60" y="668" font-size="11" fill="#a78bfa" font-weight="700">VIEW ↔ PERSONA ↔ PRINCIPLE</text>
+
+  <g font-size="10" fill="#e4e7eb">
+    <text x="60" y="694" fill="#6b8eff" font-weight="700">VIEW 1 · DIRECTOR'S CANVAS</text>
+    <text x="60" y="710" fill="#8a93a6">Persona: Jordan · Creative Professional</text>
+    <text x="60" y="724" fill="#8a93a6">Embodies: Law 3 (every decision has a reason) · Law 5 (AI proposes, human approves)</text>
+
+    <text x="420" y="694" fill="#a78bfa" font-weight="700">VIEW 2 · GUIDED FLOW</text>
+    <text x="420" y="710" fill="#8a93a6">Persona: Sam · Emerging Creator</text>
+    <text x="420" y="724" fill="#8a93a6">Embodies: Law 1 (generation is a service call) · Law 4 (same engine, fewer knobs)</text>
+
+    <text x="780" y="694" fill="#6b8eff" font-weight="700">VIEW 3 · TIMELINE EDITOR</text>
+    <text x="780" y="710" fill="#8a93a6">Persona: Jordan (editor mode)</text>
+    <text x="780" y="724" fill="#8a93a6">Embodies: Law 2 (nothing final until user says so) · non-destructive layers</text>
+
+    <text x="1140" y="694" fill="#a78bfa" font-weight="700">VIEW 4 · AGENT CONSOLE</text>
+    <text x="1140" y="710" fill="#8a93a6">Persona: Jordan (AI-native mode)</text>
+    <text x="1140" y="724" fill="#8a93a6">Embodies: Law 5 (propose ≠ execute) · Reviewer as first-class agent</text>
+
+    <text x="1500" y="694" fill="#6b8eff" font-weight="700">VIEW 5 · NODE GRAPH</text>
+    <text x="1500" y="710" fill="#8a93a6">Persona: Alex · Studio Lead / Developer</text>
+    <text x="1500" y="724" fill="#8a93a6">Embodies: Axiom 2 (every interface is a view of the same model)</text>
+
+    <line x1="60" y1="744" x2="1864" y2="744" stroke="#2d3340"/>
+    <text x="60" y="766" fill="#a78bfa" font-weight="700">ALL VIEWS</text>
+    <text x="60" y="782" fill="#8a93a6">Same underlying Production state. Switching views is instant. Changes in any view reflect everywhere.</text>
+    <text x="60" y="798" fill="#8a93a6">Reviewer agent (magenta) and Consistency Contract (next step) are first-class in every view.</text>
+  </g>
+
+  <!-- footer -->
+  <rect x="0" y="850" width="1920" height="120" fill="rgba(0,0,0,0.5)"/>
+  <text x="40" y="884" font-size="10" fill="#a78bfa" font-weight="700">DESIGN DECISIONS</text>
+  <g font-size="10" fill="#e4e7eb">
+    <text x="40" y="908" fill="#8a93a6">1. View choice is automatic per-persona but overridable in settings — never forces a user to fight the surface.</text>
+    <text x="40" y="924" fill="#8a93a6">2. Reviewer appears in every view at a glance — production quality is not an afterthought, it's an ambient signal.</text>
+    <text x="40" y="940" fill="#8a93a6">3. Every view reads from the same Production state. No view has its own copy. Switching is instant, lossless.</text>
+  </g>
+
+  <rect x="0" y="970" width="1920" height="40" fill="rgba(0,0,0,0.55)"/>
+  <text x="40" y="992" font-size="10" fill="#5d6678" font-weight="700">ACT-3</text>
+  <text x="40" y="1008" font-size="11" fill="#e4e7eb" font-weight="500">Director's Canvas wireframe · 5 views · per-persona · same engine</text>
+  <text x="1880" y="1000" font-size="10" fill="#5d6678" text-anchor="end">5 SVGs · composite · 4 KB–18 KB · all hand-coded</text>
+</svg>

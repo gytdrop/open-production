@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" font-family="-apple-system,Inter,Segoe UI,Helvetica,Arial,sans-serif">
+  <rect width="1920" height="1080" fill="#0f1117"/>
+
+  <!-- header -->
+  <rect x="0" y="0" width="1920" height="60" fill="rgba(0,0,0,0.5)"/>
+  <rect x="0" y="0" width="5" height="60" fill="#6b8eff"/>
+  <text x="28" y="22" font-size="10" fill="#6b8eff" font-weight="700">OPEN PRODUCTION</text>
+  <text x="28" y="44" font-size="18" fill="#e4e7eb" font-weight="600">Guided Production Flow</text>
+  <text x="1892" y="22" font-size="10" fill="#a78bfa" font-weight="700" text-anchor="end">02 / GUIDED FLOW</text>
+  <text x="1892" y="44" font-size="11" fill="#8a93a6" text-anchor="end">Persona: Sam · Emerging Creator</text>
+  <text x="1892" y="60" font-size="9" fill="#5d6678" text-anchor="end">VIEW 2 OF 5 · BEGINNER DEFAULT</text>
+
+  <!-- left minimal rail -->
+  <rect x="0" y="100" width="60" height="940" fill="rgba(0,0,0,0.4)"/>
+  <text x="30" y="140" font-size="24" fill="#e4e7eb" text-anchor="middle">🎬</text>
+  <text x="30" y="175" font-size="9" fill="#5d6678" text-anchor="middle">Studio</text>
+
+  <!-- progress dots -->
+  <text x="960" y="138" font-size="11" fill="#5d6678" text-anchor="middle">STEP 1 OF 7</text>
+  <circle cx="755" cy="170" r="9" fill="#6b8eff"/>
+  <circle cx="755" cy="170" r="16" fill="none" stroke="#6b8eff" stroke-width="1.2" opacity="0.5"/>
+  <circle cx="825" cy="170" r="6" fill="#3a4256"/>
+  <circle cx="895" cy="170" r="6" fill="#3a4256"/>
+  <circle cx="965" cy="170" r="6" fill="#3a4256"/>
+  <circle cx="1035" cy="170" r="6" fill="#3a4256"/>
+  <circle cx="1105" cy="170" r="6" fill="#3a4256"/>
+  <circle cx="1175" cy="170" r="6" fill="#3a4256"/>
+  <text x="755" y="200" font-size="10" fill="#e4e7eb" font-weight="600" text-anchor="middle">Idea</text>
+  <text x="825" y="200" font-size="10" fill="#8a93a6" text-anchor="middle">Ref</text>
+  <text x="895" y="200" font-size="10" fill="#8a93a6" text-anchor="middle">Mood</text>
+  <text x="965" y="200" font-size="10" fill="#8a93a6" text-anchor="middle">Cast</text>
+  <text x="1035" y="200" font-size="10" fill="#8a93a6" text-anchor="middle">Plan</text>
+  <text x="1105" y="200" font-size="10" fill="#8a93a6" text-anchor="middle">Gen</text>
+  <text x="1175" y="200" font-size="10" fill="#8a93a6" text-anchor="middle">Pub</text>
+
+  <!-- centered wizard column -->
+  <text x="960" y="270" font-size="30" fill="#e4e7eb" font-weight="600" text-anchor="middle">What story do you want to tell?</text>
+  <text x="960" y="306" font-size="14" fill="#8a93a6" text-anchor="middle">A few sentences is fine — we'll help you develop it.</text>
+
+  <!-- idea textarea -->
+  <rect x="600" y="334" width="720" height="130" rx="8" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="618" y="358" font-size="13" fill="#5d6678" font-style="italic">e.g. A short film about a barista who discovers</text>
+  <text x="618" y="378" font-size="13" fill="#5d6678" font-style="italic">their regular customer is an AI testing whether</text>
+  <text x="618" y="398" font-size="13" fill="#5d6678" font-style="italic">humans can tell…</text>
+  <text x="618" y="436" font-size="13" fill="#e4e7eb">A young filmmaker wonders if AI can</text>
+  <text x="836" y="436" font-size="13" fill="#e4e7eb">replace</text>
+  <line x1="887" y1="424" x2="887" y2="442" stroke="#6b8eff" stroke-width="1.5"/>
+
+  <!-- character counter -->
+  <text x="1302" y="478" font-size="10" fill="#5d6678" text-anchor="end">37 / 500</text>
+
+  <!-- platform pills -->
+  <text x="600" y="510" font-size="12" fill="#a78bfa" font-weight="700">WHERE WILL IT LIVE?</text>
+  <rect x="600" y="524" width="120" height="40" rx="20" fill="rgba(107,142,255,0.18)" stroke="#6b8eff"/>
+  <text x="660" y="549" font-size="13" fill="#e4e7eb" font-weight="500" text-anchor="middle">TikTok</text>
+  <rect x="730" y="524" width="120" height="40" rx="20" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="790" y="549" font-size="13" fill="#8a93a6" text-anchor="middle">Instagram</text>
+  <rect x="860" y="524" width="120" height="40" rx="20" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="920" y="549" font-size="13" fill="#8a93a6" text-anchor="middle">YouTube</text>
+  <rect x="990" y="524" width="120" height="40" rx="20" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="1050" y="549" font-size="13" fill="#8a93a6" text-anchor="middle">Other</text>
+
+  <!-- tone selector -->
+  <text x="600" y="610" font-size="12" fill="#a78bfa" font-weight="700">WHAT TONE?</text>
+  <rect x="600" y="624" width="92" height="36" rx="6" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="646" y="647" font-size="12" fill="#8a93a6" text-anchor="middle">Warm</text>
+  <rect x="702" y="624" width="92" height="36" rx="6" fill="rgba(107,142,255,0.18)" stroke="#6b8eff"/>
+  <text x="748" y="647" font-size="12" fill="#e4e7eb" font-weight="500" text-anchor="middle">Neutral</text>
+  <rect x="804" y="624" width="92" height="36" rx="6" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="850" y="647" font-size="12" fill="#8a93a6" text-anchor="middle">Tense</text>
+  <rect x="906" y="624" width="92" height="36" rx="6" fill="rgba(255,255,255,0.04)" stroke="#3a4256"/>
+  <text x="952" y="647" font-size="12" fill="#8a93a6" text-anchor="middle">Hopeful</text>
+
+  <!-- right-side helper card -->
+  <rect x="1380" y="334" width="280" height="200" rx="8" fill="rgba(167,139,250,0.08)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="1396" y="362" font-size="14" fill="#a78bfa" font-weight="700">💡 Tip</text>
+  <text x="1396" y="392" font-size="12" fill="#e4e7eb">You can change anything</text>
+  <text x="1396" y="408" font-size="12" fill="#e4e7eb">later — the production</text>
+  <text x="1396" y="424" font-size="12" fill="#e4e7eb">doc keeps every version.</text>
+  <line x1="1396" y1="446" x2="1644" y2="446" stroke="#3a4256"/>
+  <text x="1396" y="468" font-size="10" fill="#8a93a6">Skip ahead any time</text>
+  <text x="1396" y="484" font-size="10" fill="#8a93a6">from the Studio menu.</text>
+  <text x="1396" y="516" font-size="10" fill="#5d6678" font-style="italic">No saves to manage.</text>
+
+  <!-- continue button -->
+  <rect x="1180" y="704" width="140" height="48" rx="8" fill="#6b8eff"/>
+  <text x="1250" y="734" font-size="14" fill="#0f1117" font-weight="700" text-anchor="middle">Continue →</text>
+
+  <!-- "I have a script" link -->
+  <text x="600" y="734" font-size="12" fill="#6b8eff" font-weight="500">I have a script — paste it instead</text>
+
+  <!-- annotation arrows -->
+  <circle cx="600" cy="334" r="5" fill="#67e8f9"/>
+  <line x1="600" y1="329" x2="600" y2="298" stroke="#67e8f9" stroke-width="1.2"/>
+  <text x="609" y="293" font-size="10" fill="#67e8f9" font-weight="500">Same engine, fewer knobs (Law 4)</text>
+
+  <circle cx="1380" cy="334" r="5" fill="#67e8f9"/>
+  <line x1="1380" y1="329" x2="1380" y2="298" stroke="#67e8f9" stroke-width="1.2"/>
+  <text x="1371" y="293" font-size="10" fill="#67e8f9" font-weight="500" text-anchor="end">No false urgency</text>
+
+  <!-- footer notes -->
+  <rect x="600" y="800" width="1060" height="60" rx="6" fill="rgba(255,255,255,0.025)" stroke="#3a4256"/>
+  <text x="618" y="824" font-size="11" fill="#a78bfa" font-weight="700">WHAT HAPPENS NEXT</text>
+  <text x="618" y="846" font-size="11" fill="#8a93a6">After you continue, the system suggests 3 creative angles for your idea. You pick one. Then references. Then mood. You can change any later.</text>
+</svg>

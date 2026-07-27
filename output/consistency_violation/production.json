@@ -1,0 +1,36 @@
+{
+  "scenario": "consistency_contract_violation",
+  "contract": {
+    "subject_id": "char-elena",
+    "required_attributes": [
+      "red_scarf",
+      "silver_locket"
+    ],
+    "prohibited_attributes": [],
+    "variance_tolerance": 0.15
+  },
+  "generations": [
+    {
+      "id": "gen-001",
+      "subject_id": "char-elena",
+      "attributes": [
+        "red_scarf",
+        "silver_locket",
+        "dark_coat"
+      ],
+      "description": "Elena in her winter coat, red scarf wrapped twice, locket visible."
+    },
+    {
+      "id": "gen-002",
+      "subject_id": "char-elena",
+      "attributes": [
+        "silver_locket",
+        "dark_coat"
+      ],
+      "description": "Elena in her winter coat, locket at neck \u2014 red scarf not generated."
+    }
+  ],
+  "audit_path": "D:\\IBM Project\\Open_Production\\output\\consistency_violation\\consistency_violation_audit.jsonl",
+  "production_blocked": true,
+  "generated_at": "2026-07-27T19:00:15.474023+00:00"
+}

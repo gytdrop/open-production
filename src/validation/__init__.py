@@ -1,0 +1,1 @@
+"""Validation gates (evidence, consistency, publication)."""

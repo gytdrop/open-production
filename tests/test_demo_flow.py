@@ -42,7 +42,7 @@ def test_build_demo_report_writes_audit_trail():
 def test_render_index_html_mentions_browser_demo():
     """The landing page should clearly present the browser-first experience."""
     html = render_index_html()
-    assert "browser demo" in html.lower()
+    assert "Guided Flow" in html or "browser demo" in html.lower()
     assert "Show creative angles" in html
     assert "Open Production" in html
 

@@ -2,21 +2,36 @@
 
 This module wraps the existing Open Production flow in a tiny HTTP server so
 people can interact with it from a browser instead of a terminal.
+
+Two views are available via ?view= query parameter:
+  ?view=guided  (default) — Guided Flow: step-by-step angle selection
+  ?view=console           — Agent Console: live audit-event log
+Both views accept ?production_id= and link to each other preserving it.
 """
 from __future__ import annotations
 
 import json
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from demo_flow import build_demo_report, generate_angles
+
+# Optional ProductionService — used for the /api/production/* endpoints.
+try:
+    from src.service.production_service import ProductionNotFound, ProductionService
+    _SVC_AVAILABLE = True
+except ImportError:  # pragma: no cover
+    _SVC_AVAILABLE = False
 
 
 DEFAULT_TOPIC = "The future of AI in creative industries"
 DEFAULT_AUDIENCE = "educated_lay"
 DEFAULT_TONE = "neutral"
+
+_STORAGE_DIR = Path("output/productions")
 
 
 INDEX_HTML = """<!doctype html>
@@ -303,9 +318,12 @@ INDEX_HTML = """<!doctype html>
 </head>
 <body>
   <main class="shell">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+      <a href="{{CONSOLE_LINK}}" style="padding:7px 16px;border-radius:999px;border:1px solid rgba(137,181,255,0.18);background:rgba(255,255,255,0.07);color:#7fd4c1;text-decoration:none;font-size:0.93rem;">Agent Console &#8594;</a>
+    </div>
     <section class="hero">
       <div>
-        <div class="eyebrow">Open Production | browser demo</div>
+        <div class="eyebrow">Open Production | Guided Flow</div>
         <h1 class="title">AI as a creative partner for public-facing writing</h1>
         <p class="lede">
           Tell the system what you want. It suggests three creative angles, lets
@@ -586,14 +604,186 @@ INDEX_HTML = """<!doctype html>
 """
 
 
-def render_index_html() -> str:
-    """Return the landing page HTML."""
-    return (
+# ---------------------------------------------------------------------------
+# Agent Console HTML (view=console)
+# ---------------------------------------------------------------------------
+
+CONSOLE_HTML = """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent Console — Open Production</title>
+  <style>
+    :root {
+      --bg: #07111f; --panel: rgba(10,18,33,0.82);
+      --panel-border: rgba(137,181,255,0.18);
+      --text: #f5f7fb; --muted: #9db0cc;
+      --accent: #7fd4c1; --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      font-family: "Gill Sans","Trebuchet MS",sans-serif;
+      color: var(--text);
+      background: linear-gradient(160deg,#08111f 0%,#0c1a2f 48%,#060a13 100%);
+    }
+    .shell { width: min(1000px,calc(100% - 32px)); margin: 0 auto; padding: 28px 0 48px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+    }
+    .view-link {
+      padding: 8px 18px; border-radius: 999px;
+      border: 1px solid var(--panel-border);
+      background: rgba(255,255,255,0.07);
+      color: var(--accent); text-decoration: none; font-size: 0.95rem;
+    }
+    .view-link:hover { background: rgba(127,212,193,0.12); }
+    h1 { font-size: 1.9rem; margin: 0; }
+    .subtitle { color: var(--muted); margin: 4px 0 0; font-size: 0.97rem; }
+    .panel {
+      background: var(--panel); border: 1px solid var(--panel-border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 18px;
+    }
+    .panel-title { font-size: 1.2rem; margin: 0 0 12px; }
+    .status-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
+    .stat { padding: 12px 16px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); }
+    .stat b { display: block; font-size: 1.5rem; color: #fff; }
+    .stat span { color: var(--muted); font-size: 0.9rem; }
+    .event-list { list-style: none; margin: 0; padding: 0; }
+    .event-item {
+      display: grid; grid-template-columns: 160px 1fr auto;
+      gap: 10px; align-items: baseline;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.93rem;
+    }
+    .event-item:last-child { border-bottom: none; }
+    .evt-ts { color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+    .evt-gate { color: #a7c8ff; }
+    .evt-status { padding: 3px 9px; border-radius: 999px; font-size: 0.8rem; }
+    .s-accepted,.s-publish_ok,.s-contract_passed { background: rgba(127,212,193,0.15); color: #c0f4e7; }
+    .s-rejected,.s-publish_rejected,.s-contract_violated,.s-production_blocked { background: rgba(255,122,122,0.15); color: #ffb3b3; }
+    .s-contradiction_detected { background: rgba(240,184,93,0.15); color: #fde8a0; }
+    .empty { color: var(--muted); font-style: italic; }
+    .footer { margin-top: 18px; color: var(--muted); font-size: 0.9rem; }
+    @media(max-width:700px) { .status-row { grid-template-columns: 1fr; } .event-item { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topbar">
+      <div>
+        <h1>Agent Console</h1>
+        <p class="subtitle">Live audit-event log for production <code>{{PROD_ID_LABEL}}</code></p>
+      </div>
+      <a class="view-link" href="{{GUIDED_LINK}}">&#8592; Switch to Guided Flow</a>
+    </div>
+
+    <div class="status-row" id="status-row">
+      <div class="stat"><b id="s-state">—</b><span>state</span></div>
+      <div class="stat"><b id="s-events">—</b><span>audit events</span></div>
+      <div class="stat"><b id="s-title">—</b><span>production title</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Recent Events (last 20)</div>
+      <ul class="event-list" id="event-list">
+        <li class="empty">Loading…</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      Agent Console — Open Production. Events auto-refresh every 5 s.
+      <a class="view-link" style="margin-left:12px;" href="{{GUIDED_LINK}}">Go to Guided Flow</a>
+    </div>
+  </main>
+  <script>
+    const PROD_ID = "{{PROD_ID_JS}}";
+    const REFRESH_MS = 5000;
+
+    function statusClass(s) {
+      const safe = (s || "").replace(/[^a-z0-9_]/g,"");
+      return "evt-status s-" + safe;
+    }
+
+    async function fetchStatus() {
+      if (!PROD_ID) return;
+      try {
+        const r = await fetch("/api/production/" + PROD_ID + "/status");
+        if (!r.ok) return;
+        const d = await r.json();
+        document.getElementById("s-state").textContent = d.state || "—";
+        document.getElementById("s-title").textContent = (d.title || d.name || "untitled").slice(0,28);
+      } catch(_) {}
+    }
+
+    async function fetchLog() {
+      const list = document.getElementById("event-list");
+      if (!PROD_ID) {
+        list.innerHTML = '<li class="empty">No production_id in URL. Open from Guided Flow.</li>';
+        return;
+      }
+      try {
+        const r = await fetch("/api/production/" + PROD_ID + "/log");
+        if (!r.ok) { list.innerHTML = '<li class="empty">Could not load events.</li>'; return; }
+        const entries = await r.json();
+        document.getElementById("s-events").textContent = entries.length;
+        if (!entries.length) { list.innerHTML = '<li class="empty">No events yet.</li>'; return; }
+        const last20 = entries.slice(-20).reverse();
+        list.innerHTML = last20.map(e => {
+          const ts = (e.ts || "").slice(11,19);
+          const gate = e.gate_name || e.action_type || "event";
+          const status = e.decision_status || e.action_type || "";
+          const reason = e.reason ? (" — " + e.reason.slice(0,60)) : "";
+          return "<li class='event-item'>" +
+            "<span class='evt-ts'>" + ts + "</span>" +
+            "<span class='evt-gate'>" + gate + reason + "</span>" +
+            "<span class='" + statusClass(status) + "'>" + status + "</span>" +
+            "</li>";
+        }).join("");
+      } catch(_) {
+        list.innerHTML = '<li class="empty">Error loading events.</li>';
+      }
+    }
+
+    async function refresh() { await fetchStatus(); await fetchLog(); }
+    refresh();
+    setInterval(refresh, REFRESH_MS);
+  </script>
+</body>
+</html>
+"""
+
+
+def render_index_html(view: str = "guided", production_id: str = "") -> str:
+    """Return the landing page HTML for the requested view.
+
+    Args:
+        view: "guided" (default) or "console"
+        production_id: optional production ID to thread through the page
+    """
+    pid = production_id or ""
+    if view == "console":
+        guided_qs = f"?view=guided&production_id={pid}" if pid else "?view=guided"
+        label = pid if pid else "(none)"
+        return (
+            CONSOLE_HTML
+            .replace("{{PROD_ID_LABEL}}", label)
+            .replace("{{PROD_ID_JS}}", pid)
+            .replace("{{GUIDED_LINK}}", guided_qs)
+        )
+    # Default: guided flow (existing page, extended with view-switcher link)
+    console_qs = f"?view=console&production_id={pid}" if pid else "?view=console"
+    html = (
         INDEX_HTML
         .replace("{{DEFAULT_TOPIC}}", DEFAULT_TOPIC)
         .replace("{{DEFAULT_AUDIENCE}}", DEFAULT_AUDIENCE)
         .replace("{{DEFAULT_TONE}}", DEFAULT_TONE)
+        .replace("{{CONSOLE_LINK}}", console_qs)
+        .replace("{{PROD_ID_JS}}", pid)
     )
+    return html
 
 
 def _json_response(handler: BaseHTTPRequestHandler, payload: Any, status: int = 200) -> None:
@@ -623,15 +813,53 @@ def _normalize_payload(payload: dict) -> dict:
     return {"topic": topic, "audience": audience, "tone": tone}
 
 
+# ---------------------------------------------------------------------------
+# Production API helpers
+# ---------------------------------------------------------------------------
+
+def _get_service() -> "ProductionService | None":
+    if not _SVC_AVAILABLE:
+        return None
+    _STORAGE_DIR.mkdir(parents=True, exist_ok=True)
+    return ProductionService(storage_dir=_STORAGE_DIR)
+
+
+def _api_production_status(production_id: str) -> tuple[int, Any]:
+    svc = _get_service()
+    if svc is None:
+        return 503, {"error": "ProductionService not available"}
+    try:
+        status = svc.status(production_id)
+        return 200, status
+    except Exception:
+        return 404, {"error": f"Production {production_id!r} not found"}
+
+
+def _api_production_log(production_id: str) -> tuple[int, Any]:
+    svc = _get_service()
+    if svc is None:
+        return 503, {"error": "ProductionService not available"}
+    try:
+        entries = svc.log(production_id)
+        return 200, entries
+    except Exception:
+        return 404, {"error": f"Production {production_id!r} not found"}
+
+
 class DemoHTTPRequestHandler(BaseHTTPRequestHandler):
     """Serve the landing page and JSON demo endpoints."""
 
     server_version = "OpenProductionDemo/1.0"
 
     def do_GET(self) -> None:  # noqa: N802 - stdlib handler signature
-        route = urlparse(self.path).path
+        parsed = urlparse(self.path)
+        route = parsed.path
+        qs = parse_qs(parsed.query)
+
         if route in {"/", "/index.html"}:
-            html = render_index_html().encode("utf-8")
+            view = (qs.get("view") or ["guided"])[0]
+            production_id = (qs.get("production_id") or [""])[0]
+            html = render_index_html(view=view, production_id=production_id).encode("utf-8")
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", str(len(html)))
@@ -642,6 +870,22 @@ class DemoHTTPRequestHandler(BaseHTTPRequestHandler):
         if route == "/healthz":
             _json_response(self, {"ok": True})
             return
+        # /api/production/<id>/status
+        if route.startswith("/api/production/") and route.endswith("/status"):
+            parts = route.strip("/").split("/")  # ['api','production','<id>','status']
+            if len(parts) == 4:
+                prod_id = parts[2]
+                status_code, body = _api_production_status(prod_id)
+                _json_response(self, body, status=status_code)
+                return
+        # /api/production/<id>/log
+        if route.startswith("/api/production/") and route.endswith("/log"):
+            parts = route.strip("/").split("/")
+            if len(parts) == 4:
+                prod_id = parts[2]
+                status_code, body = _api_production_log(prod_id)
+                _json_response(self, body, status=status_code)
+                return
         _json_response(self, {"error": "Not found"}, status=404)
 
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler signature

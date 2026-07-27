@@ -1,0 +1,6 @@
+{"ts": "2026-07-27T19:12:26.096681+00:00", "gate_name": "confirm_gate", "claim_id": "angle-selection", "decision_status": "accepted", "reason": "user picked contrarian", "evidence": {"options": ["skeptic", "advocate", "contrarian"], "chosen": "contrarian"}}
+{"ts": "2026-07-27T19:12:26.097206+00:00", "gate_name": "evidence_gate", "claim_id": "c1", "decision_status": "accepted", "reason": "has sources", "evidence": {"source_ids": ["pubmed:38001234"]}}
+{"ts": "2026-07-27T19:12:26.097914+00:00", "gate_name": "evidence_gate", "claim_id": "c2", "decision_status": "rejected", "reason": "no source_ids", "evidence": {"source_ids": []}}
+{"ts": "2026-07-27T19:12:26.099244+00:00", "gate_name": "evidence_gate", "claim_id": "c3", "decision_status": "accepted", "reason": "has sources", "evidence": {"source_ids": ["pubmed:38005678"]}}
+{"ts": "2026-07-27T19:12:26.100156+00:00", "gate_name": "consistency_gate", "claim_id": "c1_c3", "decision_status": "contradiction_detected", "reason": "fact_id=efficacy-rate", "evidence": {"fact_id": "efficacy-rate"}}
+{"ts": "2026-07-27T19:12:26.100845+00:00", "gate_name": "publication_gate", "claim_id": "doc-metadata", "decision_status": "publish_ok", "reason": "ok", "evidence": {"doi": "10.9999/custom-test", "authors": ["Custom Author"], "date": "2026-01-01", "title": "Custom metadata test"}}

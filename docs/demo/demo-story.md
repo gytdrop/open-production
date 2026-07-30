@@ -1,9 +1,22 @@
 # Demo Story — Open Production
 
 **Duration:** ≤ 3 minutes (cap: 3:00).
-**Recorded:** Day 3, after `make demo` runs cleanly from a fresh clone.
+**Entry point:** Browser demo at `http://127.0.0.1:8000/?view=guided` (no terminal visible to audience).
 **Published:** YouTube, unlisted then public.
 **Purpose:** communicate all five judging criteria in 180 seconds.
+
+---
+
+## Pre-recording setup
+
+```powershell
+cd "D:\IBM Project\Open_Production"
+python -m pip install -e .
+python src/public_demo/server.py
+# Browser opens at http://127.0.0.1:8000/?view=guided
+```
+
+Have the Agent Console tab ready at `http://127.0.0.1:8000/?view=console`.
 
 ---
 
@@ -11,9 +24,9 @@
 
 ### 0:00–0:15 — Title card
 
-**Visual:** Open Production logo (the 🪷 lotus mark). Tagline: *"AI as a creative partner for long-form content."*
+**Visual:** Open Production logo (the 🪷 lotus mark). Tagline: *"AI as a creative partner for video production."*
 
-**Voiceover:** "Open Production — built with IBM Bob. AI as a creative partner for research writing."
+**Voiceover:** "Open Production — built with IBM Bob. A 21-agent production crew with fail-closed gates and a full audit trail."
 
 **Criterion:** none yet — set the frame.
 
@@ -21,9 +34,9 @@
 
 ### 0:15–0:35 — Problem statement
 
-**Visual:** A mock "thesis deadline" graphic. Clock ticking. Student staring at a blank page. Failed citations highlighted in red.
+**Visual:** A mock production brief — dozens of agents, no oversight, no audit. Highlight: "Who approved this? Where's the brief?"
 
-**Voiceover:** "Every creator knows the bottleneck — research is slow, citations break, drafts contradict themselves, deadlines force shortcuts that lose trust."
+**Voiceover:** "Every AI creative tool shares one failure mode: generation happens unilaterally. No brief. No stage gate. No consistency contract. No audit trail. Open Production fixes that."
 
 **Criterion:** **Real-World Impact.** Sets the human stakes.
 
@@ -31,39 +44,39 @@
 
 ### 0:35–1:05 — Architecture in one shot
 
-**Visual:** Show the Mermaid diagram at `docs/architecture/architecture-diagram.mmd`. Highlight the five primitives, the creative reframing subgraph, and the three fail-closed gates. Cursor traces the path: Intent → Reframing → Research → Gates → Output.
+**Visual:** Show the Mermaid diagram at `docs/architecture/architecture-diagram.mmd`. Highlight: Intent → Creative Reframing → 21 Agents → 4 Fail-Closed Gates → Dual-Artifact Output → 2 Browser Views.
 
-**Voiceover:** "Open Production runs five stages. You declare an intent. The system proposes three creative angles. You pick one. Four academic agents research in parallel. Three fail-closed gates — evidence, consistency, publication — refuse to publish anything untraceable."
+**Voiceover:** "Five layers. User Intent feeds Creative Reframing — three angles, user picks one. A 21-agent production crew each with a bounded scope contract. Four fail-closed gates. Every decision written to an append-only audit journal. Two browser views."
 
 **Criterion:** **Technical Execution** + **Challenge Fit.** Kernel depth in 30 seconds.
 
 ---
 
-### 1:05–1:45 — The creative reframing moment
+### 1:05–1:45 — The creative reframing moment (live browser)
 
-**Visual:** Live screen capture. Browser demo at `http://127.0.0.1:8000/`. The creative-reframing agent runs after the topic is submitted. Three angle cards appear: **skeptic / advocate / contrarian**. Cursor clicks "contrarian."
+**Visual:** Live screen capture. Browser demo at `http://127.0.0.1:8000/?view=guided`. Type a topic: "The future of AI in creative industries". Click "Show creative angles". Three angle cards appear: **skeptic / advocate / contrarian**. Click "Use this angle" on the contrarian card.
 
-**Voiceover:** "Watch the reframing — the system proposes skeptic, advocate, contrarian. I pick contrarian. That's the AI as creative partner move: the system doesn't generate content unilaterally, it proposes alternatives and lets me decide."
+**Voiceover:** "Watch the reframing — skeptic, advocate, contrarian. I pick contrarian. That is the AI-as-creative-partner move: the system proposes alternatives and waits for a human decision. It does not generate unilaterally."
 
 **Criterion:** **Innovation.** The differentiator. The rubric's exact framing.
 
 ---
 
-### 1:45–2:20 — Multi-agent research + gates
+### 1:45–2:20 — Gates fire + production created
 
-**Visual:** Browser result panel. The accepted / rejected / contradiction counts update, and the audit trail scrolls below. If you want a quick terminal cutaway, show `audit_trail.jsonl` in a side window.
+**Visual:** After picking an angle, the Result panel appears. Accepted / rejected / contradiction counts update. The production_id panel appears with the teal "Open in Agent Console →" link. Click it. The Agent Console opens, showing the per-actor event rail and the live audit log.
 
-**Voiceover:** "Multi-agent research hits four academic APIs in parallel. The evidence gate rejects a claim without a citation. The consistency gate surfaces a contradiction. The publication gate halts because the DOI is missing. Fail-closed: every gate refuses to publish anything untraceable."
+**Voiceover:** "Evidence gate rejects one claim — no citation. Consistency gate detects a contradiction. Publication gate checks metadata readiness. Every decision logged. And here — the production ID. The Agent Console shows the full event stream, filterable by agent."
 
 **Criterion:** **Feasibility** + **Technical Execution.** Live, working, not a slide.
 
 ---
 
-### 2:20–2:50 — Output + audit trail
+### 2:20–2:50 — Audit trail as proof
 
-**Visual:** The PDF opens. Scroll through the document — every claim has a footnote linked to a source. Open `audit_trail.json` in another pane — the full query/response/claim/rejection log.
+**Visual:** Agent Console. Click "system" in the actor rail — filter to system events. Show the audit log entries scrolling. Switch back to "All". Open the browser DevTools network tab briefly to show `/api/production/<id>/log` returning real JSON.
 
-**Voiceover:** "Result: a finished, citable PDF. Every sentence traces back to a source. The audit trail is auditable — every query, every claim, every gate decision is recorded."
+**Voiceover:** "This is the audit trail — every gate decision, every agent action, append-only. Every production is reproducible from its journal. This is what 'AI as creative partner' means: the process is visible, traceable, and verifiable."
 
 **Criterion:** **Feasibility** + **Real-World Impact.** The deliverable is real.
 
@@ -71,9 +84,9 @@
 
 ### 2:50–3:00 — Closing + Bob usage
 
-**Visual:** Title card. IBM Bob logo. Open Production GitHub URL. "Built with IBM Bob — three captured sessions in `bob-sessions/`."
+**Visual:** Title card. "464 tests. 21 agents. 4 fail-closed gates. Built with IBM Bob — 9 sessions." Open Production GitHub URL.
 
-**Voiceover:** "Built with IBM Bob as the primary development tool. Three captured sessions. Open source, MIT. Read the architecture in the repo."
+**Voiceover:** "464 tests. 21 agents. 4 fail-closed gates. Open source, MIT. Built with IBM Bob. The architecture is in the repo."
 
 **Criterion:** none — close cleanly.
 
@@ -83,19 +96,19 @@
 
 | Time | Criterion | What it scores |
 |---|---|---|
-| 0:15–0:35 | Real-World Impact | Thesis deadline, citation failure, trust loss |
-| 0:35–1:05 | Technical Execution + Challenge Fit | Kernel diagram, primitives, fail-closed gates |
+| 0:15–0:35 | Real-World Impact | Unauditable AI production — the failure mode creators face |
+| 0:35–1:05 | Technical Execution + Challenge Fit | Kernel diagram, 21 agents, fail-closed gates, dual-artifact output |
 | 1:05–1:45 | **Innovation** (the highlight) | Creative reframing — the rubric's exact framing |
-| 1:45–2:20 | Feasibility + Technical Execution | Live multi-agent research + live gate firings |
-| 2:20–2:50 | Feasibility + Real-World Impact | Output PDF + audit trail |
-| 2:50–3:00 | (closing) | Bob usage callout |
+| 1:45–2:20 | Feasibility + Technical Execution | Live gate firings, production_id, Agent Console with actor filter |
+| 2:20–2:50 | Feasibility + Real-World Impact | Audit trail as real artifact + API verification |
+| 2:50–3:00 | (closing) | 464 tests, 9 Bob sessions |
 
 **Why this works:**
 - The **innovation highlight is at 1:05**, not buried at the end. Judges see the differentiator in the first third.
 - Every criterion gets at least **two shots** of evidence.
-- The **live demo** (1:05–2:50) is the longest segment — 105 seconds of working software.
+- The **live browser demo** (1:05–2:50) is the longest segment — 105 seconds of working software.
 - The **opening** establishes stakes before showing the system.
-- The **closing** echoes the Bob usage requirement without making it the whole video.
+- The **closing** echoes the Bob usage requirement concisely.
 
 ---
 
@@ -103,11 +116,13 @@
 
 Before hitting record:
 
-- [ ] `make demo` runs end-to-end on a fresh clone without intervention.
+- [ ] `python -m pytest tests/ -q` reports 464 passed from a fresh terminal (no `--basetemp` flag).
+- [ ] Browser demo starts cleanly: `python src/public_demo/server.py` → `http://127.0.0.1:8000/?view=guided`.
+- [ ] Guided Flow: topic pre-filled, angles appear, angle selection works, production_id panel visible after finalize.
+- [ ] Agent Console: actor rail visible, "All" button active, event list loads.
 - [ ] Terminal font size readable at 1080p (16pt minimum).
 - [ ] No personal email or sensitive keys on screen.
-- [ ] The contrarian angle pick at 1:30 is rehearsed (cursor position known).
-- [ ] Voiceover script printed or on second monitor — don't read from the same screen you're recording.
+- [ ] Voiceover script printed or on second monitor.
 - [ ] Lighting + audio checked (no fan noise, no echo).
 
 ---
@@ -116,9 +131,9 @@ Before hitting record:
 
 - Reading code line by line (use the diagram, not the source).
 - Showing Bob IDE itself (the audit trail is the Bob evidence, not the demo).
-- Slides with bullet points (the deck already exists for judges; the video shows the system live).
+- Slides with bullet points (the architecture doc exists; the video shows the system live).
 - Apologies or hedging ("this might not work perfectly") — judges score confidence.
-- The other four domains (video, audio, code, design) — the kernel is designed for them but the submission is the research-writing vertical.
+- The terminal / command line (the browser demo is the public face).
 
 ---
 
@@ -140,4 +155,4 @@ Recommended:
 - Trim to ≤ 3:00 if over.
 - Switch to **public** before submitting.
 
-The YouTube link becomes Section 6 of the Project Page and the "Demo video" link in the README.
+The YouTube link becomes Section 6 of the Project Page and the "Demo video" link in `README.md`.

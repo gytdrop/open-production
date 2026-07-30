@@ -58,7 +58,9 @@ else:
 print("[OK] BaseAgent")
 
 ml = MockLLMClient()
-assert ml.complete("hi") == ml.response
+assert ml.complete("hi") != ml.response  # default response: a three-angle JSON fallback
+ml_pinned = MockLLMClient(response='hello world')
+assert ml_pinned.complete("hi") == 'hello world'  # pinned response: returned verbatim
 print("[OK] MockLLMClient")
 
 # 3. Verify Makefile uses tabs (not spaces)

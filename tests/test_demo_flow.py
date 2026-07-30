@@ -33,9 +33,12 @@ def test_build_demo_report_writes_audit_trail():
     assert audit_path.exists()
 
     lines = audit_path.read_text(encoding="utf-8").splitlines()
-    assert len(lines) == 6
+    # 1 research_gate + 1 confirm_gate + 3 evidence_gate + 2 reviewer_agent (accepted claims) +
+    # 1 consistency_gate + 1 publication_gate = 9
+    assert len(lines) == 9
     entries = [json.loads(line) for line in lines]
-    assert entries[0]["gate_name"] == "confirm_gate"
+    assert entries[0]["gate_name"] == "research_gate"
+    assert entries[1]["gate_name"] == "confirm_gate"
     assert entries[-1]["gate_name"] == "publication_gate"
 
 

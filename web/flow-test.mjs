@@ -1,0 +1,32 @@
+﻿import { chromium } from 'playwright';
+import { writeFile, mkdir } from 'fs/promises';
+const SHOTS = 'web/.tmp/browser-test/screenshots';
+await mkdir(SHOTS, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const page = await ctx.newPage();
+const messages = [];
+page.on('console', (m) => { if (m.type() === 'error') messages.push(m.text()); });
+page.on('pageerror', (e) => messages.push('PAGEERROR: ' + e.message));
+await page.goto('http://127.0.0.1:5173/flow', { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(2000);
+await page.screenshot({ path: SHOTS + '/stage1-clean.png' });
+await page.locator('textarea').first().fill('A short film about a barista who discovers their regular customer is an AI.');
+await page.getByRole('button', { name: /Continue/ }).click();
+await page.waitForTimeout(2500);
+await page.screenshot({ path: SHOTS + '/stage2-with-continue.png' });
+// Click the new Continue button on stage 2
+const advanceBtn = page.getByRole('button', { name: /Continue to Find Your Angle/ });
+console.log('stage 2 advance button exists:', await advanceBtn.isVisible());
+await advanceBtn.click();
+await page.waitForTimeout(1500);
+await page.screenshot({ path: SHOTS + '/stage3-angles.png' });
+const angleArticles = await page.locator('article').count();
+console.log('angle cards:', angleArticles);
+// Pick first angle
+await page.locator('article').first().getByRole('button').click();
+await page.waitForTimeout(8000);
+await page.screenshot({ path: SHOTS + '/after-pick-finalize.png' });
+console.log('messages:', messages.length);
+for (const m of messages) console.log('  ERR:', m.slice(0, 200));
+await browser.close();

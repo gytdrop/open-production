@@ -13,18 +13,21 @@ This is the recommended path if you want a non-technical experience.
 cd 'D:\IBM Project\Open_Production'
 
 # Step 2: launch the browser demo
-make web-demo
-# or: python scripts/run_web_demo.py --open-browser
+python src/public_demo/server.py
 ```
 
 The browser opens at `http://127.0.0.1:8000/`. From there:
 
-1. Enter a topic.
-2. Click "Show creative angles".
-3. Pick skeptic, advocate, or contrarian.
-4. Review the summary and audit trail.
+1. Enter a topic and click **"Show creative angles"**.
+2. Pick skeptic, advocate, or contrarian.
+3. Click **"Use this angle"** on the chosen card.
+4. Review the gate results — accepted/rejected claims, contradictions detected.
+5. The **production_id panel** appears — click **"Open in Agent Console →"** to see the live event log.
 
-The browser demo uses the same underlying logic as the terminal demo, but it is much friendlier for non-technical users.
+Two views are available via the `?view=` parameter:
+
+- `http://127.0.0.1:8000/?view=guided` — Guided Production Flow (default)
+- `http://127.0.0.1:8000/?view=console&production_id=<id>` — Agent Console
 
 ---
 
@@ -33,131 +36,134 @@ The browser demo uses the same underlying logic as the terminal demo, but it is 
 **Prerequisites:** Python 3.10+ on Windows / macOS / Linux. Git. ~5 minutes.
 
 ```powershell
-# Step 1: navigate to the project (or clone the public repo after Day 4)
+# Step 1: navigate to the project (or clone the public repo)
 cd 'D:\IBM Project\Open_Production'
 
 # Step 2: install dependencies (only pytest + stdlib extras)
 python -m pip install -e .
-# or: python -m pip install pytest
 
-# Step 3: run the test suite — should be 51/51 passing
-make test
-# or: pytest -v
+# Step 3: run the test suite — 166 tests must pass
+python -m pytest tests/ -q
+# Expected: 166 passed in ~3s, 0 failures, 0 errors
 
-# Step 4: run the demo end-to-end
-make demo
-# or: python scripts/run_demo.py --topic "CRISPR for sickle cell disease"
+# Step 4: start the browser demo
+python src/public_demo/server.py
+# Then open http://127.0.0.1:8000/?view=guided
 
-# Step 5: inspect the audit trail
-type audit_demo.jsonl
-# or: cat audit_trail.jsonl
+# Step 5: inspect a demo audit trail (written on each finalize run)
+# Look in output/public-demo/ for audit_<timestamp>.jsonl
 ```
 
-**Expected output from `make demo`:**
-
-```
-Creative angles for: 'CRISPR for sickle cell disease'
-
-  1. [skeptic] The skeptic's view
-     What are the strongest objections to current claims about CRISPR for sickle cell disease?
-  2. [advocate] The advocate's case
-     Why does CRISPR for sickle cell disease matter and who stands to benefit most?
-  3. [contrarian] The non-obvious take
-     What is the defensible but underexplored position on CRISPR for sickle cell disease?
-
-3 angles · 2 claims accepted · 1 claims rejected · 1 contradictions detected · audit trail: audit_demo.jsonl
-```
-
-**Expected output from `audit_trail.jsonl`:** 5 JSON lines, each with `ts`, `gate_name`, `claim_id`, `decision_status`, `reason`, `evidence`. See `examples/output/audit_trail.jsonl` for a worked example.
+**Expected output from the browser demo finalize:**
+- Accepted/rejected/contradiction counts update
+- Production_id panel shows the new production ID
+- "Open in Agent Console →" link appears
+- Clicking it opens `/?view=console&production_id=<id>` with live event log
 
 ---
 
 ## 3. Local testing — verify the prototype actually works
 
-**Tests (7 files, 51 tests):**
-
 ```powershell
-pytest -v
+python -m pytest tests/ -q
 ```
 
-Expected:
-- `test_audit_recorder.py` — 5/5
-- `test_confirm_gate.py` — 5/5
-- `test_creative_reframing.py` — 9/9
-- `test_gates.py` — 12/12
-- `test_transforms.py` — 11/11
-- `test_videos.py` — 9/9
+Expected (166 tests across 20 test files):
+
+| File | Tests |
+|---|---|
+| `test_creative_reframing.py` | 9 |
+| `test_gates.py` | 12 |
+| `test_confirm_gate.py` | 5 |
+| `test_audit_recorder.py` | 5 |
+| `test_transforms.py` | 11 |
+| `test_videos.py` | 9 |
+| `test_production_service.py` | 8 |
+| `test_demo_flow.py` | 6 |
+| `test_view_switching.py` | 7 |
+| `test_shot_designer.py` | ~6 |
+| `test_character_director.py` | ~6 |
+| `test_storyboard_artist.py` | ~6 |
+| `test_environment_artist.py` | ~7 |
+| `test_reviewer.py` | ~7 |
+| `test_editor.py` | ~6 |
+| `test_publisher.py` | ~8 |
+| `test_voice_director.py` | 7 |
+| `test_sound_designer.py` | 7 |
+| `test_music_composer.py` | 8 |
+| `test_colorist.py` | 9 |
 
 If anything fails, the prototype is broken — do not submit.
 
 **Smoke test (manual, ~2 min):**
 
-1. Run `python scripts/run_demo.py --topic "AI in creative industries"` — should print 3 angles + summary line.
-2. Run `python scripts/run_demo.py --topic ""` (empty topic) — should not crash.
-3. Run `python scripts/run_demo.py --topic "test" --out /tmp/test.jsonl` — should write a JSONL file at that path.
-4. Open `audit_trail.jsonl` in any editor. Each line should be valid JSON.
-5. Confirm 5 entries: 3 from evidence_gate + 1 from consistency_gate + 1 from publication_gate.
+1. Start `python src/public_demo/server.py`.
+2. Open `http://127.0.0.1:8000/?view=guided` — the Guided Flow should load.
+3. Submit the sample topic — three angle cards should appear.
+4. Pick an angle — the gate result panel should appear with a production_id.
+5. Click "Open in Agent Console →" — the Agent Console should load with the event list.
+6. The left-rail Actors panel should show actors with event counts.
 
 **Audit-trail validation:**
 
 ```powershell
-python -c "import json; [json.loads(l) for l in open('audit_trail.jsonl')]; print('JSONL valid')"
+# After a finalize run, audit files are in output/public-demo/
+$latest = Get-ChildItem output/public-demo/*.jsonl | Sort-Object LastWriteTime -Desc | Select-Object -First 1
+python -c "import json; entries=[json.loads(l) for l in open('$($latest.FullName)')]; print('JSONL valid:', len(entries), 'entries')"
 ```
-
-If the output is "JSONL valid", every line is well-formed JSON.
-
-**Cross-reference check (5 minutes before submission):**
-
-- [ ] README.md has all 5 required sections (Problem / Solution / AI approach & architecture / Challenge theme / How Bob was used)
-- [ ] `bob-sessions/01-codebase-exploration/transcript.md` exists and is raw Bob output
-- [ ] `bob-sessions/02-creative-reframing-feature/transcript.md` exists
-- [ ] `bob-sessions/03-tests-and-checks/transcript.md` exists
-- [ ] `bob-sessions/04-demo-and-audit/transcript.md` exists
-- [ ] `bob-sessions/05-confirm-gate/transcript.md` exists
-- [ ] `bob-sessions/06-transform-catalog/transcript.md` exists
-- [ ] `bob-sessions/07-video-vertical/transcript.md` exists
-- [ ] `docs/architecture/architecture.md` exists
-- [ ] `docs/architecture/architecture-diagram.mmd` exists
-- [ ] `docs/demo/demo-story.md` exists
-- [ ] `docs/submission-checklist.md` exists
-- [ ] `docs/judge-pack/quick-brief.md` exists (after Boris writes it)
-- [ ] `project-page/project-page.md` exists
-- [ ] `Makefile` has `demo`, `test`, `install`, `clean` targets
 
 ---
 
+
+## 3.5. CLI replay — `production timeline <id>`
+
+The audit trail is the most novel property of Open Production. To make it
+inspectable without the browser demo, the project ships a one-shot CLI:
+
+```powershell
+# Replay a production's audit trail as a readable timeline.
+python -m src.cli.timeline prod_9915e6697a12
+
+# Just the header + state progression + gate counts (skip the per-event table).
+python -m src.cli.timeline prod_bd35b24041d6 --summary
+
+# Emit a single JSON document for piping into jq / scripts.
+python -m src.cli.timeline prod_bd35b24041d6 --json
+```
+
+The command searches `output/public-demo/`, `output/productions/`, and the
+project root, so any production created by the browser demo or the
+`ProductionService` is reachable by id. Pass an explicit path instead of an
+id when the production lives elsewhere.
+
+The CLI is intentionally small (one new module) and is the first of several
+commands listed in `docs/plans/audit-2026-07-29.md` (`trace`, `doctor`,
+`run`, `compare`, `plan-status`). Once `production timeline <id>` is in
+place, the others reuse the same lookup helper.
+
 ## 4. Public launch — push to GitHub and submit
 
-**Push to GitHub (Day 3 evening):**
+**Push to GitHub:**
 
 ```powershell
 cd 'D:\IBM Project\Open_Production'
 git init
 git add .
-git commit -m "Open Production v0.1 — IBM AI Builders Challenge July 2026"
+git commit -m "Open Production v1.0 — IBM AI Builders Challenge July 2026"
 git branch -M main
 git remote add origin https://github.com/yourname/open-production.git
 git push -u origin main
 ```
 
-If you don't have a GitHub repo yet, create one at github.com/new. Name it `open-production` (or `pdt-july-challenge` — your call).
-
-**Fill the Project Page on the platform (Day 3 evening, ~30 min):**
+**Fill the Project Page on the platform (~30 min):**
 
 - URL: `https://aibuilderschallenge-bobhub.bemyapp.com/#/projects`
-- Use the drafts at `project-page/project-page.md` (12.3 KB) — paste each section into the corresponding field.
 - Project name: **Open Production**
 - Track: **July — Reimagine Creative Industries with AI**
-- Team: solo (you)
 
-**Upload SkillsBuild cert (Day 3 evening):**
+**Submit:**
 
-- The cert PDF should be at `bob-sessions/certificates/skillsbuild-cert.pdf` (you save this manually).
-- Upload via Project Page Section 8.
-
-**Submit (Day 4 morning, ~15 min):**
-
-- Final QA: clone repo into a fresh dir, run `make install && make test && make demo`. All succeed.
+- Final QA: clone repo into a fresh dir, run `python -m pip install -e . && python -m pytest tests/ -q`. All 166 tests pass.
 - Verify Project Page links: GitHub repo (public), YouTube video (public, ≤3 min).
 - Click "Submit" on the platform.
 - Save confirmation email + screenshot the submitted page.
@@ -166,11 +172,11 @@ If you don't have a GitHub repo yet, create one at github.com/new. Name it `open
 
 ## What you do NOT need
 
-- **No real LLM API key.** MockLLMClient is enough for v0.1 demo. Adding OpenAI/Anthropic is a v0.2 feature.
-- **No Docker.** Judges don't require it. v0.2 if asked.
+- **No real LLM API key.** MockLLMClient is sufficient for the demo. All outputs are deterministic.
+- **No Docker.** Judges don't require it.
 - **No CI.** Same.
-- **No internet during demo.** The MockLLMClient is fully deterministic.
-- **No PDT import.** PDT is inspiration citation only; the working prototype is the Bob-built code in `src/`.
+- **No internet during demo.** MockLLMClient is fully deterministic.
+- **No Makefile.** All commands use `python` directly.
 
 ---
 
@@ -178,11 +184,11 @@ If you don't have a GitHub repo yet, create one at github.com/new. Name it `open
 
 | Problem | Fix |
 |---|---|
-| `pytest` reports import errors | Run from project root: `cd 'D:\IBM Project\Open_Production' && pytest -v` |
-| `make demo` exits 1 | Run with `--topic "..."` argument. Empty topic without flag should still work; check stderr. |
-| `audit_trail.jsonl` empty | The demo runs the gates on a hardcoded fixture set. If empty, `scripts/run_demo.py` is broken — re-run Bob session 4. |
-| Tests fail on a fresh clone | `python -m pip install pytest` (only external dep needed beyond stdlib). |
-| Bob IDE can't find the workspace | Re-open Bob IDE, point at `D:\IBM Project\Open_Production\`. Bob session transcripts are in `bob-sessions/NN-*/transcript.md`. |
+| `pytest` reports import errors | Run from project root: `cd 'D:\IBM Project\Open_Production' && python -m pytest tests/ -q` |
+| Server won't start on port 8000 | Another process using the port. Kill it or change port: `python src/public_demo/server.py` — check stderr. |
+| Browser demo shows blank page | Hard refresh (Ctrl+Shift+R). Check server is running. |
+| production_id panel doesn't appear | ProductionService storage path issue. Check `output/productions/` is writable. |
+| Tests fail on a fresh clone | `python -m pip install -e .` (install the package first). |
 | Git push fails with auth error | Set up SSH key or personal access token. Standard GitHub flow. |
 
 ---
@@ -191,10 +197,9 @@ If you don't have a GitHub repo yet, create one at github.com/new. Name it `open
 
 | Day | Test | Pass criterion |
 |---|---|---|
-| Day 0 (now) | `pytest -v` | 51/51 |
-| Day 0 | `make demo` | prints 3 angles, summary line, exits 0 |
-| Day 0 | `audit_trail.jsonl` | 5 entries, all valid JSON |
-| Day 3 | Fresh clone test | `git clone`, `make install`, `make test`, `make demo` — all succeed |
+| Day 0 | `python -m pytest tests/ -q` | 166 passed, 0 failures |
+| Day 0 | Browser demo end-to-end | 3 angles → pick → gates fire → production_id shows |
+| Day 3 | Fresh clone test | `pip install -e . && pytest tests/ -q` — all pass |
 | Day 3 | Demo video check | ≤3 min, audio present, links resolve |
 | Day 4 | Final pre-submit | Project Page links resolve; Bob session transcripts readable |
 | Day 4 | Submit | Confirmation email received |
@@ -204,24 +209,27 @@ If you don't have a GitHub repo yet, create one at github.com/new. Name it `open
 ## Quick reference — the single command that proves it works
 
 ```powershell
-cd 'D:\IBM Project\Open_Production' && python -m pytest -v && python scripts/run_demo.py --topic "test topic" && python -c "import json; [json.loads(l) for l in open('audit_trail.jsonl')]; print('JSONL valid:', sum(1 for _ in open('audit_trail.jsonl')), 'entries')"
+cd 'D:\IBM Project\Open_Production'
+python -m pytest tests/ -q
+# Expected: 166 passed in ~3s
+python src/public_demo/server.py
+# Then open http://127.0.0.1:8000/?view=guided and run a demo
 ```
-
-If that one command exits 0 and prints "JSONL valid: 5 entries" (or similar), the prototype is alive. Use this as your go/no-go gate before recording the demo video.
 
 ---
 
 ## What "tested" means in this submission
 
-- **Unit tests** — 51/51 passing. Each module's behavior is verified in isolation.
-- **Integration test** — `make demo` runs the full pipeline end-to-end with audit trail.
-- **Smoke tests** — manual checks above (empty topic, custom output path, JSONL validation).
-- **Audit trail** — every gate decision is recorded in JSONL format.
+- **Unit tests** — 166 tests, 20 test files, all passing. Each module's behavior is verified in isolation.
+- **Integration test** — browser demo runs the full pipeline end-to-end with a dual-artifact audit trail.
+- **Smoke tests** — manual checks above (angle selection, gate firing, production_id surfacing, Agent Console filter).
+- **Audit trail** — every gate decision is recorded as append-only `AuditEntry` records in `audit.jsonl`.
 
-What's NOT tested (v0.2 concerns):
-- Real LLM provider integration (MockLLMClient only).
+What's NOT tested (post-submission concerns):
+
+- Real LLM provider integration (MockLLMClient only — deterministic, no API key required).
 - Cross-OS sandboxing.
-- Concurrent / re-entrant behavior (acknowledged in Bob session 4).
+- Concurrent / re-entrant behavior.
 - Performance under load.
 
-Judges evaluating "Technical Execution" should see: working tests, working demo, working audit trail, clean architecture. We have all four.
+Judges evaluating "Technical Execution" should see: 166 working tests, working browser demo, live audit trail, clean production-crew architecture. We have all four.

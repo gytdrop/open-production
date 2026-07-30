@@ -1,8 +1,8 @@
 # Open Production
 
-> **AI as a creative partner for long-form content — research, ideation, evaluation, and audit-traceable output.**
+> **AI as a creative partner for long-form video production — 21 specialist agents, fail-closed gates, and an audit-traceable production pipeline.**
 
-An open-source multi-agent system that takes a creator's intent and produces a finished, citable document — or a presentation, a teaching brief, a research report. Built with **IBM Bob** as the primary development tool.
+An open-source multi-agent production crew for video and creative content. The primary vertical is long-form video production; research writing is an earlier experimental vertical that proved out the kernel primitives. Built with **IBM Bob** as the primary development tool.
 
 🪷 **July 2026 — IBM AI Builders Challenge: Reimagine Creative Industries with AI**
 
@@ -18,13 +18,13 @@ The bottleneck is not imagination. It is the distance between *intent* and *fini
 
 ## Solution
 
-**Open Production** is a creative partner that turns a single intent — *"Explain CRISPR for sickle cell disease, with citations"* — into a finished, audited, citable document. It runs five stages:
+**Open Production** is a creative partner that guides a production from a single intent through a crew of 21 specialist AI agents to a published, audit-traceable result. It runs five stages:
 
-1. **Intent declaration.** You tell the system what you want. A topic, an audience, a length, a tone.
-2. **Creative reframing.** Before writing begins, an agent proposes three creative angles on the topic — *skeptic*, *advocate*, *contrarian*. You pick one. The chosen angle becomes the document's frame.
-3. **Multi-agent research.** Specialist agents query four live academic sources in parallel: PubMed, OpenAlex, Crossref, Semantic Scholar.
-4. **Claim extraction with evidence gates.** Every claim extracted from the literature must cite a source. Claims without citations are rejected — the system fails closed.
-5. **Contradiction detection and publication gating.** The system detects contradictions between sources, surfaces them for the writer to resolve, and refuses to publish a document whose sources can't be traced.
+1. **Intent declaration.** You tell the system what you want — topic, audience, tone, platform.
+2. **Creative reframing.** An agent proposes three creative angles — *skeptic*, *advocate*, *contrarian*. You pick one. The chosen angle becomes the production's frame.
+3. **Shot design.** ShotDesignerAgent proposes three camera + lighting combinations per shot, each tied to the scene's emotional intent.
+4. **Storyboarding + review.** StoryboardArtistAgent generates ASCII blocking diagrams; ReviewerAgent runs all 5 checks from Appendix J and gates delivery.
+5. **Publish with evidence.** PublisherAgent generates three manifest proposals; PublicationGate checks readiness before anything is treated as publishable.
 
 The user's role is to **declare intent, react to the gates, and make creative choices** — not to wrangle tools.
 
@@ -82,7 +82,7 @@ The solution areas we align with:
 
 ## How IBM Bob was used
 
-IBM Bob is the primary development tool for this project. Bob was used in seven captured sessions:
+IBM Bob is the primary development tool for this project. Bob was used in nine captured sessions:
 
 1. **Codebase exploration.** Bob read the OpenMontage video pipeline dispatcher (`tools/video/video_compose.py` + `video_stitch.py`) and produced a 16.7 KB audit with a phase table, branch coverage gaps, top-3 severity ranking, and a hardening refactor proposal. The transcript is at `bob-sessions/01-codebase-exploration/transcript.md`. This session was **read-only** — Bob analyzed the inspiration codebase to ground the design in real production patterns.
 2. **Build the creative-reframing agent.** Bob designed and implemented `src/agents/creative_reframing.py` (189 lines) from the spec in `bob-sessions/02-creative-reframing-feature/spec.md`. The implementation inherits from `BaseAgent`, uses the existing LLM client wrapper, validates output with one retry + deterministic fallback, and includes 9 unit tests. The transcript is at `bob-sessions/02-creative-reframing-feature/transcript.md`.
@@ -92,7 +92,7 @@ IBM Bob is the primary development tool for this project. Bob was used in seven 
 6. **Transform catalog.** Bob built the `src/transforms/` package — 6 named, typed, idempotent Transforms across `text/`, `filter/`, and `compose/` subpackages, all auto-registering on import, proving the kernel's Transform primitive is real and testable. The transcript is at `bob-sessions/06-transform-catalog/transcript.md`.
 7. **Video vertical sketch.** Bob built `src/videos/` — a second vertical on the same five primitives proving the kernel generalizes beyond research writing: `ShotComposition`, `FrameRenderTransform`, `VisualQualityGate`, and a `render_video()` CLI. The transcript is at `bob-sessions/07-video-vertical/transcript.md`.
 
-The seven sessions demonstrate IBM Bob used for **exploration, implementation, validation, integration, hardening, abstraction, and generalization** — every phase of a real software project. The transcripts are not curated highlights — they are the actual working sessions, captured for the judges.
+The nine sessions demonstrate IBM Bob used for **exploration, implementation, validation, integration, hardening, abstraction, and generalization** — every phase of a real software project. The transcripts are not curated highlights — they are the actual working sessions, captured for the judges.
 
 ### Bob sessions index
 
@@ -105,46 +105,59 @@ The seven sessions demonstrate IBM Bob used for **exploration, implementation, v
 | 05 | Interactive confirm gate | `bob-sessions/05-confirm-gate/` |
 | 06 | Transform catalog | `bob-sessions/06-transform-catalog/` |
 | 07 | Video vertical sketch | `bob-sessions/07-video-vertical/` |
+| 08 | Code review + phase 2 backend | `bob-sessions/08-code-review/` |
+| 09 | Deployment readiness (Phase 1 + view polish) | `bob-sessions/09-deployment-readiness/` |
 
 See `bob-sessions/_index.md` for a compact index. Every Bob session in this repo opens with a short header describing the goal, the prompt, and the outcome. The Bob-issued code is committed alongside the human-issued context.
 
 ## Quick start
 
+**One-liner** — install dependencies and verify everything works:
+
 ```bash
-# Clone
-git clone https://github.com/yourname/open-production.git
-cd open-production
-
-# Install (Python 3.10+; only pytest is required)
-python -m pip install -e .
-
-# Run the test suite — 51/51 must pass before submission
-make test
-# or: pytest -v
-
-# Run the demo end-to-end
-make demo
-# or: python scripts/run_demo.py --topic "CRISPR for sickle cell disease"
-
-# Or open the browser demo for a general audience
-make web-demo
-# or: python scripts/run_web_demo.py --open-browser
-
-# Inspect the audit trail
-cat audit_trail.jsonl
+git clone https://github.com/kartikeyapophali/open-production.git && cd open-production && python -m pip install -e . && python -m pytest tests/ -q
 ```
 
-The demo writes `audit_trail.jsonl` with every gate decision recorded as JSON lines. For a friendlier, browser-based experience, use `make web-demo`.
+Then start the browser demo (no API key required):
 
-For a worked-example audit trail, see `examples/output/audit_trail.jsonl` (8 entries from the Codex-built fixture generator). For a quick-start walkthrough, see `docs/how-to-launch-and-test.md`.
+```bash
+python src/public_demo/server.py
+# Open http://127.0.0.1:8000/?view=guided   ← Guided Production Flow
+# Open http://127.0.0.1:8000/?view=console  ← Agent Console
+```
+
+The browser demo runs end-to-end without any API keys. The Guided Flow creates a production and writes a dual-artifact audit trail (`production.json` + `audit.jsonl`). The Agent Console reads the same production and auto-refreshes every 5 seconds.
+
+For a worked-example audit trail, see `output/public-demo/` (written by each demo run). For a full walkthrough, see `docs/how-to-launch-and-test.md`.
+
+## Concurrency limits
+
+The demo server and `ProductionService` are designed for **single-user, single-process** demos. The following guarantees and limits apply:
+
+- **Within one Python process**, `ProductionService.save()` and `load()` are serialized by a per-instance `threading.RLock`. Double-clicks on **Finalize**, two React tabs sharing the same `ProductionService`, and Python threads calling `save()` concurrently from the same process will all serialize cleanly. For load-modify-save transactions, wrap the sequence in `with svc.transaction():` so the lock is held across the whole check-then-act operation. See `tests/test_concurrent_save.py` for the proof (8 threads, 25 saves each, no lost updates, no `PermissionError`).
+- **Across Python processes**, the story is different. Two separate `python src/public_demo/server.py` instances writing to the same `output/productions/` directory will race on atomic `os.replace` and on Windows can raise `[WinError 5] Access is denied`. The `_safe_replace()` helper retries transient failures, but for a real deployment you need cross-process locking (e.g. `msvcrt.locking` on Windows, `fcntl.flock` on POSIX) or a single-writer pattern (e.g. a queue worker).
+- **The HTTP server** is `ThreadingHTTPServer` so multiple browser tabs within one process get correct per-instance locking. For real production traffic, run behind a WSGI/ASGI server (gunicorn / uvicorn) with multiple workers and front it with a reverse proxy that adds auth and rate limiting.
+- **No authentication, no rate limiting.** The server accepts any request from any origin (`*`). Do not expose `localhost:8000` to the public internet without a reverse proxy that adds auth and rate limiting.
 
 ## Demo video
 
-A 3-minute walkthrough is on YouTube at [link to be added at submission].
+A 3-minute walkthrough will be linked at submission time.
 
 The video follows the shot list in `docs/demo/demo-story.md`. It shows: intent declaration, creative reframing, multi-agent research, evidence gate firing, contradiction resolution, publication gate, and the audit trail in `audit_trail.jsonl`. The shot list is mapped to all five judging criteria.
 
 A judge's one-pager is at `docs/judge-pack/quick-brief.md`.
+
+## Team and submission
+
+| | |
+|---|---|
+| **Team** | Kartikey (engineering) · Boris (architecture & design) |
+| **Track** | IBM AI Builders Challenge — July 2026: Reimagine Creative Industries with AI |
+| **GitHub** | [github.com/kartikeyapophali/open-production](https://github.com/kartikeyapophali/open-production) |
+| **Demo video** | To be linked at submission time (see `docs/demo/demo-story.md` for the shot list) |
+| **Platform page** | [aibuilderschallenge-bobhub.bemyapp.com](https://aibuilderschallenge-bobhub.bemyapp.com/#/projects) — linked at submission time |
+| **SkillsBuild cert** | `bob-sessions/certificates/skillsbuild-cert.pdf` |
+| **License** | MIT |
 
 ## Project page
 

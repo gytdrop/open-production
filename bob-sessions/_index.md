@@ -29,3 +29,11 @@ Goal: build a `src/transforms/` package with named, typed, idempotent Transforms
 ## 07 — Video Vertical Sketch
 
 Goal: build a `src/videos/` package that proves the kernel generalizes beyond research writing — a second vertical on the same five primitives (Source, Transform, Composition, Evaluation, Intent). Outcome: built 5 modules (`primitives.py`, `composition.py`, `render_transform.py`, `quality_evaluation.py`, `render.py`) — a `ShotComposition` that plans shots from `VideoIntent`, a `FrameRenderTransform` that renders shot frames, a `VisualQualityGate`, and an end-to-end `render_video()` CLI — plus 9 tests in `tests/test_videos.py`. Caught and fixed a spec bug where per-shot frame indices collided globally. Final count: **51 tests, all passing**. [transcript](07-video-vertical/transcript.md)
+
+## 08 — Code Review + Phase 2 Backend
+
+Goal: conduct a structured self-review of the codebase against the architecture spec and implement the phase 2 backend (EnvironmentArtistAgent, PublisherAgent, VoiceDirectorAgent, SoundDesignerAgent, MusicComposerAgent, ColoristAgent). Outcome: all 4 previously spec-only agents implemented with full scope contracts, failure modes, and dedicated test files; tests grew from 132 to 164 passing. [transcript](08-code-review/transcript.md)
+
+## 09 — Deployment Readiness (Phase 1 + View Polish)
+
+Goal: close every submission-blocking gap identified in the 2026-07-27 architecture audit — documentation hygiene, UI view polish, and test coverage for new UI elements. Outcome: architecture.md rewritten with a correct Mermaid diagram (production-crew model, all 13 agents) and updated agent table; submission-checklist.md and README Quick start updated to current commands; Guided Flow now surfaces production_id and a clickable Agent Console link after finalize; Agent Console now has a per-actor left-rail filter panel with `data-test-actor-panel` marker; 2 new view-switching tests added. Final suite: **166 passed, 0 failures, 0 errors**. [transcript](09-deployment-readiness/transcript.md)

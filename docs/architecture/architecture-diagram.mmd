@@ -1,64 +1,73 @@
 flowchart TD
-  %% Section 1 - User / Intent
-  subgraph section1["Section 1 - User / Intent"]
-    intent["User declares Intent<br/>(topic, audience, tone, length)"]
-  end
+  Intent["User Intent\n(topic · audience · tone · platform)"]
+  Intent --> Reframing
 
-  %% Section 2 - Creative Reframing (Stage 2)
-  subgraph creative_reframing["Creative Reframing - Stage 2<br/>Bob Session 2: built"]
+  subgraph Reframing["Stage 2 — Creative Reframing (Bob session 2)"]
     direction LR
-    skeptic["skeptic"]
-    advocate["advocate"]
-    contrarian["contrarian"]
-    chosen_angle["chosen_angle"]
-    skeptic -->|user picks one| chosen_angle
-    advocate -->|user picks one| chosen_angle
-    contrarian -->|user picks one| chosen_angle
+    skeptic["skeptic"] & advocate["advocate"] & contrarian["contrarian"] --> chosen_angle["chosen_angle\n(user picks)"]
   end
 
-  %% Section 3 - Multi-Agent Research (Stage 3)
-  subgraph research_agents["Multi-Agent Research - Stage 3"]
+  Reframing --> AgentCrew
+
+  subgraph AgentCrew["Production Crew — 21 Agents"]
     direction LR
-    pubmed_agent["pubmed_agent"]
-    openalex_agent["openalex_agent"]
-    crossref_agent["crossref_agent"]
-    semantic_scholar_agent["semantic_scholar_agent"]
-    source_set["source_set"]
-    pubmed_agent --> source_set
-    openalex_agent --> source_set
-    crossref_agent --> source_set
-    semantic_scholar_agent --> source_set
+    shotdesigner["ShotDesignerAgent\nShot.camera · Shot.lighting"]
+    character["CharacterDirectorAgent\nProduction.characters"]
+    storyboard["StoryboardArtistAgent\nShot.storyboard_frame"]
+    environment["EnvironmentArtistAgent\nProduction.environments"]
+    reviewer["ReviewerAgent\n(evaluator)"]
+    editor["EditorAgent\nTimeline.scene_order"]
+    publisher["PublisherAgent\nProduction.metadata"]
+    voice["VoiceDirectorAgent\nShot.audio.voice_direction"]
+    sound["SoundDesignerAgent\nShot.audio.sfx"]
+    music["MusicComposerAgent\nTimeline.music_cues"]
+    colorist["ColoristAgent\nShot.color_spec"]
   end
 
-  %% Section 4 - Claim Extraction + Gates (Stages 4-5)
-  subgraph section4["Claim Extraction + Gates - Stages 4-5"]
-    claim_extractor["claim_extractor"]
-    evidence_gate["evidence_gate<br/>(fail-closed)"]
-    consistency_gate["consistency_gate<br/>(fail-closed)"]
-    publication_gate["publication_gate<br/>(fail-closed)"]
-    claim_extractor --> evidence_gate --> consistency_gate --> publication_gate
+  AgentCrew --> Gates
+
+  subgraph Gates["Fail-Closed Gate Suite (Bob session 3)"]
+    evidence_gate["EvidenceGate\n(fail-closed)"]
+    consistency_gate["ConsistencyGate\n(fail-closed)"]
+    contract_gate["ConsistencyContractGate\n(fail-closed)"]
+    publication_gate["PublicationGate\n(fail-closed)"]
+    evidence_gate --> consistency_gate --> contract_gate --> publication_gate
   end
 
-  %% Section 5 - Output
-  subgraph section5["Section 5 - Output"]
-    finalized_document["finalized_document"]
-    audit_trail["audit_trail.json"]
-    finalized_document -. audit trail .-> audit_trail
+  Gates --> Output
+
+  subgraph Output["Dual-Artifact Output (ACT-8)"]
+    prod_json["production.json\n(current state snapshot)"]
+    audit_jsonl["audit.jsonl\n(append-only event journal)"]
+    prod_json -. append-only .-> audit_jsonl
   end
 
-  intent -->|intent feeds creative reframing| creative_reframing
-  chosen_angle -->|chosen_angle guides research| research_agents
-  source_set --> claim_extractor
-  publication_gate --> finalized_document
+  Output --> UI
 
-  loop_checkpoints["loop_checkpoints"]
-  loop_checkpoints -. checkpoint .-> evidence_gate
-  loop_checkpoints -. checkpoint .-> consistency_gate
-  loop_checkpoints -. checkpoint .-> publication_gate
+  subgraph UI["Browser Views (MVP)"]
+    guided["Guided Flow\n/?view=guided"]
+    console["Agent Console\n/?view=console"]
+    guided -. production_id .-> console
+  end
+
+  subgraph ProductionService["ProductionService (src/service/production_service.py)"]
+    state_machine["6-state machine\nDRAFT→BRIEFED→IN_PRODUCTION\n→IN_REVIEW→APPROVED→PUBLISHED"]
+    apply_event["apply_event()\n(pure, forward-only)"]
+    snapshot["snapshot()\ncontent-addressed"]
+    branch["create_branch()\nnamed forks"]
+  end
+
+  AgentCrew -. reads/writes .-> ProductionService
+  Gates -. audit entries .-> ProductionService
+  ProductionService --> Output
 
   classDef bobStyle fill:#7AC9F2,stroke:#0A0E1A,color:#0A0E1A,stroke-width:2px
   classDef gateStyle fill:#86E09C,stroke:#0A0E1A,color:#0A0E1A
   classDef failClosedStyle fill:#FF8A8A,stroke:#0A0E1A,color:#0A0E1A
-  class creative_reframing bobStyle
+  classDef uiStyle fill:#d4b4fe,stroke:#0A0E1A,color:#0A0E1A
+  classDef svcStyle fill:#fde68a,stroke:#0A0E1A,color:#0A0E1A
+  class chosen_angle bobStyle
   class evidence_gate,publication_gate gateStyle
-  class consistency_gate failClosedStyle
+  class consistency_gate,contract_gate failClosedStyle
+  class guided,console uiStyle
+  class ProductionService svcStyle

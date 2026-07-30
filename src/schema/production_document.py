@@ -51,7 +51,7 @@ ShotStatus = Literal[
 ActionType = Literal[
     "gate_decision", "decision", "lock", "unlock",
     "snapshot", "branch", "merge",
-    "state_transition", "override", "comment", "system"
+    "state_transition", "stage_advance", "override", "comment", "system"
 ]
 
 ReferenceKind = Literal["image", "video", "audio", "text", "url"]
@@ -228,9 +228,21 @@ class Shot:
     generation: Optional[GenerationResult] = None
     locked: bool = False
     version_history: list[GenerationResult] = field(default_factory=list)
+    storyboard_frame: Optional[str] = None       # ASCII/SVG blocking diagram — StoryboardArtistAgent (K.2)
+    color_spec: Optional[dict[str, Any]] = None  # ColoristAgent approved grade (K.9)
+    motion_spec: Optional[dict[str, Any]] = None # AnimationDirectorAgent approved motion (Stage 18)
 
     def __post_init__(self):
         _validate_id_format(self.id, "shot")
+
+
+@dataclass
+class ColorSpec:
+    """Per-shot or per-scene colour grade specification (K.9 ColoristAgent output)."""
+    look_name: Optional[str] = None
+    primary: dict[str, Any] = field(default_factory=dict)
+    creative: dict[str, Any] = field(default_factory=dict)
+    rationale: Optional[str] = None
 
 
 @dataclass
@@ -242,6 +254,9 @@ class Scene:
     location: Optional[str] = None
     notes: Optional[str] = None
     stage: Optional[str] = None
+    sound_palette: Optional[dict[str, Any]] = None   # SoundDesignerAgent output (K.6)
+    music_cue: Optional[dict[str, Any]] = None       # MusicComposerAgent brief (K.7)
+    color_look: Optional[ColorSpec] = None           # ColoristAgent approved look (K.9)
 
     def __post_init__(self):
         _validate_id_format(self.id, "scene")
@@ -252,6 +267,10 @@ class Timeline:
     scene_order: list[str] = field(default_factory=list)
     transitions: list[dict[str, Any]] = field(default_factory=list)
     music_cues: list[dict[str, Any]] = field(default_factory=list)
+    # Assembled by ProductionService.commit_editor_proposal() from an EditorAgent proposal.
+    # Each entry: {"scene_id": str, "shot_id": str, "duration_sec": float}
+    shot_durations: list[dict[str, Any]] = field(default_factory=list)
+    total_duration_sec: float = 0.0
 
 
 @dataclass
@@ -311,6 +330,29 @@ class AuditEntry:
 
 
 # ----------------------------------------------------------------- root
+
+@dataclass
+class Studio:
+    """Layer 1 of the three-layer information architecture (§9).
+
+    A Studio is a workspace for an organisation or individual.
+    It holds shared brand kits, asset libraries, member roles, and
+    production presets — equivalent to a Figma Team.
+    """
+    id: str
+    name: str
+    owner: Optional[str] = None
+    created_at: str = field(default_factory=utc_now_iso)
+    updated_at: str = field(default_factory=utc_now_iso)
+    brand_kit: Optional[BrandKit] = None
+    style_tokens: list[StyleToken] = field(default_factory=list)
+    member_roles: dict[str, str] = field(default_factory=dict)  # member_id → role
+    production_ids: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self):
+        _validate_id_format(self.id, "studio")
+
 
 @dataclass
 class Production:
@@ -386,8 +428,8 @@ __all__ = [
     "IntentDocument", "Reference", "ConsistencyContract", "Character",
     "Environment", "StyleToken", "BrandKit", "MoodSpec", "CameraSpec",
     "LightingSpec", "AudioSpec", "CharacterReference", "GenerationResult",
-    "Shot", "Scene", "Timeline", "Branch", "VersionSnapshot", "AuditEntry",
-    "Production",
+    "Shot", "ColorSpec", "Scene", "Timeline", "Branch", "VersionSnapshot",
+    "AuditEntry", "Studio", "Production",
     # helpers
     "audit_entry_from_gate_decision", "utc_now_iso",
 ]

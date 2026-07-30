@@ -7,8 +7,13 @@ import sys
 import webbrowser
 from threading import Timer
 
-# Allow imports from src/ without installing the package.
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+# Allow imports from root and src/ without installing the package.
+_root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+_src_dir = os.path.join(_root_dir, "src")
+if _root_dir not in sys.path:
+    sys.path.insert(0, _root_dir)
+if _src_dir not in sys.path:
+    sys.path.insert(0, _src_dir)
 
 from public_demo.server import serve_forever
 

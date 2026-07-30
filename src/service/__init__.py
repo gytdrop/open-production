@@ -27,8 +27,25 @@ from .production_service import (
     ProductionNotFound,
     StorageError,
 )
+from .asset_library_service import (
+    AssetLibraryService,
+    IngestResult,
+    RetrieveResult,
+)
+from .style_library import (
+    StyleLibrary,
+    CategoryInfo,
+    CategoryNotFound,
+    CategoryNotEmpty,
+    DuplicateTokenId,
+)
 
-__all__ = ["ProductionService", "ProductionNotFound", "StorageError"]
+__all__ = [
+    "ProductionService", "ProductionNotFound", "StorageError",
+    "AssetLibraryService", "IngestResult", "RetrieveResult",
+    "StyleLibrary", "CategoryInfo", "CategoryNotFound",
+    "CategoryNotEmpty", "DuplicateTokenId",
+]
 
 
 # backward-compat helper for legacy code paths that build AuditEntry

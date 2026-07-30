@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 
 from agents.base import BaseAgent
-from tools.llm_client import LLMClient, MockLLMClient
+from tools.llm_client import LLMClient, MockLLMClient, get_default_client
 
 
 # ---------------------------------------------------------------------------
@@ -69,11 +69,28 @@ class CreativeReframing(BaseAgent):
 
     Injects an ``LLMClient`` so tests can swap in a mock without monkey-patching.
     If no client is provided, a ``MockLLMClient`` is used (safe offline default).
+
+    Scope (Law 5: AI proposes; human + service applies):
+      Output ``angles`` is allowlisted advisory content. ``WRITABLE_FIELDS`` is
+      ``frozenset()`` -- this agent never writes production state directly. The
+      chosen angle is committed to ``Production.intent.extra["creative_angle"]``
+      by the service layer after human approval. Aligns with the proposals-only
+      pattern of ``ResearchAgent``, ``StoryAgent``, ``ScriptAgent``, and
+      ``ReviewerAgent``.
     """
+
+    WRITABLE_FIELDS: frozenset[str] = frozenset()  # proposals only; writes go through service
+    DIAGNOSTIC_KEYS: frozenset[str] = frozenset({
+        "angles",
+        "topic",
+        "audience",
+        "tone",
+        "context",
+    })
 
     def __init__(self, llm: LLMClient | None = None) -> None:
         super().__init__("creative_reframing")
-        self._llm: LLMClient = llm if llm is not None else MockLLMClient()
+        self._llm: LLMClient = llm if llm is not None else get_default_client()
 
     # ------------------------------------------------------------------
     # Public API

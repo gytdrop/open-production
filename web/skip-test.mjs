@@ -1,0 +1,23 @@
+﻿import { chromium } from 'playwright';
+import { writeFile, mkdir } from 'fs/promises';
+const SHOTS = 'web/web/web/.tmp/browser-test/screenshots';
+await mkdir(SHOTS, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const page = await ctx.newPage();
+const errors = [];
+page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+page.on('pageerror', (e) => errors.push('PE: ' + e.message));
+async function shot(name) { await page.screenshot({ path: SHOTS + '/' + name + '.png' }); }
+await page.goto('http://127.0.0.1:5173/flow', { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(2000);
+await shot('flow-after-skip-stage2-1');
+await page.locator('textarea').first().fill('A short film about a barista who discovers their regular customer is an AI testing whether humans can tell.');
+await page.getByRole('button', { name: /Continue/ }).click();
+await page.waitForTimeout(3000);
+await shot('flow-after-skip-stage2-direct-to-3');
+const arts = await page.locator('article').count();
+const curStep = await page.locator('h1').first().textContent();
+console.log('articles after Continue:', arts);
+console.log('current heading:', curStep);
+await browser.close();

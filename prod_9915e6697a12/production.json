@@ -1,0 +1,659 @@
+{
+  "audit_trail": [
+    {
+      "action_type": "system",
+      "actor": "system",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_4b960055bd91",
+      "payload": {
+        "operation": "init",
+        "title": "Test failure"
+      },
+      "reason": null,
+      "state_after": "4a73895c91856eb9",
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.417570+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.research_writeback",
+      "claim_id": "research-sources",
+      "decision_status": "sources_insufficient",
+      "evidence": {
+        "source_count": 2
+      },
+      "gate_name": "research_gate",
+      "id": "evt_744f942d1c8b",
+      "payload": {},
+      "reason": "Research gate BLOCKED: only 2 source(s) collected for 'Test failure' \u2014 1 more required (minimum 3).",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.425744+00:00"
+    },
+    {
+      "action_type": "timeline_assembly",
+      "actor": "editor_agent",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_2016147df27b",
+      "payload": {
+        "proposal_label": "Balanced coverage edit",
+        "scene_id": "scene_e6697a12",
+        "shot_count": 5,
+        "total_duration_sec": 19.5
+      },
+      "reason": null,
+      "state_after": null,
+      "state_before": "1f0acf26267de5ab",
+      "ts": "2026-07-28T17:12:36.455552+00:00"
+    },
+    {
+      "action_type": "system",
+      "actor": "user",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_b9216201726e",
+      "payload": {
+        "branch_id": "branch_bd4e1795376f",
+        "label": "review-branch",
+        "operation": "create_branch"
+      },
+      "reason": null,
+      "state_after": "branch_bd4e1795376f",
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.456163+00:00"
+    },
+    {
+      "action_type": "snapshot",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_fc713e71df32",
+      "payload": {
+        "content_hash": "4470eb15f4b5c9dc18f15817af21260530b364567faaa0b9fac98a45b1aa23d6",
+        "label": "pre-publish-snapshot",
+        "snap_id": "snap_7b615869383d"
+      },
+      "reason": null,
+      "state_after": "4470eb15f4b5c9dc",
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.456310+00:00"
+    },
+    {
+      "action_type": "state_transition",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_briefed",
+      "payload": {
+        "next_state": "BRIEFED"
+      },
+      "reason": null,
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.456875+00:00"
+    },
+    {
+      "action_type": "state_transition",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_in_productio",
+      "payload": {
+        "next_state": "IN_PRODUCTION"
+      },
+      "reason": null,
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.456952+00:00"
+    },
+    {
+      "action_type": "state_transition",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_in_review",
+      "payload": {
+        "next_state": "IN_REVIEW"
+      },
+      "reason": null,
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.456988+00:00"
+    },
+    {
+      "action_type": "state_transition",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_approved",
+      "payload": {
+        "next_state": "APPROVED"
+      },
+      "reason": null,
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.457017+00:00"
+    },
+    {
+      "action_type": "state_transition",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_published",
+      "payload": {
+        "next_state": "PUBLISHED"
+      },
+      "reason": null,
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.457051+00:00"
+    },
+    {
+      "action_type": "system",
+      "actor": "demo_flow",
+      "claim_id": null,
+      "decision_status": null,
+      "evidence": {},
+      "gate_name": null,
+      "id": "evt_f1291c8c506b",
+      "payload": {
+        "archived_at": "2026-07-28T17:12:36.457085+00:00",
+        "artifacts": [
+          "production.json",
+          "audit.jsonl"
+        ],
+        "expires_at": "2033-07-26T17:12:36.457085+00:00",
+        "operation": "archive",
+        "production_id": "prod_9915e6697a12",
+        "retention_days": 2555
+      },
+      "reason": null,
+      "state_after": "archived",
+      "state_before": "aa54c526633f5ed2",
+      "ts": "2026-07-28T17:12:36.457085+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "research-sources",
+      "decision_status": "sources_insufficient",
+      "evidence": {
+        "gate_passed": false,
+        "required_count": 3,
+        "source_count": 2
+      },
+      "gate_name": "research_gate",
+      "id": "evt_4005f3029ede",
+      "payload": {},
+      "reason": "Research gate BLOCKED: only 2 source(s) collected for 'Test failure' \u2014 1 more required (minimum 3).",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.458820+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "angle-selection",
+      "decision_status": "accepted",
+      "evidence": {
+        "chosen": "contrarian",
+        "options": [
+          "skeptic",
+          "advocate",
+          "contrarian"
+        ]
+      },
+      "gate_name": "confirm_gate",
+      "id": "evt_fc0ab2ba802c",
+      "payload": {},
+      "reason": "user picked contrarian",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.460375+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c1",
+      "decision_status": "accepted",
+      "evidence": {
+        "source_ids": [
+          "pubmed:38001234"
+        ]
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_aadbac2a072c",
+      "payload": {},
+      "reason": "has sources",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.461522+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c1",
+      "decision_status": "pass",
+      "evidence": {
+        "checks": 2
+      },
+      "gate_name": "reviewer_agent",
+      "id": "evt_3fc987e224ca",
+      "payload": {},
+      "reason": "score=1.00 blocking=False",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.462908+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c2",
+      "decision_status": "rejected",
+      "evidence": {
+        "source_ids": []
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_1994717b8fe7",
+      "payload": {},
+      "reason": "no source_ids",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.463908+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c3",
+      "decision_status": "accepted",
+      "evidence": {
+        "source_ids": [
+          "pubmed:38005678"
+        ]
+      },
+      "gate_name": "evidence_gate",
+      "id": "evt_04424f49cd0f",
+      "payload": {},
+      "reason": "has sources",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.464870+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c3",
+      "decision_status": "pass",
+      "evidence": {
+        "checks": 2
+      },
+      "gate_name": "reviewer_agent",
+      "id": "evt_75ef53b82847",
+      "payload": {},
+      "reason": "score=1.00 blocking=False",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.465775+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "c1_c3",
+      "decision_status": "contradiction_detected",
+      "evidence": {
+        "fact_id": "efficacy-rate"
+      },
+      "gate_name": "consistency_gate",
+      "id": "evt_94f1143fd89c",
+      "payload": {},
+      "reason": "fact_id=efficacy-rate",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.466866+00:00"
+    },
+    {
+      "action_type": "gate_decision",
+      "actor": "demo_flow.build_demo_report",
+      "claim_id": "doc-metadata",
+      "decision_status": "publish_ok",
+      "evidence": {
+        "authors": [
+          "Alice Smith",
+          "Bob Jones"
+        ],
+        "date": "2026-07-27",
+        "doi": "10.1000/demo-2026",
+        "title": "Demo document"
+      },
+      "gate_name": "publication_gate",
+      "id": "evt_658e7aa5d8c7",
+      "payload": {},
+      "reason": "ok",
+      "state_after": null,
+      "state_before": null,
+      "ts": "2026-07-28T17:12:36.467850+00:00"
+    }
+  ],
+  "branches": [
+    {
+      "created_at": "2026-07-28T17:12:36.456163+00:00",
+      "created_by": "user",
+      "id": "branch_bd4e1795376f",
+      "locked": false,
+      "name": "review-branch",
+      "parent_snapshot_id": null
+    }
+  ],
+  "brand_kit": null,
+  "characters": [],
+  "created_at": "2026-07-28T17:12:36.416995+00:00",
+  "environments": [
+    {
+      "consistency_contract": null,
+      "id": "env_7a4c7abe",
+      "lighting_presets": [
+        "warm_interior",
+        "window_fill"
+      ],
+      "name": "Primary Location",
+      "time_of_day_variants": [
+        "morning",
+        "afternoon",
+        "evening"
+      ],
+      "visual_anchors": []
+    }
+  ],
+  "id": "prod_9915e6697a12",
+  "intent": {
+    "audience": "educated_lay",
+    "duration_sec": null,
+    "extra": {},
+    "platform": null,
+    "style_seed": null,
+    "tone": "neutral",
+    "topic": "Test failure"
+  },
+  "metadata": {
+    "archived_at": "2026-07-28T17:12:36.457085+00:00",
+    "expires_at": "2033-07-26T17:12:36.457085+00:00",
+    "publish_manifest": {
+      "authors": [
+        "Alice Smith",
+        "Bob Jones"
+      ],
+      "doi": "10.1000/demo-2026",
+      "production_id": "prod_9915e6697a12",
+      "release_date": "2026-07-27",
+      "rights": "All rights reserved.",
+      "scene_count": 1,
+      "shot_count": 5,
+      "targets": [
+        "youtube"
+      ],
+      "title": "Test failure",
+      "total_duration_sec": 19.5
+    }
+  },
+  "references": [
+    {
+      "id": "ref_3d39e4e4",
+      "kind": "text",
+      "label": "pubmed:38001234",
+      "pinned_at": null,
+      "pinned_by": null,
+      "sha256": null,
+      "uri": null
+    },
+    {
+      "id": "ref_989b8716",
+      "kind": "text",
+      "label": "pubmed:38005678",
+      "pinned_at": null,
+      "pinned_by": null,
+      "sha256": null,
+      "uri": null
+    },
+    {
+      "id": "ref_b14b9d7e",
+      "kind": "image",
+      "label": "warm golden exterior",
+      "pinned_at": null,
+      "pinned_by": null,
+      "sha256": null,
+      "uri": "demo://ref/1"
+    },
+    {
+      "id": "ref_2c4e7831",
+      "kind": "image",
+      "label": "overcast verite documentary",
+      "pinned_at": null,
+      "pinned_by": null,
+      "sha256": null,
+      "uri": "demo://ref/2"
+    },
+    {
+      "id": "ref_771f6be7",
+      "kind": "image",
+      "label": "natural texture organic",
+      "pinned_at": null,
+      "pinned_by": null,
+      "sha256": null,
+      "uri": "demo://ref/3"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene_e6697a12",
+      "location": "Primary Location",
+      "mood": {
+        "emotional_promise": "Vitality and forward movement",
+        "locked": true,
+        "references": [],
+        "tonal_palette": [
+          "warm amber",
+          "golden daylight",
+          "open sky"
+        ]
+      },
+      "name": "Demo Scene",
+      "notes": null,
+      "shots": [
+        {
+          "audio": null,
+          "camera": null,
+          "characters": [],
+          "duration_sec": 4.0,
+          "generation": null,
+          "id": "shot_e6697a12_01_03fe08",
+          "intent": "Show both speakers in relation to the space before cutting.",
+          "lighting": null,
+          "locked": false,
+          "scene_id": "scene_e6697a12",
+          "status": "draft",
+          "storyboard_frame": null,
+          "version_history": []
+        },
+        {
+          "audio": null,
+          "camera": null,
+          "characters": [],
+          "duration_sec": 5.0,
+          "generation": null,
+          "id": "shot_e6697a12_02_84fc29",
+          "intent": "Over-the-shoulder on Speaker A looking at Speaker B.",
+          "lighting": null,
+          "locked": false,
+          "scene_id": "scene_e6697a12",
+          "status": "draft",
+          "storyboard_frame": null,
+          "version_history": []
+        },
+        {
+          "audio": null,
+          "camera": null,
+          "characters": [],
+          "duration_sec": 5.0,
+          "generation": null,
+          "id": "shot_e6697a12_03_3f120e",
+          "intent": "Reverse: over-the-shoulder on Speaker B looking at Speaker A.",
+          "lighting": null,
+          "locked": false,
+          "scene_id": "scene_e6697a12",
+          "status": "draft",
+          "storyboard_frame": null,
+          "version_history": []
+        },
+        {
+          "audio": null,
+          "camera": null,
+          "characters": [],
+          "duration_sec": 3.0,
+          "generation": null,
+          "id": "shot_e6697a12_04_8c3262",
+          "intent": "Tight on Speaker A's face at the emotional peak of their line.",
+          "lighting": null,
+          "locked": false,
+          "scene_id": "scene_e6697a12",
+          "status": "draft",
+          "storyboard_frame": null,
+          "version_history": []
+        },
+        {
+          "audio": null,
+          "camera": null,
+          "characters": [],
+          "duration_sec": 2.5,
+          "generation": null,
+          "id": "shot_e6697a12_05_76ebb3",
+          "intent": "Speaker B's silent reaction as they absorb the key revelation.",
+          "lighting": null,
+          "locked": false,
+          "scene_id": "scene_e6697a12",
+          "status": "draft",
+          "storyboard_frame": null,
+          "version_history": []
+        }
+      ],
+      "stage": null
+    }
+  ],
+  "schema_version": "1.0.0",
+  "snapshots": [
+    {
+      "branch_id": "branch_bd4e1795376f",
+      "content_hash": "4470eb15f4b5c9dc18f15817af21260530b364567faaa0b9fac98a45b1aa23d6",
+      "id": "snap_7b615869383d",
+      "label": "pre-publish-snapshot",
+      "taken_at": "2026-07-28T17:12:36.456310+00:00",
+      "taken_by": "demo_flow"
+    }
+  ],
+  "state": "PUBLISHED",
+  "studio_id": null,
+  "style_tokens": [
+    {
+      "id": "tok_2da4f72b",
+      "kind": "composite",
+      "name": "warm_amber_palette",
+      "tokens": {},
+      "value": null
+    },
+    {
+      "id": "tok_a3bfe46c",
+      "kind": "composite",
+      "name": "soft_directional_light",
+      "tokens": {},
+      "value": null
+    },
+    {
+      "id": "tok_1aed8742",
+      "kind": "composite",
+      "name": "natural_texture",
+      "tokens": {},
+      "value": null
+    }
+  ],
+  "timeline": {
+    "music_cues": [],
+    "scene_order": [
+      "scene_e6697a12"
+    ],
+    "shot_durations": [
+      {
+        "duration_sec": 3.9,
+        "scene_id": "scene_e6697a12",
+        "shot_id": "shot_e6697a12_01_03fe08"
+      },
+      {
+        "duration_sec": 3.9,
+        "scene_id": "scene_e6697a12",
+        "shot_id": "shot_e6697a12_02_84fc29"
+      },
+      {
+        "duration_sec": 3.9,
+        "scene_id": "scene_e6697a12",
+        "shot_id": "shot_e6697a12_03_3f120e"
+      },
+      {
+        "duration_sec": 3.9,
+        "scene_id": "scene_e6697a12",
+        "shot_id": "shot_e6697a12_04_8c3262"
+      },
+      {
+        "duration_sec": 3.9,
+        "scene_id": "scene_e6697a12",
+        "shot_id": "shot_e6697a12_05_76ebb3"
+      }
+    ],
+    "total_duration_sec": 19.5,
+    "transitions": [
+      {
+        "from_shot": "shot_e6697a12_01_03fe08",
+        "scene_id": "scene_e6697a12",
+        "to_shot": "shot_e6697a12_02_84fc29",
+        "type": "cut"
+      },
+      {
+        "from_shot": "shot_e6697a12_02_84fc29",
+        "scene_id": "scene_e6697a12",
+        "to_shot": "shot_e6697a12_03_3f120e",
+        "type": "cut"
+      },
+      {
+        "from_shot": "shot_e6697a12_03_3f120e",
+        "scene_id": "scene_e6697a12",
+        "to_shot": "shot_e6697a12_04_8c3262",
+        "type": "cut"
+      },
+      {
+        "from_shot": "shot_e6697a12_04_8c3262",
+        "scene_id": "scene_e6697a12",
+        "to_shot": "shot_e6697a12_05_76ebb3",
+        "type": "cut"
+      }
+    ]
+  },
+  "title": "Test failure",
+  "updated_at": "2026-07-28T17:12:36.467850+00:00"
+}

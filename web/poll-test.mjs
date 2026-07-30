@@ -1,0 +1,25 @@
+﻿import { chromium } from 'playwright';
+import { writeFile, mkdir } from 'fs/promises';
+const SHOTS = 'web/.tmp/browser-test/screenshots';
+await mkdir(SHOTS, { recursive: true });
+const browser = await chromium.launch({ headless: true });
+const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const page = await ctx.newPage();
+const networkErrors = [];
+const allResponses = [];
+page.on('console', (m) => console.log('CONSOLE', m.type(), m.text()));
+page.on('pageerror', (e) => console.log('PAGEERROR', e.message));
+page.on('response', (r) => { allResponses.push({ url: r.url(), status: r.status() }); if (r.url().includes('/api/') && r.status() >= 400) networkErrors.push({ url: r.url(), status: r.status() }); });
+await page.goto('http://127.0.0.1:5173/console?id=stale-id', { waitUntil: 'domcontentloaded' });
+await page.waitForTimeout(3000);
+await page.screenshot({ path: SHOTS + '/console-404-initial.png' });
+// Wait 12s to confirm polling actually stops
+await page.waitForTimeout(12000);
+await page.screenshot({ path: SHOTS + '/console-404-after12s.png' });
+const apiCalls = allResponses.filter((r) => r.url.includes('/api/'));
+console.log('api calls total:', apiCalls.length);
+console.log('first 5:', JSON.stringify(apiCalls.slice(0, 5), null, 2));
+console.log('all:', JSON.stringify(apiCalls, null, 2));
+await writeFile('web/.tmp/browser-test/api-calls.json', JSON.stringify(apiCalls, null, 2));
+await browser.close();
+console.log('DONE');

@@ -1,0 +1,184 @@
+﻿@import "tailwindcss";
+
+/* â”€â”€ Design tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+:root {
+  --bg:        #0b0d12;
+  --bg2:       #0f1117;
+  --panel:     rgba(255, 255, 255, 0.030);
+  --panel2:    rgba(255, 255, 255, 0.055);
+  --border:    #1e2433;
+  --border2:   #2d3650;
+  --border3:   #3a4568;
+  --text:      #e8ecf2;
+  --text2:     #c4ccda;
+  --muted:     #7a8499;
+  --dim:       #4a5268;
+  --accent:    #5b7fff;
+  --accent2:   #7a9bff;
+  --accent-glow: rgba(91, 127, 255, 0.18);
+  --purple:    #9d7ef5;
+  --purple2:   #b89ef8;
+  --green:     #2dce7a;
+  --green2:    #5aeaa0;
+  --amber:     #f5a623;
+  --amber2:    #ffc461;
+  --pink:      #f06292;
+  --pink2:     #f48fb1;
+  --cyan:      #4dd0e1;
+  --cyan2:     #80deea;
+
+  /* Semantic elevation */
+  --surface-1: rgba(255,255,255,0.025);
+  --surface-2: rgba(255,255,255,0.045);
+  --surface-3: rgba(255,255,255,0.07);
+
+  /* Component sizing */
+  --header-h: 56px;
+  --radius-sm: 4px;
+  --radius-md: 7px;
+  --radius-lg: 11px;
+}
+
+/* â”€â”€ Base reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'Inter', 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* â”€â”€ Scrollbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+::-webkit-scrollbar        { width: 3px; height: 3px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.08); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* â”€â”€ Focus ring â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* â”€â”€ Base element resets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+button  { cursor: pointer; font-family: inherit; }
+input,
+textarea,
+select  { font-family: inherit; }
+
+/* â”€â”€ Animations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: .25; }
+  50%       { opacity: .6; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50%       { box-shadow: 0 0 0 6px transparent; }
+}
+
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+/* â”€â”€ Animation utility classes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.anim-fade-in    { animation: fadeIn   250ms ease both; }
+.anim-slide-down { animation: slideDown 250ms ease both; }
+.anim-slide-up   { animation: slideUp   250ms ease both; }
+
+/* â”€â”€ Hover lift utility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.hover-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* -- Guided-flow responsive rules ------------------------------------------- */
+/* The left rail collapses on small screens so the canvas can claim width. */
+/* The right rail collapses by default below 1100px and is reopened via    */
+/* the floating help toggle button.                                        */
+
+.left-rail { display: flex; }
+.footer-label { white-space: nowrap; }
+
+@media (max-width: 1100px) {
+  .left-rail { display: none; }
+}
+
+@media (max-width: 700px) {
+  .footer-label { display: none; }
+  .footer-hint { display: none; }
+}
+
+/* Right-rail toggle button - visible only when rail is collapsed. */
+.rail-toggle {
+  position: fixed;
+  right: 14px;
+  bottom: 14px; right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(91,127,255,0.45);
+  z-index: 90;
+  display: none;
+}
+@media (max-width: 1100px) {
+  .rail-toggle { display: inline-flex; align-items: center; justify-content: center; }
+}
+
+/* -- Right-rail Tabs/Tip/Glossary/Audit must scroll, not push page height -- */
+aside[aria-label=\"Stage help and details\"] {
+  max-height: 100%;
+}
+

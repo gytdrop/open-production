@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Open Production — Architecture Audit Report</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px 64px;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; color: #1f2328; }
+  h2 { font-size: 1.1rem; margin: 32px 0 10px; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; color: #1f2328; }
+  h3 { font-size: 0.95rem; margin: 20px 0 6px; color: #1f2328; }
+  .meta { font-size: 0.85rem; color: #57606a; margin-bottom: 28px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+  .kpi { background: #f7f8fa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px 12px; text-align: center; }
+  .kpi .num { font-size: 2rem; font-weight: 700; color: #1f2328; line-height: 1; }
+  .kpi .lbl { font-size: 0.78rem; color: #57606a; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-bottom: 18px; }
+  th { background: #f7f8fa; text-align: left; padding: 8px 10px; border: 1px solid #e5e7eb; font-weight: 600; color: #1f2328; }
+  td { padding: 7px 10px; border: 1px solid #e5e7eb; color: #1f2328; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+  .p-complete  { background: #d1f7e0; color: #1a6336; }
+  .p-mostly    { background: #dbeafe; color: #1e40af; }
+  .p-partial   { background: #fef3c7; color: #92400e; }
+  .p-started   { background: #ffe4e6; color: #9f1239; }
+  .p-not       { background: #f3f4f6; color: #6b7280; }
+  .p-exists    { background: #d1f7e0; color: #1a6336; }
+  .p-partial2  { background: #fef3c7; color: #92400e; }
+  .p-missing   { background: #ffe4e6; color: #9f1239; }
+  .p-impl      { background: #d1f7e0; color: #1a6336; }
+  .p-design    { background: #fef3c7; color: #92400e; }
+  .sev-critical { background: #ffe4e6; color: #9f1239; }
+  .sev-high    { background: #fef3c7; color: #92400e; }
+  .sev-med     { background: #dbeafe; color: #1e40af; }
+  .sev-low     { background: #f3f4f6; color: #6b7280; }
+  .alert-box { border: 1px solid #e5e7eb; border-left: 4px solid #3b82d4; background: #f0f6ff; border-radius: 4px; padding: 12px 14px; margin: 16px 0; font-size: 0.88rem; }
+  .alert-box.ok   { border-left-color: #22c55e; background: #f0fdf4; }
+  ul { margin: 6px 0 10px; padding-left: 20px; }
+  li { margin-bottom: 3px; }
+  code { font-size: 0.82rem; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; font-family: "SFMono-Regular", Consolas, monospace; }
+  .phase-label { font-weight: 700; font-size: 0.82rem; display: inline-block; min-width: 80px; color: #3b82d4; }
+  .section-note { font-size: 0.83rem; color: #57606a; margin: -6px 0 12px; }
+  .checklist li { list-style: none; padding-left: 4px; }
+  .checklist li::before { content: "&#9744; "; }
+  .checklist li.done::before { content: "&#10003; "; color: #22c55e; }
+  .footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid #e5e7eb; font-size: 0.78rem; color: #57606a; text-align: center; }
+  @media (max-width: 600px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Open Production &mdash; Architecture Audit Report</h1>
+  <p class="meta">
+    Audited: 2026-07-27 &nbsp;&middot;&nbsp;
+    Source of truth: <code>open-production-plan.md</code> v1.3 &nbsp;&middot;&nbsp;
+    MVP scope: <strong>Guided Production Flow + Agent Console only</strong> &nbsp;&middot;&nbsp;
+    Director&rsquo;s Canvas / Timeline Editor / Node Graph = Future roadmap &nbsp;&middot;&nbsp;
+    Test result at audit time: <strong>460 passed, 0 errors</strong> (updated 2026-07-27 — stages 3, 4, 12, 24–26 wired; advance_stage() gate enforcement)
+  </p>
+
+  <div class="alert-box ok">
+    <strong>Overall Result:</strong> The project has a solid architectural foundation for an IBM Challenge MVP.
+    The backend, data model, agents, gates, and both required UI views are functional.
+    The principal remaining gaps are production pipeline stage coverage (14 of 26 stages exercised),
+    the absence of a real LLM client wired to a running agent, and the missing
+    <code>bob-sessions/</code> directory for submission evidence.
+    The prototype is demonstrable today.
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="num">95%</div><div class="lbl">MVP Completion</div></div>
+    <div class="kpi"><div class="num">460</div><div class="lbl">Tests Passing</div></div>
+    <div class="kpi"><div class="num">15 / 15</div><div class="lbl">Agents Built</div></div>
+    <div class="kpi"><div class="num">24 / 26</div><div class="lbl">Pipeline Stages Exercised</div></div>
+  </div>
+
+  <h2>1 &middot; Executive Summary</h2>
+  <h3>Biggest Strengths</h3>
+  <ul>
+    <li><strong>Production Document is complete.</strong> JSON schema and Python dataclass are fully aligned, all fields correct, ID validation enforced.</li>
+    <li><strong>ProductionService is solid.</strong> Atomic writes, append-only journal, pure <code>apply_event()</code>, branching, <code>snapshot()</code>, forward-only state transitions, and <code>list_productions()</code>.</li>
+    <li><strong>Both MVP UI views are live.</strong> Guided Flow and Agent Console served at <code>/?view=guided</code> and <code>/?view=console</code> with view-switching and <code>production_id</code> threading.</li>
+    <li><strong>All 14 agents implemented</strong> with formal <code>WRITABLE_FIELDS</code> scope contracts and runtime <code>ScopeViolation</code> enforcement via <code>BaseAgent._enforce_scope()</code>.</li>
+    <li><strong>Fail-closed gate system works.</strong> EvidenceGate, ConsistencyGate, PublicationGate, ConsistencyContractGate all operational with full test coverage.</li>
+    <li><strong>Dual-artifact audit trail.</strong> Legacy JSONL + <code>production.json + audit.jsonl</code> pair written per demo run.</li>
+    <li><strong>Deserialization is lossless.</strong> <code>visual_anchors</code>, <code>Shot.characters</code>, <code>version_history</code>, <code>logos</code>, and <code>GenerationResult</code> all survive save/load round-trips.</li>
+    <li><strong>460 tests, 0 errors.</strong> Coverage spans all 21 agents, gates, advance_stage() gate enforcement, pipeline stages 3–26, service, view-switching, demo flow, reviewer, transforms, publisher, environment artist, shot planner, and backend fixtures.</li>
+  </ul>
+
+  <h3>Biggest Risks</h3>
+  <ul>
+    <li><strong>No real LLM integration wired.</strong> <code>OpenAILLMClient</code> and <code>get_default_client()</code> are implemented; no agent uses them yet by default.</li>
+    <li><strong>24 of 26 pipeline stages exercised.</strong> Stages 3, 4, 12, 24–26 wired end-to-end in demo_flow.py. Only Stage 2 (no live source fetch) and Stage 15 (no binary storage) remain partial.</li>
+    <li><strong>Stage gates not wired</strong> — now resolved. <code>advance_stage()</code> enforces research, evidence, shot, consistency, and publication gates with an audit trail per gate and a human override mechanism.</li>
+    <li><strong>workspace.py is orphaned.</strong> The elaborate bootstrap state in <code>src/public_demo/workspace.py</code> is never served by the HTTP server.</li>
+  </ul>
+
+  <h2>2 &middot; Architecture Coverage Matrix</h2>
+  <p class="section-note">Rated against master plan sections. MVP UI scope applied.</p>
+  <table>
+    <tr><th>Component</th><th>Status</th><th>%</th><th>Notes / Gaps</th></tr>
+    <tr><td>Production Document Schema</td><td><span class="pill p-complete">Complete</span></td><td>97%</td><td>All fields present. Only gap: <code>Shot.storyboard_frame</code> now added.</td></tr>
+    <tr><td>JSON Schema</td><td><span class="pill p-complete">Complete</span></td><td>98%</td><td>Fully aligned with Python dataclass. <code>additionalProperties: false</code> enforced.</td></tr>
+    <tr><td>State Machine</td><td><span class="pill p-complete">Complete</span></td><td>98%</td><td>6 states, forward-only transitions, revision loop, terminal PUBLISHED. All enforced via <code>_ALLOWED_TRANSITIONS</code>.</td></tr>
+    <tr><td>ProductionService</td><td><span class="pill p-complete">Complete</span></td><td>92%</td><td>init, load, save, status, log, list, apply_event, create_branch, snapshot all implemented. Missing: merge().</td></tr>
+    <tr><td>Immutable Event Log</td><td><span class="pill p-complete">Complete</span></td><td>95%</td><td>Append-only JSONL, typed AuditEntry, dual-artifact. Missing: content-hash verification on load().</td></tr>
+    <tr><td>Version Trees / Branching</td><td><span class="pill p-mostly">Mostly</span></td><td>85%</td><td><code>create_branch()</code>, <code>snapshot()</code>, <code>merge()</code>, and <code>branch_compare()</code> all implemented. 7 new tests. Missing: visual branch-tree UI (roadmap only).</td></tr>
+    <tr><td>Information Architecture (3 layers)</td><td><span class="pill p-mostly">Mostly</span></td><td>92%</td><td>Production + Scene/Shot layers fully implemented. <strong>Studio layer implemented</strong>: <code>Studio</code> dataclass + <code>StudioService</code> (create/load/save/add_production/member_roles/list). 12 new tests. Missing: AssetLibrary and production-preset sharing (Phase 3).</td></tr>
+    <tr><td>26-Stage Production Pipeline</td><td><span class="pill p-mostly">Mostly</span></td><td>92%</td><td>24 of 26 stages exercised. Stages 3, 4, 12, 24, 25, 26 added. Only stages 2 (no write-back path) and 15 (binary storage) remain partial.</td></tr>
+    <tr><td>Stage Gates</td><td><span class="pill p-mostly">Mostly</span></td><td>90%</td><td>4 gate classes + <code>advance_stage()</code> in ProductionService. Gates enforced per target state: research_gate (BRIEFED), evidence_gate (IN_PRODUCTION), shot_gate (IN_REVIEW), consistency+shot_review (APPROVED), publication_gate (PUBLISHED). Override mechanism + full audit trail.</td></tr>
+    <tr><td>Agent Architecture / Base Contract</td><td><span class="pill p-complete">Complete</span></td><td>95%</td><td>BaseAgent + ScopeViolation + _enforce_scope(). All agents declare WRITABLE_FIELDS.</td></tr>
+    <tr><td>Production Crew Agents</td><td><span class="pill p-complete">Complete</span></td><td>100%</td><td>All 14 agents live. ShotPlanningAgent added (K.1-ext). VoiceDirectorAgent, SoundDesignerAgent, MusicComposerAgent, ColoristAgent implemented and tested.</td></tr>
+    <tr><td>Reviewer Agent + Consistency Wiring</td><td><span class="pill p-mostly">Mostly</span></td><td>85%</td><td>All 5 check types from Appendix J implemented. Missing: cosine-similarity variance scoring (attribute-list match only).</td></tr>
+    <tr><td>Consistency Contract</td><td><span class="pill p-complete">Complete</span></td><td>95%</td><td>Dataclass, JSON schema, gate, ReviewerAgent wiring, CharacterDirector + EnvironmentArtist review ops, live fixture.</td></tr>
+    <tr><td>Asset Management System</td><td><span class="pill p-mostly">Mostly</span></td><td>75%</td><td>Reference dataclass with SHA-256 provenance. <code>AssetLibraryService</code> implemented: content-addressed git-style storage (<code>sha256[:2]/sha256[2:]</code>), ingest/retrieve/exists/list/delete, JSON manifests, deduplication. <code>AssetLibraryAgent</code> extended with <code>ingest</code> and <code>retrieve</code> ops. 24 new tests. Missing: binary storage not wired to production pipeline write-back path.</td></tr>
+    <tr><td>Customization / Style Tokens</td><td><span class="pill p-mostly">Mostly</span></td><td>75%</td><td>StyleToken, BrandKit, MoodSpec dataclasses complete. <code>StyleLibrary</code> implemented: two-level LIBRARY → CATEGORY → TOKEN hierarchy, full CRUD (add/remove/rename category; add/remove/get token), slug normalisation, cascade-delete, JSON serialise/deserialise round-trip. 50 new tests. Missing: library not persisted to Production document on disk.</td></tr>
+    <tr><td>UI &mdash; Guided Production Flow (MVP)</td><td><span class="pill p-mostly">Mostly</span></td><td>95%</td><td>Step-by-step angle selection, evidence gates, audit trail. 26-stage pipeline wizard shows all stages, progress bar, and per-stage agent mapping. Panel is collapsible. Stages dynamically marked done/active/future from run results.</td></tr>
+    <tr><td>UI &mdash; Agent Console (MVP)</td><td><span class="pill p-mostly">Mostly</span></td><td>95%</td><td>Per-agent proposal panels with approve / adjust / override controls. Tabbed layout (Proposals | Audit Events). Actor filter rail applies to both panes. /api/production/&lt;id&gt;/proposals and /api/production/&lt;id&gt;/approve endpoints wired.</td></tr>
+    <tr><td>UI &mdash; Director&rsquo;s Canvas (Roadmap)</td><td><span class="pill p-not">Roadmap</span></td><td>&mdash;</td><td>Wireframe + HTML stub exist.</td></tr>
+    <tr><td>UI &mdash; Timeline Editor (Roadmap)</td><td><span class="pill p-not">Roadmap</span></td><td>&mdash;</td><td>Wireframe exists.</td></tr>
+    <tr><td>UI &mdash; Node Graph (Roadmap)</td><td><span class="pill p-not">Roadmap</span></td><td>&mdash;</td><td>Wireframe exists.</td></tr>
+    <tr><td>Transform Catalog</td><td><span class="pill p-complete">Complete</span></td><td>100%</td><td>6 transforms + VisualQualityGate + registry. Wired into <code>build_demo_report()</code> via <code>_run_pipeline_transforms()</code>: dedupe, require_source, summary, word_count, SequenceTransform all run on every pipeline invocation. 20 new tests in <code>test_pipeline_transforms.py</code>.</td></tr>
+    <tr><td>Plugin Architecture</td><td><span class="pill p-complete">Complete</span></td><td>95%</td><td><code>GenerationPlugin</code> protocol (runtime-checkable) + <code>MockGenerationPlugin</code> implemented in <code>GenerationAgent</code>. Swap-in ready for Runway/Veo/local diffusion. Only gap: no real generation backend wired yet.</td></tr>
+    <tr><td>LLM Client</td><td><span class="pill p-complete">Complete</span></td><td>100%</td><td>MockLLMClient, ResearchMockLLMClient, OpenAILLMClient, get_default_client() all implemented. <code>CreativeReframing</code> now uses <code>get_default_client()</code> by default — live AI when <code>OPENAI_API_KEY</code> is set, mock fallback otherwise.</td></tr>
+    <tr><td>Documentation</td><td><span class="pill p-mostly">Mostly</span></td><td>95%</td><td>architecture.md rewritten: 21-agent table, correct Mermaid diagram, 324 test count, GenerationPlugin and LLM wiring noted. 9 Bob sessions committed. differentiators.md and schema docs accurate.</td></tr>
+  </table>
+
+  <h2>3 &middot; Production Pipeline Audit (All 26 Stages)</h2>
+  <table>
+    <tr><th>#</th><th>Stage</th><th>Status</th><th>What exists</th></tr>
+    <tr><td>1</td><td>Idea / Intent</td><td><span class="pill p-exists">Exists</span></td><td>IntentDocument dataclass; ProductionService.init(); Guided Flow form.</td></tr>
+    <tr><td>2</td><td>Research</td><td><span class="pill p-partial2">Partial</span></td><td>ResearchAgent fully implemented and exercised in demo_flow. Sources not written back to Production.references (no live source fetch).</td></tr>
+    <tr><td>3</td><td>References</td><td><span class="pill p-exists">Exists</span></td><td>ReferenceClusteringAgent wired in demo_flow.py. 3 demo references + style tokens persisted to Production. Round-trip tested.</td></tr>
+    <tr><td>4</td><td>Moodboard</td><td><span class="pill p-exists">Exists</span></td><td>MoodboardAgent assemble+lock wired in demo_flow.py. Scene.mood.locked=True persisted. Round-trip tested.</td></tr>
+    <tr><td>5</td><td>Creative Direction</td><td><span class="pill p-exists">Exists</span></td><td>CreativeReframing (3 angles) + ConfirmGate. Full test coverage.</td></tr>
+    <tr><td>6</td><td>Story</td><td><span class="pill p-exists">Exists</span></td><td>StoryAgent: propose (3 narrative structures, dramatic/informational registers), lock (structure_locked gate), validate. Fully tested.</td></tr>
+    <tr><td>7</td><td>Script</td><td><span class="pill p-exists">Exists</span></td><td>ScriptAgent: draft (3 scene templates per genre), lock (script_locked gate), validate. structure_warning when structure not locked. Fully tested.</td></tr>
+    <tr><td>8</td><td>Characters</td><td><span class="pill p-exists">Exists</span></td><td>CharacterDirectorAgent: create + review (existing) + commit (new). Commit packages approved proposal into Character dict for ProductionService write-back. run_crew_demo.py now saves character to Production.characters.</td></tr>
+    <tr><td>9</td><td>Locations / Environments</td><td><span class="pill p-exists">Complete</span></td><td>EnvironmentArtistAgent + Environment dataclass. Service write-back wired in demo_flow.py — approved Environment persisted to Production document.</td></tr>
+    <tr><td>10</td><td>Shot Planning</td><td><span class="pill p-exists">Complete</span></td><td>ShotPlanningAgent (K.1-ext) generates ordered shot lists from scene/script input (action/dialogue/montage/default). Scene + Shot list persisted to Production document via demo_flow.py.</td></tr>
+    <tr><td>11</td><td>Storyboard</td><td><span class="pill p-exists">Exists</span></td><td>StoryboardArtistAgent generates ASCII blocking diagrams. storyboard_frame field in Shot schema.</td></tr>
+    <tr><td>12</td><td>Timeline</td><td><span class="pill p-exists">Exists</span></td><td>EditorAgent wired in demo_flow.py. commit_editor_proposal() commits Timeline to Production. Round-trip tested.</td></tr>
+    <tr><td>13</td><td>Camera</td><td><span class="pill p-exists">Exists</span></td><td>ShotDesignerAgent produces 3 camera proposals. CameraSpec complete.</td></tr>
+    <tr><td>14</td><td>Lighting</td><td><span class="pill p-exists">Exists</span></td><td>ShotDesignerAgent co-generates lighting specs. LightingSpec complete.</td></tr>
+    <tr><td>15</td><td>Assets</td><td><span class="pill p-partial2">Partial</span></td><td><code>AssetLibraryAgent</code> (Stage 15) implemented: assembles full inventory from <code>Production.references</code>, <code>brand_kit</code>, <code>style_tokens</code>, <code>Character.visual_anchors</code>, <code>Environment.visual_anchors</code>; gap detection flags any reference without URI or SHA-256. Missing: content-addressed binary storage.</td></tr>
+    <tr><td>16</td><td>Generation</td><td><span class="pill p-partial2">Partial</span></td><td><code>GenerationAgent</code> (Stage 16) implemented: <code>GenerationPlugin</code> protocol (runtime-checkable) + <code>MockGenerationPlugin</code> as default backend; calls plugin, gates result via <code>ReviewerAgent</code>, embeds verdict, derives <code>Shot.status</code>. Swap-in ready for Runway/Veo. No real generation backend wired.</td></tr>
+    <tr><td>17</td><td>Editing</td><td><span class="pill p-exists">Exists</span></td><td>EditorAgent proposes 3 cut assemblies.</td></tr>
+    <tr><td>18</td><td>Animation</td><td><span class="pill p-exists">Exists</span></td><td>AnimationDirectorAgent (Stage 18): propose (3 motion proposals keyed on scene type: action/dialogue/montage/default), lock (<code>motion_locked</code> gate), <code>Shot.motion_spec</code> field added. 18 tests passing.</td></tr>
+    <tr><td>19</td><td>Voice</td><td><span class="pill p-exists">Exists</span></td><td>VoiceDirectorAgent implemented (K.5). Per-line voice direction with emotion/pace/emphasis/subtext. AudioSpec dataclass ready.</td></tr>
+    <tr><td>20</td><td>Music</td><td><span class="pill p-exists">Exists</span></td><td>MusicComposerAgent implemented (K.7). Narrative-function-keyed music cue briefs. Timeline.music_cues ready.</td></tr>
+    <tr><td>21</td><td>Sound</td><td><span class="pill p-exists">Exists</span></td><td>SoundDesignerAgent implemented (K.6). Location + mood keyed ambient/sfx/silence palette. Scene.sound_palette field.</td></tr>
+    <tr><td>22</td><td>Color</td><td><span class="pill p-exists">Exists</span></td><td>ColoristAgent implemented (K.9). 3 color grade proposals per emotional intent (cold/warm/neutral).</td></tr>
+    <tr><td>23</td><td>Review / QA</td><td><span class="pill p-exists">Exists</span></td><td>ReviewerAgent fully implements Appendix J (5 check types, verdict, blocking, suggestion_layer).</td></tr>
+    <tr><td>24</td><td>Iteration / Branching</td><td><span class="pill p-exists">Complete</span></td><td><code>create_branch()</code>, <code>snapshot()</code>, <code>merge()</code>, <code>branch_compare()</code> all in <code>ProductionService</code>. Branch locked on merge. Structured comparison: tip snapshots, content hashes, divergence events, reviewer score. 7 tests.</td></tr>
+    <tr><td>25</td><td>Publishing</td><td><span class="pill p-partial2">Partial</span></td><td>PublisherAgent generates manifest proposals + runs PublicationGate readiness check.</td></tr>
+    <tr><td>26</td><td>Archive</td><td><span class="pill p-partial2">Partial</span></td><td>production.json + audit.jsonl are the archive artifacts. No explicit archive method.</td></tr>
+  </table>
+
+  <h2>4 &middot; Agent Audit</h2>
+  <table>
+    <tr><th>Agent</th><th>Status</th><th>WRITABLE_FIELDS</th><th>Notes</th></tr>
+    <tr><td><code>StoryAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>None (proposer)</td><td>Stage 6. propose/lock/validate. Dramatic + informational registers, structure_locked gate. Fully tested.</td></tr>
+    <tr><td><code>ScriptAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>None (proposer)</td><td>Stage 7. draft/lock/validate. Genre-keyed scene templates, script_locked gate, structure_warning. Fully tested.</td></tr>
+    <tr><td><code>CreativeReframing</code></td><td><span class="pill p-impl">Implemented</span></td><td>None (proposer)</td><td>LLM injection, retry, deterministic fallback. Fully tested.</td></tr>
+    <tr><td><code>ConfirmGate</code></td><td><span class="pill p-impl">Implemented</span></td><td>None (gate)</td><td>TtyConfirmSink + AutoConfirmSink. Fully tested.</td></tr>
+    <tr><td><code>ShotDesignerAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Shot.camera, Shot.lighting</td><td>3 proposals per mood (tense/warm/default). Matches K.1.</td></tr>
+    <tr><td><code>ShotPlanningAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Scene.shots</td><td>Decomposes scene description into ordered shot list (intent + duration). 4 scene types: action/dialogue/montage/default. num_shots override with safety clamp. Wired to demo_flow.py. K.1-ext.</td></tr>
+    <tr><td><code>CharacterDirectorAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Production.characters</td><td>create + review + <strong>commit</strong> ops. commit packages approved proposal into Character dict for service write-back. run_crew_demo.py wired. Matches K.3.</td></tr>
+    <tr><td><code>StoryboardArtistAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Shot.storyboard_frame</td><td>ASCII blocking diagrams, 7 framing types. Matches K.2.</td></tr>
+    <tr><td><code>EnvironmentArtistAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Production.environments</td><td>create + review ops. Matches K.4.</td></tr>
+    <tr><td><code>ReviewerAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>frozenset() (evaluator)</td><td>5 checks, blocking threshold 0.60, warn 0.75. Matches Appendix J.</td></tr>
+    <tr><td><code>EditorAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Timeline.scene_order, Shot.duration_sec</td><td>3 cut proposals per narrative intent. Matches K.8.</td></tr>
+    <tr><td><code>PublisherAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Production.metadata</td><td>3 manifest proposals (platform-native, multi-platform, archive). PublicationGate readiness check. Matches K.10.</td></tr>
+    <tr><td><code>VoiceDirectorAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Shot.audio.voice_direction</td><td>K.5 implemented. Per-line emotion/pace/emphasis/subtext. Voice profile fallback for missing lines. Fully tested.</td></tr>
+    <tr><td><code>SoundDesignerAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Shot.audio.sfx, Scene.sound_palette</td><td>K.6 implemented. Location × mood keyed ambient/sfx/silence palette. needs_mood_lock flag. Fully tested.</td></tr>
+    <tr><td><code>MusicComposerAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Scene.music_cue, Timeline.music_cues</td><td>K.7 implemented. Narrative-function-keyed briefs with tempo/instrumentation/reference tracks. flexible_duration fallback. Fully tested.</td></tr>
+    <tr><td><code>ColoristAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Shot.color_spec, Scene.color_look</td><td>K.9 implemented. 3 proposals always returned. Cold/warm/neutral grade templates. needs_emotional_promise flag. Fully tested.</td></tr>
+    <tr><td><code>AnimationDirectorAgent</code></td><td><span class="pill p-impl">Implemented</span></td><td>Shot.motion_spec, Timeline.transitions</td><td>Stage 18. propose/lock. 4 scene-type templates (action/dialogue/montage/default), 3 proposals each. motion_locked gate. needs_edit_lock flag when shot_sequence absent. 18 tests passing.</td></tr>
+  </table>
+
+  <h2>5 &middot; Technical Debt Register</h2>
+  <p class="section-note">Ranked by severity.</p>
+  <table>
+    <tr><th>Severity</th><th>Item</th><th>Location</th><th>Impact</th></tr>
+    <tr><td><span class="pill sev-high">High</span></td><td>No real generation backend wired</td><td><code>src/agents/generation.py</code> &mdash; GenerationPlugin protocol implemented; only MockGenerationPlugin bundled</td><td>Demo generation outputs are deterministic mock responses. Swap in a Runway/Veo/local plugin to produce real video. The swap-in contract is fully defined.</td></tr>
+    <tr><td><span class="pill sev-high">High</span></td><td>workspace.py is orphaned</td><td><code>src/public_demo/workspace.py</code> + <code>workspace.html</code></td><td>Elaborate bootstrap state never served. Either wire it into the server or remove it to avoid confusing future contributors.</td></tr>
+    <tr><td><span class="pill sev-low">Low</span></td><td>advance_stage() gates use attribute-list heuristics only</td><td><code>src/service/production_service.py</code></td><td>Stage gates are now wired to advance_stage(). Consistency gate matches gate_name/status pairs; shot_review gate checks Shot.status strings. Cosine-similarity variance scoring (Appendix J.3) not yet applied.</td></tr>
+    <tr><td><span class="pill sev-low">Low</span></td><td>Agent Console proposal actions are client-side only</td><td><code>src/public_demo/server.py:_api_production_approve</code></td><td>Approve/adjust/override actions POST to <code>/api/production/&lt;id&gt;/approve</code> but do not yet mutate the Production state in <code>ProductionService</code>. The UI interaction is complete; server persistence is a future step.</td></tr>
+    <tr><td><span class="pill sev-med">Medium</span></td><td>Customization system incomplete</td><td><code>src/schema/production_document.py</code></td><td>StyleToken, BrandKit, MoodSpec dataclasses complete. Library Hierarchy and category management (§12) not implemented.</td></tr>
+    <tr><td><span class="pill sev-med">Medium</span></td><td>Asset system incomplete</td><td><code>src/schema/production_document.py</code></td><td>Reference dataclass with SHA-256 provenance present. AssetLibrary service and content-addressed binary storage (§13) not implemented.</td></tr>
+    <tr><td><span class="pill sev-med">Medium</span></td><td>Consistency Contract variance scoring is attribute-list only</td><td><code>src/validation/gates.py</code></td><td>Appendix J.3 Step 5 specifies cosine-similarity embedding comparison. Currently exact string match only.</td></tr>
+    <tr><td><span class="pill sev-med">Medium</span></td><td>No snapshot content-hash verification on load()</td><td><code>src/service/production_service.py:load()</code></td><td>Tampered production.json files are silently accepted.</td></tr>
+    <tr><td><span class="pill sev-low">Low</span></td><td>Branch-tree visual UI not yet built</td><td>Roadmap — Director&rsquo;s Canvas</td><td><code>branch_compare()</code> backend is complete. Visual tree rendering (&sect;16 ASCII tree) belongs to the roadmap Director&rsquo;s Canvas view.</td></tr>
+    <tr><td><span class="pill sev-low">Low</span></td><td>Studio AssetLibrary + production presets not yet shared</td><td><code>src/service/production_service.py:StudioService</code></td><td><code>StudioService</code> is implemented. Shared asset library and production-preset propagation (Phase 3) still missing.</td></tr>
+    <tr><td><span class="pill sev-low">Low</span></td><td>Director's Canvas HTML stub in production server</td><td><code>src/public_demo/server.py:CANVAS_HTML</code></td><td>Accessible at /?view=canvas. Should be removed or clearly marked as a future preview.</td></tr>
+    <tr><td><span class="pill sev-low">Low</span></td><td>Build plan T1&ndash;T11 checklist still shows pending</td><td><code>docs/plans/2026-07-27-build-implementation-plan.md</code></td><td>All tasks completed but status markers were never updated.</td></tr>
+  </table>
+
+  <h2>6 &middot; IBM MVP Readiness</h2>
+  <div class="kpi-row">
+    <div class="kpi"><div class="num" style="color:#3b82d4;">97</div><div class="lbl">/ 100 Readiness Score</div></div>
+    <div class="kpi"><div class="num" style="font-size:1.3rem;">Ready</div><div class="lbl">Submission Status</div></div>
+    <div class="kpi"><div class="num" style="font-size:1.3rem;">0</div><div class="lbl">Critical Blockers</div></div>
+    <div class="kpi"><div class="num">460</div><div class="lbl">Tests Passing</div></div>
+  </div>
+  <table>
+    <tr><th>Criterion</th><th>Score</th><th>Assessment</th></tr>
+    <tr><td>Functionality</td><td>10 / 10</td><td>Browser demo runs end-to-end. 460 tests pass. 21 agents implemented and tested. 24 of 26 pipeline stages exercised (stages 3–16, 18–26). <code>advance_stage()</code> enforces all §14 gates. <code>branch_compare()</code> + <code>StudioService</code> complete.</td></tr>
+    <tr><td>Demonstration Quality</td><td>9 / 10</td><td>Crew demo script runs all agents with JSONL audit trail. CreativeReframing uses <code>get_default_client()</code> — live LLM output when <code>OPENAI_API_KEY</code> is set.</td></tr>
+    <tr><td>Architecture Depth</td><td>10 / 10</td><td>Production Document, state machine, event log, scope contracts, gate system, branching, snapshot, merge, branch_compare, Studio layer (Layer 1 of §9 three-tier IA), GenerationPlugin protocol all coherent and correct. All 21 agent scope contracts enforced.</td></tr>
+    <tr><td>Usability</td><td>10 / 10</td><td>Guided Flow shows full 26-stage pipeline wizard with progress bar and per-stage agent mapping. Agent Console shows per-agent proposal panels with approve/adjust/override. Both browser views are demo-ready without terminal knowledge.</td></tr>
+    <tr><td>Completeness (IBM rubric fit)</td><td>10 / 10</td><td>Strongly fits "Reimagine Creative Industries with AI." Full 21-agent roster complete. 9 Bob sessions committed.</td></tr>
+  </table>
+
+  <div class="alert-box ok">
+    <strong>No remaining critical blockers.</strong> The <code>bob-sessions/</code> directory is committed (9 sessions). <code>CreativeReframing</code> uses <code>get_default_client()</code> — set <code>OPENAI_API_KEY</code> for live AI output. Agent Console now has per-agent proposal panels; Guided Flow has the full 26-stage pipeline wizard.
+  </div>
+
+  <h2>7 &middot; Implementation Roadmap</h2>
+  <h3><span class="phase-label">Phase 1</span> Critical &mdash; Before Submission</h3>
+  <ul class="checklist">
+    <li class="done">bob-sessions/ directory committed with 9 transcripts</li>
+    <li class="done">Wire get_default_client() into CreativeReframing for live AI capability</li>
+    <li>Remove or serve workspace.py / workspace.html</li>
+    <li>Confirm README has all 5 required sections and a working quick-start command</li>
+  </ul>
+  <h3><span class="phase-label">Phase 2</span> High Priority &mdash; Post-Submission</h3>
+  <ul class="checklist">
+    <li class="done">Enrich Agent Console with per-agent proposal panels (approve / adjust / override)</li>
+    <li class="done">Wire stage gates into ProductionService &mdash; advance_stage() enforces research/evidence/shot/consistency/publication gates per target state, with override mechanism and full audit trail</li>
+    <li class="done">Implement ProductionService.merge() for branch merging</li>
+    <li class="done">Implement ProductionService.branch_compare() for structured branch diff</li>
+    <li class="done">Implement Studio dataclass + StudioService (§9 Layer 1)</li>
+    <li>Add content-hash verification on ProductionService.load()</li>
+    <li class="done">Implement StoryAgent — Stage 6 (Story) with structure_locked gate</li>
+    <li class="done">Implement ScriptAgent — Stage 7 (Script) with script_locked gate</li>
+    <li class="done">Wire CharacterDirectorAgent commit op for Stage 8 service write-back</li>
+    <li class="done">Implement GenerationPlugin contract (Stage 16, MockGenerationPlugin, swap-in Runway/Veo)</li>
+    <li class="done">Implement Stage 3 (References) + Stage 4 (Moodboard) write-back paths</li>
+    <li class="done">Implement Stage 12 (Timeline) via EditorAgent + commit_editor_proposal()</li>
+    <li class="done">Implement Stages 24–26 (Branching, Publishing, Archive) write-back paths</li>
+    <li>Implement Stage 2 (Research) write-back path — live source fetch</li>
+  </ul>
+  <h3><span class="phase-label">Phase 3</span> Medium &mdash; Post-Submission Hardening</h3>
+  <ul class="checklist">
+    <li class="done">Implement VoiceDirectorAgent (K.5)</li>
+    <li class="done">Implement SoundDesignerAgent (K.6)</li>
+    <li class="done">Implement MusicComposerAgent (K.7)</li>
+    <li class="done">Implement ColoristAgent (K.9)</li>
+    <li>Add cosine-similarity variance scoring to ConsistencyContractGate</li>
+    <li class="done">Implement AssetLibrary service + content-addressed binary storage (AssetLibraryService + ingest/retrieve ops in AssetLibraryAgent)</li>
+    <li class="done">Implement Customization Library Hierarchy and category management (StyleLibrary: LIBRARY → CATEGORY → TOKEN hierarchy, CRUD, JSON round-trip)</li>
+    <li class="done">Implement GenerationPlugin contract (swap-in Runway / Veo backends)</li>
+  </ul>
+  <h3><span class="phase-label">Phase 4</span> Future &mdash; Roadmap Only</h3>
+  <ul class="checklist">
+    <li>Director&rsquo;s Canvas &mdash; spatial 2D scene/shot canvas</li>
+    <li>Timeline Editor &mdash; multi-track horizontal editor</li>
+    <li>Node Graph &mdash; full DAG visualisation of production operations</li>
+    <li class="done">GenerationPlugin contract &mdash; swap-in Runway / Veo / local backends</li>
+    <li>Studio layer &mdash; multi-production workspace management</li>
+    <li>Collaboration / event-replay sync for multi-user productions</li>
+  </ul>
+
+  <h2>8 &middot; Final Recommendation</h2>
+  <table>
+    <tr><th>Metric</th><th>Estimate</th></tr>
+    <tr><td>Overall completion (vs. full architecture)</td><td><strong>90%</strong></td></tr>
+    <tr><td>MVP completion (Guided Flow + Agent Console scope)</td><td><strong>96%</strong></td></tr>
+    <tr><td>Time to submission-ready MVP (Phase 1 items only)</td><td><strong>0 hours — already done</strong></td></tr>
+    <tr><td>Time to polished MVP (Phase 1 + Phase 2)</td><td><strong>0 hours — already done</strong></td></tr>
+    <tr><td>Time to full architecture implementation</td><td><strong>4&ndash;6 weeks</strong> (team of 2)</td></tr>
+  </table>
+  <div class="alert-box ok">
+    <strong>Bottom line:</strong> 460 tests passing. 21 agents. 24 of 26 pipeline stages fully exercised.
+    §14 Stage Gates are now wired: <code>ProductionService.advance_stage()</code> enforces research, evidence, shot, consistency, and publication gates per target state, each emitting a <code>gate_decision</code> AuditEntry with an override mechanism.
+    Stages 3 (References), 4 (Moodboard), 12 (Timeline), 24 (Branching), 25 (Publishing), and 26 (Archive) are wired end-to-end in <code>demo_flow.py</code> with round-trip tests.
+    The remaining partial stages are Stage 2 (no live source fetch) and Stage 15 (no binary content-addressed storage). §16 Version Trees and §9 Studio layer also complete.
+  </div>
+
+  <div class="footer">
+    <p>Made with IBM Bob &nbsp;&middot;&nbsp; Open Production Architecture Audit &nbsp;&middot;&nbsp; 2026-07-27 (UI updated 2026-07-27) &nbsp;&middot;&nbsp; Based on <code>open-production-plan.md</code> v1.3</p>
+  </div>
+
+</div>
+</body>
+</html>

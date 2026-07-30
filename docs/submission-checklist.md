@@ -17,7 +17,7 @@ Use this on Day 4 as a single-pass verification list. Each item is a hard gate �
   - [ ] Problem statement
   - [ ] Solution (5 stages — Creative Reframing is stage 2)
   - [ ] AI approach and architecture (cross-references `docs/architecture/architecture.md`)
-  - [ ] How IBM Bob was used (7 captured sessions)
+  - [ ] How IBM Bob was used (9 captured sessions)
   - [ ] Demo video link (YouTube, public)
   - [ ] GitHub repo link (public)
   - [ ] Team member(s) + SkillsBuild cert
@@ -35,23 +35,28 @@ Use this on Day 4 as a single-pass verification list. Each item is a hard gate �
 - [ ] Repo name matches Project Page (e.g., `open-production`).
 - [ ] All non-PDT code lives in `D:\IBM Project\Open_Production\` and is pushed.
 - [ ] README.md has **all 5 required sections** (Problem / Solution / AI approach & architecture / Challenge theme / How Bob was used).
+- [ ] `python -m pytest tests/ -q` reports **164+ passed** (as of submission build).
 - [ ] `bob-sessions/01-codebase-exploration/transcript.md` exists, raw Bob output preserved.
 - [ ] `bob-sessions/02-creative-reframing-feature/transcript.md` exists with `src/agents/creative_reframing.py` and `tests/test_creative_reframing.py`.
 - [ ] `bob-sessions/03-tests-and-checks/transcript.md` exists with `tests/test_gates.py` and the check log.
-- [ ] `docs/architecture/architecture.md` exists.
-- [ ] `docs/architecture/architecture-diagram.mmd` parses (renders in GitHub Markdown preview).
-- [ ] `docs/demo/demo-story.md` exists.
+- [ ] `bob-sessions/04-demo-and-audit/transcript.md` exists.
 - [ ] `bob-sessions/05-confirm-gate/transcript.md` exists.
 - [ ] `bob-sessions/06-transform-catalog/transcript.md` exists.
 - [ ] `bob-sessions/07-video-vertical/transcript.md` exists.
-- [ ] `Makefile` works: `make test` runs and passes (51/51).
+- [ ] `bob-sessions/08-code-review/transcript.md` exists.
+- [ ] `bob-sessions/09-deployment-readiness/transcript.md` exists (this session).
+- [ ] `docs/architecture/architecture.md` exists and reflects current implementation (all 13 agents, current Mermaid diagram).
+- [ ] `docs/architecture/architecture-diagram.mmd` parses (renders in GitHub Markdown preview).
+- [ ] `docs/demo/demo-story.md` exists.
+- [ ] `python -m pytest tests/ -q` runs and passes (≥164 tests, 0 errors).
 - [ ] License = MIT.
 
 ## Gate 4 — Working prototype
 
-- [ ] `make demo` runs end-to-end on a fresh clone without intervention.
-- [ ] The demo shows: intent → 3 angles → user picks → research → gates fire → output PDF + audit trail.
-- [ ] No real API keys in `src/`, `tests/`, or `Makefile`. `.env.example` only has commented placeholders.
+- [ ] Browser demo starts: `python src/public_demo/server.py` then open `http://127.0.0.1:8000/?view=guided`.
+- [ ] The demo shows: intent → 3 angles → user picks → gates fire → production_id displayed → Agent Console link visible.
+- [ ] `python -m pytest tests/ -q` passes with ≥164 tests, 0 errors, without any `--basetemp` flag.
+- [ ] No real API keys in `src/` or `tests/`. `.env.example` only has commented placeholders.
 
 ## Gate 5 — Demo video (≤ 3 minutes)
 
@@ -68,7 +73,7 @@ Use this on Day 4 as a single-pass verification list. Each item is a hard gate �
 
 ## Gate 6 — Final QA before submit
 
-- [ ] Clone repo into a fresh directory. Run `make install && make test && make demo`. All succeed.
+- [ ] Clone repo into a fresh directory. Run `python -m pip install -e . && python -m pytest tests/ -q && python src/public_demo/server.py`. All succeed.
 - [ ] Project Page `https://aibuilderschallenge-bobhub.bemyapp.com/#/projects` — click every link, including GitHub repo and YouTube video. All resolve to public, working URLs.
 - [ ] Re-read the Project Page once with fresh eyes. No typos, no half-finished sentences.
 - [ ] Spot-check the demo video — does it have audio? Any dead time?
